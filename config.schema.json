@@ -141,6 +141,12 @@
             ]
           },
           {
+            "title": "New (Auto)",
+            "enum": [
+              "new"
+            ]
+          },
+          {
             "title": "Dark Mode",
             "enum": [
               "dark-mode"

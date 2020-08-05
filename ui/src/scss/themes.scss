@@ -21,11 +21,16 @@
     a {
       &.card-link {
         color: #000000;
+        text-transform: uppercase;
 
         &:hover {
           color: $primary-dark;
         }
       }
+    }
+
+    .d-sm-block a.card-link {
+      text-transform: initial;
     }
 
     .hb-uix-switch {
@@ -66,6 +71,1043 @@
   }
 }
 
+@mixin make-new-theme() {
+  $name: "new";
+
+  $red: rgb(249, 46, 49);
+  $orange: rgb(255, 149, 9);
+  $yellow: rgb(237, 187, 0);
+  $green: rgb(0, 178, 102);
+  $blue: rgb(0, 92, 191);
+  $purple: rgb(87, 39, 124);
+  $purple-dark: rgb(73, 31, 89);
+
+  $black: #222;
+  $white: #fff;
+
+  $padding: 4px;
+  $canal: (6 * $padding);
+  $border-radius: (2 * $padding);
+
+  $header-height: (12 * $padding);
+
+  :root {
+    --base-size: 2vh;
+  }
+
+  .config-ui-x-#{$name} {
+    font-family: var(--font-family-sans-serif);
+    font-size: 100%;
+    letter-spacing: .005rem;
+    padding: $header-height 0 0;
+    background-color: darken($white, 4%);
+
+    // Heading
+    @for $i from 1 through 5 {
+      h#{$i}, .h#{$i} {
+        font-size: (1.8rem - (0.1 * $i));
+        font-weight: 500;
+        letter-spacing: -.024;
+        line-height: 120%;
+      }
+    }
+
+    // Paragraph
+    p {
+      line-height: 140%;
+      margin: $padding 0;
+    }
+
+    @for $i from 1 through 10 {
+      .mt-#{$i}, .my-#{$i} { margin-top: ($padding * $i) }
+      .mb-#{$i}, .my-#{$i} { margin-bottom: ($padding * $i) }
+    }
+
+    .container-fluid,
+    .container-sm,
+    .container-md,
+    .container-lg,
+    .container-xl {
+      padding: 0 $canal;
+    }
+
+
+    a {
+      &.card-link {
+        color: $black;
+        line-height: 100%;
+
+        &:hover {
+          color: inherit;
+        }
+      }
+    }
+
+    .hb-uix-switch {
+      .hb-uix-slider  {
+        border-color: $blue!important;
+      }
+
+      input:checked ~ .hb-uix-slider {
+        background-color: $blue!important;
+      }
+    }
+
+    .hb-widget-chart-background {
+      background-color: rgba($white, .24);
+      display: none;
+    }
+
+    .alert-info {
+      background-color: rgba($green, 0.1);
+      border-color: rgba($green, 0.1);
+      color: $orange;
+    }
+
+    .animate_loader {
+      .spinner_outer {
+        stroke: $green
+      }
+      .spinner_inner {
+        stroke: $orange
+      }
+    }
+
+    .bg-primary {
+      background-color: $blue!important;
+    }
+
+    .grey-text {
+      color: lighten($black, 32%)!important;
+    }
+
+    /*
+     * Modification for header page
+     */
+
+    header {
+      .navbar {
+        height: $header-height;
+        box-shadow: none;
+        background-color: rgba(darken($blue, 8%), .76)!important;
+        -webkit-backdrop-filter: saturate(180%) blur(20px);
+      }
+
+      .menu-logo {
+        height: (6 * $padding)!important;
+      }
+
+      // Main menu
+      .navbar-nav.mr-auto {
+        margin: 0 auto!important;
+
+        li {
+          border: 1px solid desaturate(mix($white, $blue, 58%), 24%);
+          overflow: hidden;
+
+          a {
+            padding: ($padding / 2) (4 * $padding);
+          }
+
+          &.active {
+            background-color: desaturate(mix($white, $blue, 58%), 24%);
+
+            a {
+              color: darken($blue, 8%)!important;
+            }
+          }
+
+          &:first-child {
+            border-radius: $border-radius 0 0 $border-radius;
+          }
+
+          &:last-child {
+            border-radius: 0 $border-radius $border-radius 0;
+          }
+
+          &:not(:last-child) {
+            border-right: none;
+          }
+        }
+      }
+    }
+
+
+    /*
+     * Modification for plugins page - search bar
+     */
+
+    form {
+      .hb-npm-search {
+        background-color: $white;
+        height: auto;
+        margin: (8 * $padding) 0;
+        padding: $padding (6 * $padding);
+        border: 1px solid darken($white, 12%);
+
+        border-radius: $border-radius;
+        box-shadow: 0 12px 24px rgba($black, .048);
+        transition: color .256s ease, background-color .256s ease, border-color .256s ease, box-shadow .256s ease;
+
+        &:hover {
+          border-color: darken($white, 16%);
+          box-shadow: 0 12px 24px rgba($black, .24);
+        }
+
+        &:focus {
+          border-color: rgba(darken($blue, 16%), .24);
+          box-shadow: 0 24px 48px rgba(darken($blue, 16%), .24);
+        }
+
+        &:before,
+        &:after {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+
+          content: "";
+          display: block;
+          border-radius: 1px;
+          background-color: $black;
+
+          width: (3 * $padding);
+          height: 2px;
+
+          transform: translate(-50%, -50%) rotate(45deg);
+          transform-origin: 50%;
+        }
+      }
+
+      .hb-npm-search-clear {
+        background-color: lighten($black, 30%);
+
+        top: (12 * $padding);
+        right: (10 * $padding);
+        width: (5 * $padding);
+        height: (5 * $padding);
+
+        border-radius: 100%;
+        transition: background-color .256s ease;
+
+        &:hover {
+          background-color: lighten($black, 15%);
+        }
+
+        &:before,
+        &:after {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+
+          content: "";
+          display: block;
+          border-radius: 1px;
+          background-color: $white;
+
+          width: (3 * $padding);
+          height: 2px;
+
+          transform: translate(-50%, -50%) rotate(45deg);
+          transform-origin: 50%;
+        }
+
+        &:after {
+          transform: translate(-50%, -50%) rotate(-45deg);
+        }
+      }
+    }
+
+
+    /*
+     * Modification for button style
+     */
+
+    .btn {
+      line-height: 100%;
+      text-transform: capitalize;
+      margin: 0 ($padding * 2) 0 0;
+
+      background-color: transparent!important;
+      border: 1px solid darken($white, 16%);
+      color: lighten($black, 16%);
+      padding: 0 (5 * $padding);
+      height: (8 * $padding);
+
+      border-radius: $border-radius;
+      box-shadow: none!important;
+
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+
+      transition: color .256s ease, background-color .256s ease, border-color .256s ease, box-shadow .256s ease;
+
+      &.btn-default,
+      &.btn-primary {
+        border: none;
+        color: $white;
+      }
+
+      &.btn-elegant {
+        background-color: transparent!important;
+      }
+
+      &.btn-default {
+        background-color: $blue!important;
+        &:hover {
+          color: $white;
+          background-color: darken($blue, 8%)!important;
+        }
+      }
+
+      &.btn-primary {
+        background-color: $green!important;
+        &:hover {
+          color: $white;
+          background-color: darken($green, 8%)!important;
+        }
+      }
+
+      &:hover {
+        color: initial;
+        background-color: darken($white, 8%)!important;
+      }
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+
+
+    /*
+     * Modification status view
+     */
+
+    app-status {
+      .scrollVertical {
+        overflow-x: initial;
+        overflow-y: initial;
+      }
+
+      > div > .row {
+        margin-left: -$canal;
+        margin-right: -$canal;
+
+        &:last-child {
+          padding: 0 0 $padding;
+          background-color: darken($white, 8%);
+
+          > div {
+            border-top: 1px solid darken($white, 12%);
+            margin: 0!important;
+          }
+        }
+      }
+
+      gridster {
+        &.fit {
+          overflow-x: initial;
+          overflow-y: initial;
+        }
+
+        .p-2 {
+          padding: (2 * $padding)!important;
+        }
+
+        gridster-item {
+          border-radius: var(--base-size);
+          box-shadow: 0 8px 16px rgba($black, .16);
+
+          .drag-handler {
+            font-size: .7rem;
+            font-weight: 600;
+            letter-spacing: .048rem;
+            text-transform: uppercase;
+            color: lighten($black, 48%);
+            padding: (3 * $padding) (10 * $padding) (3 * $padding) (6 * $padding)!important;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+
+          .widget-control-button {
+            top: (3 * $padding);
+            right: (3 * $padding);
+            z-index: 3;
+          }
+
+          &#MemoryWidgetComponent,
+          &#CpuWidgetComponent,
+          &#WeatherWidgetComponent,
+          &#HomebridgeLogsWidgetComponent,
+          &#ClockWidgetComponent,
+          &#UptimeWidgetComponent,
+          &#HapQrcodeWidgetComponent {
+            .drag-handler,
+            .widget-control-button {
+              color: $white!important;
+            }
+          }
+
+          &#HomebridgeStatusWidgetComponent {
+            .gridster-item-content {
+              flex: 1;
+              padding: 0!important;
+              justify-content: center!important;
+            }
+
+            .hb-status-item {
+              flex: 1;
+              overflow: hidden;
+
+              .align-self-center {
+                span:first-child {
+                  font-size: calc(1.25 * var(--base-size));
+                }
+
+                br {
+                  padding: 0;
+                  margin: 0;
+                }
+
+                .grey-text,
+                .primary-text {
+                  display: block;
+                  margin-top: calc(-1/4 * var(--base-size));
+                  font-size: var(--base-size);
+                  overflow: hidden;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
+
+                  span {
+                    font-size: inherit;
+                  }
+                }
+              }
+            }
+
+            .hb-status-icon {
+              display: flex;
+              align-items: center;
+              justify-content:center;
+              font-size: calc(3 * var(--base-size));
+            }
+          }
+
+          &#HapQrcodeWidgetComponent {
+            $dark: $purple;
+            $light: $white;
+
+            background: linear-gradient(180deg, lighten($dark, 16%) 0%, lighten($dark, 8%) 100%);
+
+            color: $light;
+
+            .grey-text {
+              color: rgba($light, .64)!important;
+            }
+
+            .p-2 {
+              padding: calc(2 * var(--base-size))!important;
+            }
+
+            .drag-handler {
+              font-size: 1rem;
+              font-weight: normal;
+              letter-spacing: inherit;
+              text-transform: initial;
+              padding: 0!important;
+              white-space: normal;
+
+              > div {
+                display: flex;
+                flex-flow: column nowrap;
+                justify-content: flex-end;
+                align-items: flex-end;
+              }
+            }
+
+            .qr-code-container {
+              display: flex;
+              margin-top: auto;
+
+              svg {
+                width: 20vh;
+                height: 20vh;
+                border: 1px solid $light;
+                align-self: flex-end;
+                position: initial;
+                fill: $light;
+              }
+            }
+
+            .gridster-item-content {
+              padding: 0!important;
+              margin: 0 auto;
+
+              p {
+                width: 100%;
+                text-align: left;
+                margin-bottom: 0!important;
+                font-size: var(--base-size);
+                color: $light;
+
+                &:first-child {
+                  margin-top: 2vh!important;
+                  font-size: calc(2 * var(--base-size));
+                  font-weight: 500;
+                }
+              }
+            }
+          }
+
+          &#SystemInfoWidgetComponent {
+            $drag-handler-height: 10 * $padding;
+
+            background-color: $white;
+
+            .overflow-auto {
+              padding: 0!important;
+            }
+
+            .flex-wrap {
+              padding: ($drag-handler-height + $padding) 0 0!important;
+
+              &:before {
+                content: "";
+                display: block;
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: $drag-handler-height;
+                height: $padding;
+                background-color: $white;
+                border-bottom: 1px dashed darken($white, 24%);
+              }
+            }
+
+            .drag-handler {
+              position: absolute;
+              z-index: 1;
+              top: 0;
+              left: 0;
+              right: 0;
+              color: darken($yellow, 28%)!important;
+              height: $drag-handler-height;
+              line-height: $drag-handler-height + $padding;
+              padding-top: 0!important;
+              padding-bottom: 0!important;
+              background: rgba(lighten($yellow, 24%), .8);
+              background: linear-gradient(180deg, rgba(lighten($yellow, 16%), .92), rgba(saturate(lighten($yellow, 4%), 4%), .92));
+              -webkit-backdrop-filter: saturate(180%) blur(20px);
+            }
+
+            table,
+            tbody {
+              display: block;
+              width: 100%;
+            }
+
+            tr {
+              display: flex;
+              flex-flow: column nowrap;
+              border-top: 1px solid darken($white, 4%);
+
+              &:first-child {
+                border-top: none;
+              }
+
+              th,
+              td {
+                display: block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              }
+
+              th {
+                padding: (1.5 * $padding) (6 * $padding) 0!important;
+                margin-bottom: -($padding / 2);
+                font-size: .5rem;
+                letter-spacing: .064rem;
+                text-transform: uppercase;
+                color: lighten($black, 16%);
+              }
+              td {
+                padding: 0 (6 * $padding) (1.5 * $padding)!important;
+                font-size: .9rem;
+                font-weight: 500;
+                color: darken($yellow, 48%);
+              }
+            }
+          }
+
+          &#WeatherWidgetComponent {
+            background-color: lighten($blue, 24%);
+
+            .p-2 {
+              padding-top: 0!important;
+            }
+
+            .weather-now {
+              flex-flow: row wrap!important;
+              align-items: flex-end!important;
+            }
+
+            h1,
+            h2,
+            h3 {
+              padding: .5vh .5vw;
+              margin: 0;
+              flex: 50%;
+              color: $white;
+            }
+
+            h1 {
+              order: 2;
+              font-size: calc(4 * var(--base-size));
+              text-align: left;
+            }
+
+            h2 {
+              order: 1;
+              font-weight: 300;
+              font-size: calc(3.5 * var(--base-size));
+              text-align: right;
+            }
+
+            h3 {
+              order: 3;
+              flex: 100%;
+              font-weight: 400;
+              font-size: var(--base-size);
+            }
+          }
+
+          &#MemoryWidgetComponent,
+          &#CpuWidgetComponent,
+          &#UptimeWidgetComponent {
+            color: $white!important;
+
+            canvas {
+              background-color: $green;
+              background: linear-gradient(180deg, $green 0%, darken($green, 12%) 100%);
+            }
+
+            .justify-content-around {
+              justify-content: flex-start!important;
+            }
+
+            .grey-text {
+              color: rgba($white, .8)!important;
+            }
+
+            .widget-value-parent-wrap {
+              padding: 0 0 0 (6 * $padding);
+              text-align: left!important;
+            }
+
+            .widget-value {
+              font-weight: 600;
+              font-size: calc(2 * var(--base-size));
+            }
+
+            .widget-value-label {
+              font-size: var(--base-size);
+            }
+          }
+
+          &#CpuWidgetComponent {
+            canvas {
+              background-color: $blue;
+              background: linear-gradient(180deg, $blue 0%, darken($blue, 12%) 100%);
+            }
+          }
+
+          &#UptimeWidgetComponent {
+            background-color: $orange;
+          }
+
+          &#ClockWidgetComponent {
+            background-color: $black;
+            color: $white!important;
+
+            .widget-value {
+              font-size: calc(3 * var(--base-size));
+            }
+
+            .widget-value-label {
+              font-size: var(--base-size);
+              color: $yellow;
+            }
+          }
+        }
+      }
+    }
+
+    /*
+     * Modification plugins view
+     */
+
+    app-plugins {
+      .hb-plugin-space-between {
+        width: calc(100% - (1 - 1/3) * 10px)!important;
+
+        .card {
+          border-radius: 12px;
+          background-color: $white;
+          box-shadow: 0 16px 24px rgba(0, 0, 0, .048);
+
+          &.card-body {
+            padding: (4 * $padding) (6 * $padding);
+          }
+
+          > div:first-child {
+            padding-left: (15 * $padding);
+          }
+
+          > div:last-child {
+            margin-top: (3 * $padding);
+
+            a {
+              &.card-link {
+                text-transform: capitalize;
+
+                color: lighten($black, 16%);
+                background-color: transparent;
+                border: 1px solid darken($white, 16%);
+
+                padding: 0 (5 * $padding);
+                height: (8 * $padding);
+                line-height: 100%;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                border-radius: $border-radius;
+                transition: color .256s ease, background-color .256s ease, border-color .256s ease, box-shadow .256s ease;
+
+                &:hover {
+                  color: initial;
+                  background-color: darken($white, 8%);
+                }
+              }
+
+              // Install link
+              &.card-link-install {
+                background-color: darken($white, 8%);
+                border: none;
+                margin-left: 0;
+
+                &:hover {
+                  color: $white;
+                  background-color: $blue;
+                }
+              }
+
+              // Settings Link
+              &.card-link-settings {
+                color: $white;
+                background-color: $green;
+                border: none;
+                margin: 0 (12 * $padding) 0 auto;
+
+                &:hover {
+                  color: $white;
+                  background-color: desaturate($green, 44%);
+                }
+              }
+
+              // Uninstall link
+              &.card-link-uninstall {
+                color: lighten($black, 16%);
+                background-color: transparent;
+                border: 1px solid darken($white, 16%);
+                margin: 0;
+
+                &:hover {
+                  color: desaturate($red, 24%);
+                  border-color: desaturate($red, 16%);
+                  background-color: lighten($red, 40%);
+                }
+              }
+
+              // NPM Link
+              &.card-link-npm {
+                position: absolute;
+                top: ((5 * $padding) + 2);
+                left: (6 * $padding);
+                width: (12 * $padding);
+                height: (5 * $padding);
+                padding: 0;
+
+                border: none;
+                font-size: .7rem;
+                font-weight: 600;
+                letter-spacing: .05rem;
+
+                color: $white;
+                background-color: $black;
+              }
+
+              // Github Link
+              &.card-link-external {
+                position: absolute;
+                right: (6 * $padding);
+                padding: 0;
+                width: (8 * $padding);
+                border: none;
+                background-color: darken($white, 8%);
+                color: $black!important;
+                font-size: .8rem;
+
+                &:hover {
+                  background-color: darken($white, 24%);
+                  color: $black!important;
+                }
+              }
+            }
+          }
+
+          > p,
+          > h4 {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          .card-title {
+            font-weight: 600;
+            margin-top: (3 * $padding);
+          }
+
+          .card-text {
+            font-size: 1rem;
+            color: lighten($black, 8%);
+            margin: 0 0 (2 * $padding);
+
+            span {
+              font-weight: 500;
+              font-size: .7rem;
+              letter-spacing: .032rem;
+              color: darken($blue, 8%);
+            }
+          }
+        }
+      }
+
+      .mb-3,
+      .my-3 {
+        margin-bottom: $canal!important;
+      }
+    }
+
+
+    /*
+     * Modification json form
+     */
+
+    // Form
+    legend {
+      font-size: 1.4rem;
+      font-weight: 500;
+      margin: (2 * $padding) 0 $padding;
+    }
+    .expandable,
+    .expanded {
+      legend{
+        &:before {
+          align-self: center;
+          font-size: 1rem;
+          padding-right: (2 * $padding);
+        }
+      }
+    }
+
+    .form-control {
+    }
+
+    root-widget {
+      > * {
+        margin: $padding 0;
+      }
+
+      > .form-flex-item {
+        padding: 0 $padding;
+      }
+    }
+    fieldset {
+      > root-widget {
+        > div:last-child {
+          margin-top: (4 * $padding);
+        }
+      }
+    }
+
+    json-schema-form {
+      .form-group {
+        padding: 0;
+        margin: 0;
+      }
+    }
+
+    .list-group .list-group-item {
+      margin: 0;
+      padding: $padding (4 * $padding);
+      border-radius: 0;
+
+      .close {
+        background-color: $red;
+        text-shadow: none;
+        opacity: 1;
+
+        border-radius: (3 * $padding);
+
+        position: absolute;
+        right: (4 * $padding);
+        top: (2.5 * $padding);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        width: (5 * $padding);
+        height: (5 * $padding);
+
+        span {
+          display: block;
+          text-indent: -666em;
+          width: (2.5 * $padding);
+          height: 2px;
+          background-color: $white;
+        }
+      }
+    }
+
+
+    /*
+     * Modification config view
+     */
+
+    app-config {
+      > div > .row {
+        padding: (4 * $padding) 0;
+      }
+
+      .text-right {
+        button {
+          &:nth-child(1) {
+            border-radius: $border-radius 0 0 $border-radius;
+            margin-right: 0;
+            border-right: none;
+          }
+
+          &:nth-child(2) {
+            border-radius: 0 $border-radius $border-radius 0;
+          }
+
+          &:before {
+            display: block;
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            margin: 0 (2 * $padding) 0 0;
+          }
+
+          &:nth-child(1):before {
+            content: "\f093";
+          }
+
+          &:nth-child(2):before {
+            content: "\f019";
+          }
+
+          &:nth-child(3):before {
+            content: "\f0c7";
+          }
+        }
+      }
+
+      ngx-monaco-editor {
+        margin: 0 -20px!important;
+        width: auto!important;
+
+        .editor-container {
+          height: 100%;
+        }
+      }
+    }
+
+
+    /*
+     * Modification accesories view
+     */
+
+    app-accessories {
+      > div > .row {
+        padding: (4 * $padding) 0;
+      }
+    }
+
+
+    /*
+     * Modification settings modal
+     */
+
+    .modal {
+      .modal-content {
+        border-radius: (2 * $border-radius);
+        box-shadow: 0 20px 60px rgba(0,0,0,.15);
+
+        .plugin-md p {
+          margin: 0;
+        }
+      }
+
+      .modal-header,
+      .modal-footer {
+        padding: (3 * $padding) (4 * $padding);
+      }
+
+      .modal-body {
+        padding: (4 * $padding);
+
+        .card {
+          &.card-body {
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+          }
+        }
+      }
+
+      .modal-footer {
+      }
+    }
+  }
+
+  // Large Screen
+  @media screen and (min-width: 760px) {
+    .config-ui-x-#{$name} {
+      app-plugins .hb-plugin-space-between {
+        width: calc(1/2 * 100% - (#{$canal} / 2))!important;
+      }
+    }
+  }
+
+  // Extra Large Screen
+  @media screen and (min-width: 1280px) {
+    .config-ui-x-#{$name} {
+      app-plugins .hb-plugin-space-between {
+        width: calc(1/3 * 100% - (#{$canal} / 3))!important;
+      }
+    }
+  }
+}
+
 @include make-theme('red', #F44336, #D32F2F);
 @include make-theme('pink', #e91e63, #c2185b);
 @include make-theme('purple', #9c27b0, #421367);
@@ -81,6 +1123,7 @@
 @include make-theme('teal', #009688, #00695c);
 @include make-theme('cyan', #00bcd4, #00838f);
 @include make-theme('deep-purple', #673ab7, #4527a0);
+@include make-new-theme();
 
 .config-ui-x-navi-blue {
   .btn-primary {

@@ -41,6 +41,7 @@ export class StatusComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.options = {
+      margin: 16, // Making dashboard feel roomy
       mobileBreakpoint: 1023,
       keepFixedHeightInMobile: false,
       itemChangeCallback: this.gridChangedEvent.bind(this),
@@ -51,7 +52,7 @@ export class StatusComponent implements OnInit, OnDestroy {
       resizable: {
         enabled: this.isLayoutUnlocked(),
       },
-      gridType: 'verticalFixed',
+      gridType: 'fit',
       minCols: 20,
       maxCols: 20,
       minRows: 20,
