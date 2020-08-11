@@ -10,6 +10,8 @@ import { AccessoriesService } from '../../core//accessories/accessories.service'
 import { MobileDetectService } from '../../core/mobile-detect.service';
 import { AddRoomModalComponent } from './add-room-modal/add-room-modal.component';
 
+import { environment } from '@/environments/environment';
+
 @Component({
   selector: 'app-accessories',
   templateUrl: './accessories.component.html',
@@ -18,6 +20,7 @@ import { AddRoomModalComponent } from './add-room-modal/add-room-modal.component
 export class AccessoriesComponent implements OnInit, OnDestroy {
   public isMobile: any = false;
   public hideHidden = true;
+  public backgroundStyle: string;
   private orderSubscription: Subscription;
 
   constructor(
@@ -52,6 +55,9 @@ export class AccessoriesComponent implements OnInit, OnDestroy {
     if (window.localStorage.getItem('accessories-layout-locked')) {
       this.isMobile = true;
     }
+
+    // Set background on status page
+    this.setBackground();
   }
 
   ngOnInit() {
@@ -105,6 +111,18 @@ export class AccessoriesComponent implements OnInit, OnDestroy {
     this.orderSubscription.unsubscribe();
     this.dragulaService.destroy('rooms-bag');
     this.dragulaService.destroy('services-bag');
+  }
+
+  // Set image background from config
+  async setBackground() {
+    if (!this.$auth.settingsLoaded) {
+      await this.$auth.onSettingsLoaded.toPromise();
+    }
+
+    const backgroundImageUrl = this.$auth.env.customWallpaperHash ?
+      environment.api.base + '/auth/wallpaper/' + this.$auth.env.customWallpaperHash :
+      '/assets/snapshot.jpg';
+    this.backgroundStyle = `url('${backgroundImageUrl}') center/cover`;
   }
 
 }

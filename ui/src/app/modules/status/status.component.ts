@@ -12,6 +12,8 @@ import { ManagePluginsService } from '../../core/manage-plugins/manage-plugins.s
 import { WidgetControlComponent } from './widget-control/widget-control.component';
 import { WidgetAddComponent } from './widget-add/widget-add.component';
 
+import { environment } from '@/environments/environment';
+
 @Component({
   selector: 'app-status',
   templateUrl: './status.component.html',
@@ -21,6 +23,7 @@ import { WidgetAddComponent } from './widget-add/widget-add.component';
 })
 export class StatusComponent implements OnInit, OnDestroy {
   private io = this.$ws.connectToNamespace('status');
+  public backgroundStyle: string;
 
   public saveWidgetsEvent = new Subject();
   public options: GridsterConfig;
@@ -101,6 +104,9 @@ export class StatusComponent implements OnInit, OnDestroy {
         this.gridChangedEvent();
       },
     });
+
+    // Set background on status page
+    this.setBackground();
   }
 
   getLayout() {
@@ -260,6 +266,18 @@ export class StatusComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.io.end();
     this.saveWidgetsEvent.complete();
+  }
+
+  // Set image background from config
+  async setBackground() {
+    if (!this.$auth.settingsLoaded) {
+      await this.$auth.onSettingsLoaded.toPromise();
+    }
+
+    const backgroundImageUrl = this.$auth.env.customWallpaperHash ?
+      environment.api.base + '/auth/wallpaper/' + this.$auth.env.customWallpaperHash :
+      '/assets/snapshot.jpg';
+    this.backgroundStyle = `url('${backgroundImageUrl}') center/cover`;
   }
 
 }
