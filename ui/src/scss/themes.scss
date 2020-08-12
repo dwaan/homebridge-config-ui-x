@@ -99,6 +99,7 @@ $padding:       4px;
 $canal:         (6 * $padding);
 $border-radius: (2 * $padding);
 $header-height: (12 * $padding);
+$font-size:     .9rem;
 
 
 /*
@@ -185,20 +186,22 @@ $header-height: (12 * $padding);
 
   .config-ui-x-#{$name} {
     font-family: var(--font-family-sans-serif);
-    font-size: 100%;
-    letter-spacing: .005rem;
+    font-size: $font-size;
+    font-weight: normal;
+    letter-spacing: .0064rem;
     padding: 0;
     background-color: darken($white, 4%);
+    color: lighten($black, 8%);
 
     // Heading
     @for $i from 1 through 5 {
       h#{$i}, .h#{$i} {
-        font-size: (1.8rem - (0.1 * $i));
+        font-size: (($font-size + .8) - (0.1 * $i));
         font-weight: 500;
         letter-spacing: -.024;
         line-height: 120%;
         padding: 0;
-        margin: (1.5 * ((12 - (2 * $i)) * $padding)) 0 (2 * $padding);
+        margin: (4 * ((12 - (2 * $i)) * $padding)) 0 (2 * $padding);
 
         &:first-child {
           margin-top: 0;
@@ -213,8 +216,8 @@ $header-height: (12 * $padding);
     }
 
     @for $i from 1 through 10 {
-      .mt-#{$i}, .my-#{$i} { margin-top: ($padding * $i)!important }
-      .mb-#{$i}, .my-#{$i} { margin-bottom: ($padding * $i)!important }
+      .mt-#{$i}, .my-#{$i} { margin-top: ($padding * ($i + 2))!important }
+      .mb-#{$i}, .my-#{$i} { margin-bottom: ($padding * ($i + 2))!important }
     }
 
     .container-fluid,
@@ -266,10 +269,16 @@ $header-height: (12 * $padding);
       display: none;
     }
 
-    .alert-info {
-      background-color: rgba($green, 0.1);
-      border-color: rgba($green, 0.1);
-      color: $orange;
+    .alert {
+      font-size: $font-size;
+      margin: 0 (-6 * $padding);
+      padding: 0 (6 * $padding);
+
+      border: none;
+      color: lighten($black, 16%);
+      font-size: $font-size;
+      letter-spacing: .048;
+      background-color: transparent;
     }
 
     .animate_loader {
@@ -390,6 +399,7 @@ $header-height: (12 * $padding);
      */
 
     .btn {
+      font-size: $font-size;
       line-height: 100%;
       text-transform: capitalize;
       margin: 0 ($padding * 2) 0 0;
@@ -497,6 +507,8 @@ $header-height: (12 * $padding);
       }
     }
 
+
+
     /*
      * Modification login view
      */
@@ -573,7 +585,7 @@ $header-height: (12 * $padding);
         input {
           width: 100%;
           color: $purple;
-          font-size: 1rem;
+          font-size: $font-size;
           border: none;
           background-color: rgba($white, .64);
 
@@ -589,7 +601,7 @@ $header-height: (12 * $padding);
 
           + label {
             color: rgba($purple, 48%);
-            font-size: 1rem;
+            font-size: $font-size;
             transform: none;
             transition: opacity .256 ease;
 
@@ -626,6 +638,169 @@ $header-height: (12 * $padding);
         }
       }
     }
+
+
+    /*
+     * Modification json form
+     */
+
+    // Form
+    legend {
+      font-size: ($font-size + .4);
+      font-weight: 500;
+      margin: (2 * $padding) 0 $padding;
+    }
+    .expandable,
+    .expanded {
+      legend{
+        &:before {
+          align-self: center;
+          font-size: $font-size;
+          padding-right: (2 * $padding);
+        }
+      }
+    }
+
+    .form-control {
+      font-size: $font-size;
+    }
+
+    root-widget {
+      > * {
+        margin: $padding 0;
+      }
+
+      > .form-flex-item {
+        padding: 0 $padding;
+      }
+    }
+    fieldset {
+      > root-widget {
+        > div:last-child {
+          margin-top: (4 * $padding);
+        }
+      }
+    }
+
+    json-schema-form {
+      .form-group {
+        padding: 0;
+        margin: 0;
+      }
+    }
+
+    .list-group .list-group-item {
+      margin: 0;
+      padding: $padding (4 * $padding);
+      border-radius: 0;
+
+      .close {
+        background-color: $red;
+        text-shadow: none;
+        opacity: 1;
+
+        border-radius: (3 * $padding);
+
+        position: absolute;
+        right: (4 * $padding);
+        top: (2.5 * $padding);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        width: (5 * $padding);
+        height: (5 * $padding);
+
+        span {
+          display: block;
+          text-indent: -666em;
+          width: (2.5 * $padding);
+          height: 2px;
+          background-color: $white;
+        }
+      }
+    }
+
+
+    /*
+     * Modification settings modal
+     */
+
+    .modal {
+
+      .modal-dialog {
+        height: 100%;
+        padding: (6 * $padding) 0;
+        margin: 0 auto;
+        max-width: 600px!important;
+
+        > .modal-content {
+          height: 100%;
+          background-color: transparent;
+          border-radius: 0;
+          box-shadow: none;
+
+          > * {
+            height: 100%;
+            display: flex;
+            justify-items: center;
+            align-items: center;
+          }
+
+          .modal-content {
+            max-height: 100%;
+            background-color: $white;
+            border-radius: (2 * $border-radius);
+            box-shadow: 0 20px 60px rgba(0,0,0,.15);
+            overflow: hidden;
+          }
+
+          .plugin-md p {
+            margin: 0;
+          }
+        }
+      }
+
+      .modal-header,
+      .modal-footer {
+        flex: 0 0;
+        padding: (3 * $padding) (4 * $padding);
+        background-color: darken($white, 4%);
+        background: linear-gradient(180deg, darken($white, 2%) 0%, darken($white, 6%) 100%);
+
+        h5 {
+          margin: 0 auto;
+          padding: 0;
+        }
+
+        .close {
+          margin: 0;
+          padding: 0;
+        }
+      }
+
+      .modal-body {
+        flex: 1 1;
+        padding: (4 * $padding);
+        overflow: auto;
+        background-color: darken($white, 2%);
+
+        .card {
+          background-color: transparent;
+
+          &.card-body {
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+          }
+        }
+      }
+
+      .modal-footer {
+      }
+    }
+
 
 
     /*
@@ -710,7 +885,7 @@ $header-height: (12 * $padding);
           box-shadow: 0 8px 16px rgba($black, .16);
 
           .drag-handler {
-            font-size: .7rem;
+            font-size: ($font-size - .2);
             font-weight: 600;
             letter-spacing: .048rem;
             text-transform: uppercase;
@@ -832,7 +1007,7 @@ $header-height: (12 * $padding);
             }
 
             .drag-handler {
-              font-size: 1rem;
+              font-size: $font-size;
               font-weight: normal;
               letter-spacing: inherit;
               text-transform: initial;
@@ -949,14 +1124,14 @@ $header-height: (12 * $padding);
               th {
                 padding: (1.5 * $padding) (6 * $padding) 0!important;
                 margin-bottom: -($padding / 2);
-                font-size: .5rem;
+                font-size: ($font-size - .4);
                 letter-spacing: .064rem;
                 text-transform: uppercase;
                 color: lighten($black, 16%);
               }
               td {
                 padding: 0 (6 * $padding) (1.5 * $padding)!important;
-                font-size: .9rem;
+                font-size: $font-size;
                 font-weight: 500;
                 color: lighten($black, 8%)!important;
               }
@@ -1229,7 +1404,7 @@ $header-height: (12 * $padding);
                 padding: 0;
 
                 border: none;
-                font-size: .7rem;
+                font-size: ($font-size - .2);
                 font-weight: 600;
                 letter-spacing: .05rem;
 
@@ -1246,7 +1421,7 @@ $header-height: (12 * $padding);
                 border: none;
                 background-color: darken($white, 8%);
                 color: $black!important;
-                font-size: .8rem;
+                font-size: ($font-size - .1);
 
                 &:hover {
                   background-color: darken($white, 24%);
@@ -1270,13 +1445,13 @@ $header-height: (12 * $padding);
           }
 
           .card-text {
-            font-size: 1rem;
+            font-size: $font-size;
             color: lighten($black, 8%);
             margin: 0 0 (2 * $padding);
 
             span {
               font-weight: 500;
-              font-size: .7rem;
+              font-size: ($font-size - .2);
               letter-spacing: .032rem;
               color: darken($blue, 8%);
             }
@@ -1301,103 +1476,10 @@ $header-height: (12 * $padding);
       display: flex;
       flex-flow: column nowrap;
 
-      .alert,
       .list-group .list-group-item {
-        font-size: 1rem;
+        font-size: $font-size;
         margin: 0 (-6 * $padding);
         padding: (3 * $padding) (6 * $padding);
-      }
-
-      .alert {
-        padding-top: 0;
-        padding-bottom: 0;
-        border: none;
-        color: lighten($black, 16%);
-        font-size: .9rem;
-        letter-spacing: .048;
-        background-color: transparent;
-      }
-    }
-
-
-    /*
-     * Modification json form
-     */
-
-    // Form
-    legend {
-      font-size: 1.4rem;
-      font-weight: 500;
-      margin: (2 * $padding) 0 $padding;
-    }
-    .expandable,
-    .expanded {
-      legend{
-        &:before {
-          align-self: center;
-          font-size: 1rem;
-          padding-right: (2 * $padding);
-        }
-      }
-    }
-
-    .form-control {
-    }
-
-    root-widget {
-      > * {
-        margin: $padding 0;
-      }
-
-      > .form-flex-item {
-        padding: 0 $padding;
-      }
-    }
-    fieldset {
-      > root-widget {
-        > div:last-child {
-          margin-top: (4 * $padding);
-        }
-      }
-    }
-
-    json-schema-form {
-      .form-group {
-        padding: 0;
-        margin: 0;
-      }
-    }
-
-    .list-group .list-group-item {
-      margin: 0;
-      padding: $padding (4 * $padding);
-      border-radius: 0;
-
-      .close {
-        background-color: $red;
-        text-shadow: none;
-        opacity: 1;
-
-        border-radius: (3 * $padding);
-
-        position: absolute;
-        right: (4 * $padding);
-        top: (2.5 * $padding);
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        width: (5 * $padding);
-        height: (5 * $padding);
-
-        span {
-          display: block;
-          text-indent: -666em;
-          width: (2.5 * $padding);
-          height: 2px;
-          background-color: $white;
-        }
       }
     }
 
@@ -1444,7 +1526,8 @@ $header-height: (12 * $padding);
         }
       }
 
-      ngx-monaco-editor {
+      ngx-monaco-editor,
+      ngx-monaco-editor.flex-grow-1 {
         margin: 0 -20px!important;
         width: auto!important;
 
@@ -1464,6 +1547,19 @@ $header-height: (12 * $padding);
         margin: 0 (-6 * $padding);
         padding: 0 (6 * $padding);
         min-height: 100%;
+      }
+
+      .manage-accessory-button {
+        position: relative;
+        z-index: 999;
+        margin: (5 * $padding) (5 * $padding) 0 0;
+
+        transition: opacity .356s ease, transform .512s ease;
+
+        &:hover {
+          transform-origin: 50%;
+          transform: rotate(180deg);
+        }
       }
 
       .background,
@@ -1566,7 +1662,7 @@ $header-height: (12 * $padding);
 
       .accessory-label {
         line-height: 1.1rem;
-        font-size: .9rem;
+        font-size: $font-size;
         font-weight: 500;
         color: rgba($black, .8);
         max-height: initial;
@@ -1574,7 +1670,7 @@ $header-height: (12 * $padding);
         &.grey-text {
           margin-top: $padding;
           font-weight: 400;
-          font-size: .8rem;
+          font-size: ($font-size - .1);
           color: rgba($black, .24);
           -webkit-line-clamp: 1;
         }
@@ -1632,52 +1728,6 @@ $header-height: (12 * $padding);
 
       .app-spinner-container {
         position: relative;
-      }
-    }
-
-
-    /*
-     * Modification settings modal
-     */
-
-    .modal {
-      .modal-content {
-        border-radius: (2 * $border-radius);
-        box-shadow: 0 20px 60px rgba(0,0,0,.15);
-
-        .plugin-md p {
-          margin: 0;
-        }
-      }
-
-      .modal-header,
-      .modal-footer {
-        padding: (3 * $padding) (4 * $padding);
-
-        h5 {
-          margin: 0 auto;
-          padding: 0;
-        }
-
-        .close {
-          margin: 0;
-          padding: 0;
-        }
-      }
-
-      .modal-body {
-        padding: (4 * $padding);
-
-        .card {
-          &.card-body {
-            padding: 0;
-            border-radius: 0;
-            box-shadow: none;
-          }
-        }
-      }
-
-      .modal-footer {
       }
     }
   }
