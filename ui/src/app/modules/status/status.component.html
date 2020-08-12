@@ -1,5 +1,5 @@
-<div class="status-container d-flex flex-column mt-0"
-  [ngStyle]="{'background': backgroundStyle}">
+<div class="status-container d-flex flex-column mt-0">
+  <div class="background" [ngStyle]="{'background': backgroundStyle}"></div>
 
 
   <button *ngIf="consoleStatus === 'up' && $auth.user.admin" (click)="addWidget()"

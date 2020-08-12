@@ -803,6 +803,56 @@ $font-size:     .9rem;
     }
 
 
+    /*
+     * Modification toast messages
+     */
+
+    #toast-container {
+      > div,
+      > div:hover {
+        box-shadow: 0 4px 8px rgba($black, .32);
+        border-radius: (2 * $border-radius);
+        padding: (4 * $padding) (4 * $padding) (4 * $padding) (13 * $padding);
+      }
+
+      .toast-success {
+        background-position: (4 * $padding) (2 * $padding);
+      }
+
+      .toast-close-button {
+        position: absolute;
+        top: (2 * $padding);
+        right: (2 * $padding);
+
+        display: flex;
+        justify-items: center;
+        align-items: center;
+
+        span {
+          display: block;;
+          width: (6 * $padding);
+          height: (6 * $padding);
+          line-height: (6 * $padding);
+          text-align: center;
+
+          color: $black;
+          background-color: $white;
+
+          border-radius: 100%;
+        }
+      }
+
+      .toast-title {
+        font-size: ($font-size + .2);
+        margin: 0;
+      }
+
+      .toast-message {
+        margin: 0;
+      }
+    }
+
+
 
     /*
      * Modification status view
@@ -813,6 +863,15 @@ $font-size:     .9rem;
       width: 100%;
       height: 100%;
       display: block;
+
+      .background {
+        position: absolute;
+        z-index: 0;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
 
       .status-container {
         margin: 0 (-$canal)!important;
@@ -827,7 +886,7 @@ $font-size:     .9rem;
       > div > .row {
         margin: 0 (-$canal);
 
-        &:nth-child(2) {
+        &:nth-child(3) {
           position: relative;
           z-index: 2;
           height: calc(100vh - #{$header-height});
@@ -1309,6 +1368,10 @@ $font-size:     .9rem;
 
           > div:first-child {
             padding-left: (15 * $padding);
+
+            > div:first-child {
+              flex: 1 1;
+            }
           }
 
           > div:last-child {
@@ -1615,7 +1678,7 @@ $font-size:     .9rem;
 
       .dropdown-toggle {
         margin-right: 0;
-        box-shadow: 0 8px 32px rgba(darken($green, 48%), .88)!important;
+        box-shadow: 0 8px 36px rgba(darken($green, 48%), .64)!important;
       }
     }
 
@@ -1651,13 +1714,13 @@ $font-size:     .9rem;
         right: 0;
         bottom: 0;
 
-        background-color: rgba(darken($white, 16%), .7);
+        background-color: rgba(darken($white, 24%), .68);
 
         border-radius: (2 * $border-radius)!important;
         -webkit-backdrop-filter: saturate(180%) blur(20px);
       }
 
-      &.switch-on {
+      &.switch-on:after {
         background-color: rgba($white, .96);
       }
 
