@@ -2,12 +2,13 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 
-import { AuthService } from '../../../core/auth/auth.service';
-import { ApiService } from '../../../core/api.service';
-import { ManagePluginsService } from '../../../core/manage-plugins/manage-plugins.service';
-
+import { AuthService } from '@/app/core/auth/auth.service';
+import { ApiService } from '@/app/core/api.service';
+import { ManagePluginsService } from '@/app/core/manage-plugins/manage-plugins.service';
+import { DonateModalComponent } from '../donate-modal/donate-modal.component';
 
 @Component({
   selector: 'app-plugins',
@@ -28,6 +29,7 @@ export class InstalledPluginsComponent implements OnInit, OnDestroy {
     private $router: Router,
     private $route: ActivatedRoute,
     public $fb: FormBuilder,
+    private $modal: NgbModal,
     private toastr: ToastrService,
     private translate: TranslateService,
   ) { }
@@ -75,6 +77,11 @@ export class InstalledPluginsComponent implements OnInit, OnDestroy {
           });
       }
     });
+  }
+
+  openFundingModal(plugin) {
+    const ref = this.$modal.open(DonateModalComponent);
+    ref.componentInstance.plugin = plugin;
   }
 
   onClearSearch() {

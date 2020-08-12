@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. This project uses [Semantic Versioning](https://semver.org/).
 
+## 4.25.1 (2020-08-10)
+
+### Node.js Version
+
+* Dropped support for Node.js < 10.17.0
+* Node.js versions 13.0.0 through 13.6.0 are not supported
+
+### Notable Changes
+
+* **Plugins:** Added the ability for developers of [verified](https://github.com/homebridge/homebridge/wiki/Verified-Plugins) plugins to [display ways users can support them](https://github.com/oznu/homebridge-config-ui-x/wiki/Developers:-Donation-Links) if they wish
+* **hb-service:** Additional log management features for users running Homebridge with [`hb-service`](https://github.com/oznu/homebridge-config-ui-x/wiki/Homebridge-Service-Command) only:
+  * Download the full Homebridge log file from the Log Viewer tab ([#795](https://github.com/oznu/homebridge-config-ui-x/issues/795))
+  * Truncate/empty the Homebridge log file from the Log Viewer tab
+
+### Other Changes
+
+* **i18n:** Improvements to Italian language translations ([#716](https://github.com/oznu/homebridge-config-ui-x/pull/797),[#801](https://github.com/oznu/homebridge-config-ui-x/pull/801),[#803](https://github.com/oznu/homebridge-config-ui-x/pull/803))
+* **API:** [Swagger API documentation](https://github.com/oznu/homebridge-config-ui-x/wiki/API-Reference) is now complete ([#776](https://github.com/oznu/homebridge-config-ui-x/issues/776))
+* Updated npm dependencies
+
 ## 4.24.0 (2020-07-22)
 
 ### Notable Changes

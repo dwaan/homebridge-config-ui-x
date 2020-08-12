@@ -1,0 +1,30 @@
+name: Test
+
+on: [
+  pull_request,
+  push
+]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node-version: [10.x, 11.x, 12.x, 13.x, 14.x]
+        include:
+          - os: macos-latest
+            node: 12.x
+          - os: windows-latest
+            node: 12.x
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run build:server
+      - run: npm run lint:server
+      - run: npm run test:e2e
