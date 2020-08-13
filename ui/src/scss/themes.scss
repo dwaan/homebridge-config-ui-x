@@ -98,7 +98,7 @@ $white: #fff;
 // Measurement
 $padding:       4px;
 $canal:         (6 * $padding);
-$border-radius: (2 * $padding);
+$border-radius: (3 * $padding);
 $header-height: (12 * $padding);
 $font-size:     .9rem;
 
@@ -151,14 +151,16 @@ $font-size:     .9rem;
       margin: 0 auto!important;
 
       li {
+        margin: 0 $padding;
         overflow: hidden;
-        border-radius: $border-radius;
+        border-radius: (1/2 * $border-radius);
 
         a {
           position: relative;
           overflow: hidden;
-          padding: ($padding / 2) (4 * $padding);
+          padding: (1/2 * $padding) (4 * $padding);
           font-weight: 500;
+          background-color: transparent!important;
 
           > * {
             display: none;
