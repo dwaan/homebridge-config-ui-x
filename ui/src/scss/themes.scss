@@ -146,7 +146,7 @@ $font-size:     .9rem;
       height: (6 * $padding)!important;
     }
 
-    // Main menu
+    // Main menu and Side Menu
     .navbar-nav.mr-auto {
       margin: 0 auto!important;
 
@@ -171,6 +171,32 @@ $font-size:     .9rem;
           background-color: rgba(darken($bg-color, 16%), .88);
         }
       }
+    }
+
+
+    // Side menu
+    .nav-flex-icons {
+      li {
+        margin: 0 $padding;
+        border-radius: (1/2 * $border-radius);
+
+        a {
+          background-color: transparent!important;
+        }
+
+        &.active {
+          background-color: rgba(darken($bg-color, 16%), .88);
+        }
+      }
+    }
+
+    .nav-link,
+    .navbar-brand > * {
+      filter: drop-shadow(0 2px 4px rgba($black, .64));
+    }
+
+    .waves-ripple {
+      display: none!important;
     }
   }
 }
@@ -198,19 +224,26 @@ $font-size:     .9rem;
 
     // Heading
     @for $i from 1 through 5 {
-      h#{$i}, .h#{$i} {
+      h#{$i},
+      .h#{$i},
+      .plugin-md h#{$i},
+      .plugin-md .h#{$i} {
         font-size: (($font-size + .8) - (0.1 * $i));
         font-weight: 500;
         letter-spacing: -.024;
         line-height: 120%;
         padding: 0;
-        margin: (4 * ((12 - (2 * $i)) * $padding)) 0 (2 * $padding);
+        margin: 0;
+      }
 
-        &:first-child {
-          margin-top: 0;
-        }
+      * ~ h#{$i},
+      * ~ .h#{$i},
+      .plugin-md * ~ h#{$i},
+      .plugin-md * ~ .h#{$i} {
+        margin: (((12 - (2 * $i)) * $padding)) 0 (2 * $padding);
       }
     }
+
 
     // Paragraph
     p {
@@ -222,6 +255,10 @@ $font-size:     .9rem;
       .mt-#{$i}, .my-#{$i} { margin-top: ($padding * ($i + 2))!important }
       .mb-#{$i}, .my-#{$i} { margin-bottom: ($padding * ($i + 2))!important }
     }
+
+
+
+    // Commmon styles
 
     .container-fluid,
     .container-sm,
@@ -308,6 +345,12 @@ $font-size:     .9rem;
       color: lighten($black, 32%)!important;
     }
 
+    // Markdown plugin
+    .plugin-md {
+      font-size: $font-size;
+    }
+
+
     // Modification for header page
     @include header-theme($blue, $white);
 
@@ -318,24 +361,24 @@ $font-size:     .9rem;
 
     form {
       .hb-npm-search {
-        background-color: $white;
+        background-color: rgba($black, .08);
         height: auto;
         margin: (8 * $padding) 0;
         padding: $padding (6 * $padding);
-        border: 1px solid darken($white, 12%);
+        border: none;
 
         border-radius: $border-radius;
-        box-shadow: 0 12px 24px rgba($black, .048);
+        box-shadow: none;
         transition: color .256s ease, background-color .256s ease, border-color .256s ease, box-shadow .256s ease;
 
-        &:hover {
-          border-color: darken($white, 16%);
-          box-shadow: 0 12px 24px rgba($black, .24);
+        &:hover,
+        &:focus {
+          border: none;
+          box-shadow: none;
         }
 
         &:focus {
-          border-color: rgba(darken($blue, 16%), .24);
-          box-shadow: 0 24px 48px rgba(darken($blue, 16%), .24);
+          box-shadow: 0 0 0 4px rgba($blue, .32);
         }
 
         &:before,
@@ -403,6 +446,7 @@ $font-size:     .9rem;
 
     .btn {
       font-size: $font-size;
+      font-weight: 500;
       line-height: 100%;
       text-transform: capitalize;
       margin: 0 ($padding * 2) 0 0;
@@ -413,7 +457,7 @@ $font-size:     .9rem;
       padding: 0 (6 * $padding);
       height: (8 * $padding);
 
-      border-radius: $border-radius;
+      border-radius: (3/4 * $border-radius);
       box-shadow: none!important;
 
       display: inline-flex;
@@ -464,16 +508,118 @@ $font-size:     .9rem;
 
 
     /*
-     * Dropdown menu
+     * Modification for card style
      */
 
-    .dropdown-menu {
+    .card {
+      border-radius: 12px;
+      background-color: $white;
+      box-shadow: 0 16px 24px rgba($black, .048);
+
+      &.card-body {
+        padding: (4 * $padding) (6 * $padding);
+      }
+    }
+
+
+    /*
+     * Modification for MD-Form
+     */
+
+    .md-form {
+      margin-top: (2 * $padding);
+      margin-bottom: (2 * $padding);
+
+      display: flex;
+      flex-flow: column-reverse;
+
+      .prefix {
+        $icon-size: 0;
+
+        top: 0;
+        font-size: $icon-size;
+        width: $icon-size;
+        height: $icon-size;
+        line-height: $icon-size;
+
+        ~ label,
+        ~ input,
+        ~ textarea {
+          margin-left: 0;
+          width: 100%;
+        }
+      }
+
+      input:not([type]),
+      input[type="text"]:not(.browser-default),
+      input[type="password"]:not(.browser-default),
+      input[type="email"]:not(.browser-default),
+      input[type="url"]:not(.browser-default),
+      input[type="time"]:not(.browser-default),
+      input[type="date"]:not(.browser-default),
+      input[type="datetime"]:not(.browser-default),
+      input[type="datetime-local"]:not(.browser-default),
+      input[type="tel"]:not(.browser-default),
+      input[type="number"]:not(.browser-default),
+      input[type="search"]:not(.browser-default),
+      input[type="phone"]:not(.browser-default),
+      input[type="search-md"],
+      textarea.md-textarea {
+        color: $black;
+        background-color: lighten($white, 100%);
+        border: 1px solid darken($white, 16%);
+        border-radius: (1/2 * $border-radius);
+
+        &:focus {
+          outline: 0;
+          color: $black;
+          background-color: lighten($white, 100%);
+          border-color: rgba($blue, .64);
+          box-shadow: 0 0 0 0.2rem rgba($blue, .24);
+        }
+      }
+
+      label,
+      label.active {
+        position: relative;
+        font-size: $font-size;
+        transform: none;
+      }
+
+      .form-control {
+        padding: 0.375rem 0.75rem!important;
+
+        &.is-invalid:focus {
+            border-color: rgba($red, .64)!important;
+            box-shadow: 0 0 0 0.2rem rgba($red, .24)!important;
+        }
+
+        &.is-valid,
+        &.is-invalid {
+          background-position: right 0.75rem center!important;
+        }
+      }
+    }
+
+
+    /*
+     * Modification for Dropdown menu
+     */
+
+    .dropdown-menu,
+    .monaco-menu-container {
       z-index: 99;
       padding: (2 * $padding);
       overflow: hidden;
-      border-radius: $border-radius;
+      border-radius: $border-radius!important;
       background-color: transparent;
-      box-shadow: 0 8px 16px rgba($black, .32);
+      box-shadow: 0 8px 16px rgba($black, .32)!important;
+
+      .monaco-scrollable-element {
+        padding: 0;
+        background-color: transparent;
+        box-shadow: none!important;
+      }
 
       &:after {
         position: absolute;
@@ -489,24 +635,49 @@ $font-size:     .9rem;
       }
 
       a {
+        background-color: transparent!important;
+        margin: 0;
         padding: (2 * $padding) (4 * $padding);
         color: $black!important;
+        font-size: $font-size;
         font-weight: 400;
         line-height: 100%;
+        height: auto;
         border-radius: $border-radius;
 
         &:active,
         &:focus,
         &:hover {
-          background-color: rgba($purple, .88);
+          background-color: rgba($purple, .88)!important;
           color: $white!important;
+        }
+
+        &.action-menu-item {
+          padding: (2 * $padding) (1/2 * $padding);
+        }
+
+        span {
+          font-size: $font-size!important;
+          font-weight: 400;
+          line-height: 100%;
         }
       }
 
-      .dropdown-divider {
+      .dropdown-divider,
+      .action-label.separator {
+        padding: 0;
         margin: (2 * $padding) 0;
         border-top: 2px solid rgba(darken($white, 16%), .48);
+        border-bottom: none!important;
         border-radius: $border-radius;
+      }
+
+      .action-item {
+        border: none;
+      }
+
+      .monaco-action-bar {
+        background-color: transparent!important;
       }
     }
 
@@ -519,31 +690,38 @@ $font-size:     .9rem;
     .login-container {
       .logo {
         display: block;
-        width: 35%;
+        width: 160px;
+        height: 160px;
+        padding: (8 * $padding);
         margin: 0 auto (12 * $padding);
+        background: rgba($purple, .88);
+        background: linear-gradient(180deg, rgba($purple, .88), rgba($purple-dark, .88));
+        border: 1px solid rgba($purple-dark, .92);
+        border-radius: 100%;
+        -webkit-backdrop-filter: saturate(180%) blur(20px);
+        box-shadow: 0 24px 64px rgba(darken($purple-dark, 8%), .64);
       }
 
       .login-card {
         overflow: hidden;
         padding: 0;
-        background-color: transparent;
         margin: (6 * $padding)!important;
+        background-color: transparent;
         max-width: (100 * $padding);
-        border-radius: (3 * $border-radius);
-        box-shadow: 0 24px 64px rgba(darken($purple-dark, 8%), .92);
+        box-shadow: none;
 
         form {
           padding: (12 * $padding) (10 * $padding) (10 * $padding);
-          background: rgba($purple, .88);
-          background: linear-gradient(180deg, rgba($purple, .88), rgba($purple-dark, .88));
-          border: 1px solid rgba($purple-dark, .92);
-          border-radius: (3 * $border-radius);
-          -webkit-backdrop-filter: saturate(180%) blur(20px);
+
+          > div:nth-child(2) {
+            filter: drop-shadow(0 8px 16px rgba($black, .32));
+          }
         }
       }
 
       .md-form {
-        margin: 0;
+        margin: 0 auto;
+        max-width: (75 * $padding);
 
         &:first-child {
           margin-top: (8 * $padding);
@@ -555,7 +733,7 @@ $font-size:     .9rem;
 
         &:last-child {
           margin-top: 1px;
-          margin-bottom: (8 * $padding);
+          margin-bottom: (6 * $padding);
 
           input {
             border-radius: 0 0 $border-radius $border-radius;
@@ -574,37 +752,43 @@ $font-size:     .9rem;
         }
 
         i {
-          margin: (2 * $padding) 0 0 (3 * $padding);
-          color: $purple!important;
+          z-index: 1;
+          margin: (2.5 * $padding) 0 0 (6 * $padding);
+          color: lighten($black, 24%)!important;
           font-size: (4 * $padding);
         }
 
         input,
         label {
           margin-left: 0;
-          padding: (2 * $padding) (2 * $padding) (2 * $padding) (10 * $padding)!important;
+          padding: (3 * $padding) (3 * $padding) (3 * $padding) (14 * $padding)!important;
         }
 
         input {
+          position: relative;
+          z-index: 0;
           width: 100%;
-          color: $purple;
+          color: $black;
           font-size: $font-size;
           border: none;
-          background-color: rgba($white, .64);
+          background-color: rgba(darken($white, 4%), .72);
+
+          -webkit-backdrop-filter: saturate(180%) blur(20px);
 
           &.form-control:focus,
           &:active,
           &:hover,
           &:focus {
-            color: $purple!important;
+            color: $black!important;
             border: none!important;
-            background: rgba($white, .64)!important;
+            background-color: rgba(darken($white, 4%), .72)!important;
             box-shadow: none!important;
           }
 
           + label {
-            color: rgba($purple, 48%);
+            color: lighten($black, 24%)!important;
             font-size: $font-size;
+            font-weight: 500;
             transform: none;
             transition: opacity .256 ease;
 
@@ -624,19 +808,22 @@ $font-size:     .9rem;
       .btn:focus,
       .btn:hover,
       .btn:active {
+        padding: (3 * $padding) (8 * $padding)!important;
+        height: auto!important;
         border: none!important;
-        background-color: $yellow!important;
-        color: $purple-dark!important;
-        box-shadow: 0 8px 32px rgba(darken($yellow, 32%), .72)!important;
-        border: 1px solid darken($yellow, 32%)!important;
+        background-color: $blue!important;
+        background: linear-gradient(180deg, rgba($purple, .88), rgba($purple-dark, .88))!important;
+        color: $white!important;
+        box-shadow: 0 8px 16px rgba(darken($purple-dark, 32%), .48)!important;
+        border: none!important;
         transition: all .256s ease;
+        -webkit-backdrop-filter: saturate(180%) blur(20px);
 
         &:disabled,
         &.disabled {
           opacity: 1!important;
-          color: rgba($white, .64)!important;
-          border: 1px solid rgba($black, .24)!important;
-          background: rgba($black, .16)!important;
+          color: lighten($white, 24%)!important;
+          background: rgba(lighten($black, 16%), .48)!important;
           box-shadow: none!important;
         }
       }
@@ -696,6 +883,12 @@ $font-size:     .9rem;
       margin: 0;
       padding: $padding (4 * $padding);
       border-radius: 0;
+      border: 0;
+      border-top: 1px solid darken($white, 8%);
+
+      &:last-child {
+        border-bottom: 1px solid darken($white, 8%);
+      }
 
       .close {
         background-color: $red;
@@ -731,7 +924,6 @@ $font-size:     .9rem;
      */
 
     .modal {
-
       .modal-dialog {
         height: 100%;
         padding: (6 * $padding) 0;
@@ -755,7 +947,7 @@ $font-size:     .9rem;
             max-height: 100%;
             background-color: $white;
             border-radius: (2 * $border-radius);
-            box-shadow: 0 20px 60px rgba(0,0,0,.15);
+            box-shadow: 0 20px 60px rgba($black,.15);
             overflow: hidden;
           }
 
@@ -796,6 +988,24 @@ $font-size:     .9rem;
             padding: 0;
             border-radius: 0;
             box-shadow: none;
+
+            > div > div:last-child {
+              position: absolute;
+              top: initial;
+              bottom: ($padding + 2);
+              left: initial;
+              right: 0;
+
+              a {
+                border: 1px solid rgba(darken($red, 16%), .64);
+                padding: $padding (4 * $padding);
+                border-radius: $border-radius;
+
+                &:hover {
+                  background-color: rgba($red, .08);
+                }
+              }
+            }
           }
         }
       }
@@ -811,14 +1021,21 @@ $font-size:     .9rem;
 
     #toast-container {
       > div,
-      > div:hover {
-        box-shadow: 0 4px 8px rgba($black, .32);
-        border-radius: (2 * $border-radius);
-        padding: (4 * $padding) (4 * $padding) (4 * $padding) (13 * $padding);
+      > div:hover,
+      .toast-close-button span {
+        color: $white!important;
+        -webkit-backdrop-filter: saturate(180%) blur(20px);
       }
 
-      .toast-success {
-        background-position: (4 * $padding) (2 * $padding);
+      > div,
+      > div:hover {
+        background-position: (4 * $padding) (5 * $padding);
+        padding: (4 * $padding) (4 * $padding) (4 * $padding) (13 * $padding);
+
+        background-color: rgba(lighten($black, 4%), .72)!important;
+
+        box-shadow: 0 4px 8px rgba($black, .32);
+        border-radius: $border-radius;
       }
 
       .toast-close-button {
@@ -832,14 +1049,17 @@ $font-size:     .9rem;
 
         span {
           display: block;;
+
           width: (6 * $padding);
           height: (6 * $padding);
-          line-height: (6 * $padding);
+          line-height: (5.5 * $padding);
+
           text-align: center;
+          font-weight: 300;
 
-          color: $black;
-          background-color: $white;
+          background-color: rgba(darken($black, 4%), .32)!important;
 
+          box-shadow: none;
           border-radius: 100%;
         }
       }
@@ -856,6 +1076,25 @@ $font-size:     .9rem;
 
 
 
+    // Background
+
+    .background,
+    .background:after {
+      position: absolute;
+      z-index: 2;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+
+    .background:after {
+      content: "";
+      display: block;
+      background-color: rgba($black, .16);
+    }
+
+
     /*
      * Modification status view
      */
@@ -866,13 +1105,8 @@ $font-size:     .9rem;
       height: 100%;
       display: block;
 
-      .background {
-        position: absolute;
-        z-index: 0;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+      .background:after {
+        display: none;
       }
 
       .status-container {
@@ -888,9 +1122,9 @@ $font-size:     .9rem;
       > div > .row {
         margin: 0 (-$canal);
 
-        &:nth-child(3) {
+        &.flex-column {
           position: relative;
-          z-index: 2;
+          z-index: 3;
           height: calc(100vh - #{$header-height});
           box-shadow: 0 4px 24px rgba($black, .32);
         }
@@ -944,18 +1178,20 @@ $font-size:     .9rem;
 
         gridster-item {
           border-radius: var(--base-size);
-          box-shadow: 0 8px 16px rgba($black, .16);
+          box-shadow: 0 8px 16px rgba($black, .48);
+          border-top: 1px solid rgba(lighten($white, 100%), .24);
 
           .drag-handler {
-            font-size: ($font-size - .2);
-            font-weight: 600;
-            letter-spacing: .048rem;
-            text-transform: uppercase;
-            color: lighten($black, 48%);
             padding: (3 * $padding) (10 * $padding) (3 * $padding) (6 * $padding)!important;
             overflow: hidden;
-            white-space: nowrap;
+
+            color: lighten($black, 48%);
+            font-size: ($font-size - .2);
+            font-weight: 600;
+            text-transform: uppercase;
             text-overflow: ellipsis;
+            letter-spacing: .048rem;
+            white-space: nowrap;
           }
 
           .widget-control-button {
@@ -994,7 +1230,6 @@ $font-size:     .9rem;
               flex: 0;
               align-items: center;
               justify-content:center;
-              font-size: calc(3 * var(--base-size));
 
               &:not(:last-child) {
                 margin-right: 0!important;
@@ -1013,8 +1248,10 @@ $font-size:     .9rem;
               }
 
               .align-self-center {
+                a:first-child,
                 span:first-child {
-                  font-size: calc(1.25 * var(--base-size));
+                  font-size: var(--base-size)!important;
+                  font-weight: 500;
                 }
 
                 br {
@@ -1046,8 +1283,14 @@ $font-size:     .9rem;
                 color: $green!important;
               }
 
+              .fa-cloud-upload-alt,
               .fa-exclamation-circle {
                 color: $orange!important;
+              }
+
+              .hb-status-icon {
+                padding: 0 calc(1 * var(--base-size)) 0 0!important;
+                font-size: calc(3 * var(--base-size));
               }
             }
           }
@@ -1056,6 +1299,7 @@ $font-size:     .9rem;
             $dark: $purple;
             $light: $white;
 
+            background-color: lighten($dark, 16%);
             background: linear-gradient(180deg, lighten($dark, 16%) 0%, lighten($dark, 8%) 100%);
 
             color: $light;
@@ -1081,6 +1325,11 @@ $font-size:     .9rem;
                 flex-flow: column nowrap;
                 justify-content: flex-end;
                 align-items: flex-end;
+
+                &:first-child {
+                  height: auto!important;
+                  flex: 1 1 auto;
+                }
               }
             }
 
@@ -1121,6 +1370,7 @@ $font-size:     .9rem;
 
           &#SystemInfoWidgetComponent {
             $drag-handler-height: 10 * $padding;
+            border-top: none;
 
             background-color: $white;
 
@@ -1202,6 +1452,7 @@ $font-size:     .9rem;
 
           &#WeatherWidgetComponent {
             background-color: lighten($blue, 24%);
+            background: linear-gradient(180deg, lighten($blue, 24%), lighten($blue, 28%));
 
             .p-2 {
               padding-top: 0!important;
@@ -1255,14 +1506,15 @@ $font-size:     .9rem;
           &#CpuWidgetComponent,
           &#UptimeWidgetComponent {
             color: $white!important;
+            background-color: $green;
+            background: linear-gradient(180deg, $green 0%, darken($green, 12%) 100%);
 
             canvas {
-              background-color: $green;
-              background: linear-gradient(180deg, $green 0%, darken($green, 12%) 100%);
+              background-color: transparent;
             }
 
             .hb-widget-chart-background {
-              background-color: $yellow;
+              background-color: rgba($white, .16);
             }
 
             .justify-content-around {
@@ -1296,11 +1548,6 @@ $font-size:     .9rem;
               }
             }
 
-            .widget-value,
-            .widget-value-label {
-              text-shadow: 0 4px 16px rgba(0, 0, 0, .24);
-            }
-
             .widget-value {
               font-weight: 600;
               font-size: calc(2 * var(--base-size));
@@ -1312,41 +1559,52 @@ $font-size:     .9rem;
           }
 
           &#CpuWidgetComponent {
-            canvas {
-              background-color: $blue;
-              background: linear-gradient(180deg, $blue 0%, darken($blue, 12%) 100%);
-            }
-
-            .hb-widget-chart-background {
-              background-color: $red;
-            }
+            background-color: $blue;
+            background: linear-gradient(180deg, $blue 0%, darken($blue, 12%) 100%);
           }
 
           &#UptimeWidgetComponent {
             background-color: $orange;
+            background: linear-gradient(180deg, $orange 0%, darken($orange, 12%) 100%);
           }
 
           &#ClockWidgetComponent {
             background-color: $black;
+            background: linear-gradient(180deg, lighten($black, 12%), lighten($black, 8%));
             color: $white!important;
 
             .widget-value {
               font-size: calc(3 * var(--base-size));
+              font-weight: 500;
             }
 
             .widget-value-label {
               font-size: var(--base-size);
-              color: $yellow;
+              color: darken($white, 32%)!important;
             }
           }
 
           &#HomebridgeLogsWidgetComponent {
+            background-color: #2b2b2b!important;
+
+            .drag-handler {
+              // flex: 0 0 auto;
+            }
+
             .p-2 {
               border-top: 1px solid lighten($black, 16%);
               padding: 0 (6 * $padding)!important;
             }
           }
         }
+      }
+
+      .add-widget-button {
+        opacity: 1;
+        width: (12 * $padding);
+        height: (12 * $padding);
+        border-radius: 100%;
+        box-shadow: 0 4px 16px rgba($black, .48)!important;
       }
     }
 
@@ -1360,14 +1618,6 @@ $font-size:     .9rem;
         width: calc(100% - (1 - 1/3) * 10px)!important;
 
         .card {
-          border-radius: 12px;
-          background-color: $white;
-          box-shadow: 0 16px 24px rgba(0, 0, 0, .048);
-
-          &.card-body {
-            padding: (4 * $padding) (6 * $padding);
-          }
-
           > div:first-child {
             padding-left: (15 * $padding);
 
@@ -1537,10 +1787,9 @@ $font-size:     .9rem;
      */
 
     app-settings {
-      // max-width: (160 * $padding);
-      margin: (4 * $padding) auto;
-      display: flex;
-      flex-flow: column nowrap;
+      height: initial!important;
+      min-height: 100%;
+      padding: (16 * $padding) 0 (2 * $padding)!important;
 
       .list-group .list-group-item {
         font-size: $font-size;
@@ -1609,6 +1858,12 @@ $font-size:     .9rem;
      */
 
     app-accessories {
+      .background,
+      .background:after {
+        position: fixed;
+        z-index: 0;
+      }
+
       > div {
         margin: 0 (-6 * $padding);
         padding: 0 (6 * $padding);
@@ -1628,20 +1883,8 @@ $font-size:     .9rem;
         }
       }
 
-      .background,
       .background:after {
-        position: fixed;
-        z-index: 0;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-      }
-
-      .background:after {
-        content: "";
         display: block;
-        background-color: rgba($black, .16);
       }
 
       .room-title {
@@ -1777,6 +2020,27 @@ $font-size:     .9rem;
       }
     }
 
+    /*
+     * Modification user view
+     */
+
+    app-users {
+      height: initial!important;
+      min-height: 100%;
+      padding: (16 * $padding) 0 (2 * $padding)!important;
+
+      h4 {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-right: (4 * $padding);
+      }
+
+      .btn {
+        flex: 0 0 auto;
+      }
+    }
+
 
     /*
      * Restart page
@@ -1796,6 +2060,9 @@ $font-size:     .9rem;
         position: relative;
       }
     }
+
+
+    // /platform-tools/docker/restart-container
   }
 
   // Large Screen
@@ -1832,22 +2099,825 @@ $font-size:     .9rem;
       }
     }
   }
-}
 
-@keyframes glow {
-  0% {
-    color: $black;
-    border-color: darken($white, 12%);
+  @keyframes glow {
+    0% {
+      color: $black;
+      border-color: darken($white, 12%);
+    }
+
+    25% {
+      color: darken(desaturate($green, 16%), 8%);
+      border-color: desaturate($green, 16%);
+    }
+
+    50% {
+      color: $black;
+      border-color: darken($white, 12%);
+    }
   }
 
-  25% {
-    color: darken(desaturate($green, 16%), 8%);
-    border-color: desaturate($green, 16%);
+  // Dark mode
+  @media (prefers-color-scheme: dark) {
+    // Common colors
+    $red:     darken($red, 4%);
+    $orange:  darken($orange, 4%);
+    $yellow:  darken($yellow, 4%);
+    $green:   darken($green, 4%);
+    $blue:    darken($blue, 4%);
+
+    // Homebridge color
+    $purple:      darken($purple, 8%);
+    $purple-dark: darken($purple-dark, 8%);
+
+    // B/W
+    $t_black: $black;
+    $t_white: $white;
+    $black: darken($t_white, 4%);
+    $white: $t_black;
+
+    .config-ui-x-#{$name} {
+      background-color: darken($white, 4%);
+      color: lighten($black, 8%);
+      overflow-x: hidden;
+
+
+      // Commmon styles
+
+      .container-fluid,
+      .container-sm,
+      .container-md,
+      .container-lg,
+      .container-xl {
+        h3.primary-text {
+          color: $black;
+        }
+      }
+
+      a {
+        &.card-link {
+          color: $black;
+        }
+      }
+
+      .hb-uix-switch {
+        .hb-uix-slider  {
+          border-color: $blue!important;
+        }
+
+        input:checked ~ .hb-uix-slider {
+          background-color: $blue!important;
+        }
+      }
+
+      .hb-widget-chart-background {
+        background-color: rgba($white, .24);
+      }
+
+      .alert {
+        color: lighten($black, 16%);
+      }
+
+      .animate_loader {
+        .spinner_outer {
+          stroke: rgba($purple, .32);
+        }
+
+        .spinner_inner {
+          stroke: $purple;
+        }
+      }
+
+      .bg-primary {
+        background-color: $blue!important;
+      }
+
+      .grey-text {
+        color: lighten($black, 32%)!important;
+      }
+
+      // Modification for header page
+      @include header-theme(rgba(lighten($white, 4%), .64), $black);
+
+
+      /*
+       * Modification for plugins page - search bar
+       */
+
+      form {
+        .hb-npm-search {
+          background-color: rgba($black, .08);
+
+          &:focus {
+            box-shadow: 0 0 0 4px rgba($blue, .32);
+          }
+
+          &:before,
+          &:after {
+            background-color: $black;
+          }
+        }
+
+        .hb-npm-search-clear {
+          background-color: lighten($black, 30%);
+
+          &:hover {
+            background-color: lighten($black, 15%);
+          }
+
+          &:before,
+          &:after {
+            background-color: $white;
+          }
+        }
+      }
+
+
+      /*
+       * Modification for button style
+       */
+
+      .btn {
+        border: 1px solid lighten($white, 24%);
+        color: lighten($black, 16%);
+
+        &.btn-default,
+        &.btn-primary {
+          color: $black;
+        }
+
+        &.btn-default {
+          background-color: $blue!important;
+
+          &:hover {
+            color: $black;
+            background-color: darken($blue, 8%)!important;
+          }
+        }
+
+        &.btn-primary {
+          background-color: $green!important;
+
+          &:hover {
+            color: $black;
+            background-color: darken($green, 8%)!important;
+          }
+        }
+
+        &:hover {
+          color: $black;
+          background-color: lighten($white, 8%)!important;
+        }
+      }
+
+
+      /*
+       * Dropdown menu
+       */
+
+      .dropdown-menu,
+      .monaco-menu-container {
+        border: 1px solid lighten($white, 16%);
+        box-shadow: 0 8px 16px rgba(darken($white, 24%), .32)!important;
+
+        &:after {
+          background-color: rgba(lighten($white, 4%), .72);
+        }
+
+        a {
+          color: $black!important;
+
+          &:active,
+          &:focus,
+          &:hover {
+            background-color: rgba($purple, .88);
+            color: $black!important;
+          }
+        }
+
+        .dropdown-divider,
+        .action-label.separator {
+          border-top: 2px solid rgba(darken($black, 16%), .48);
+        }
+      }
+
+
+      /*
+       * Modification for card style
+       */
+
+      .card {
+        border: 1px solid lighten($white, 4%);
+        background-color: $white;
+        box-shadow: 0 16px 24px rgba(darken($white, 24%), .32);
+      }
+
+
+      /*
+       * Modification login view
+       */
+
+      .login-container {
+        .logo {
+          background: rgba($purple, .88);
+          background: linear-gradient(180deg, rgba($purple, .88), rgba($purple-dark, .88));
+          border: 1px solid rgba($purple-dark, .92);
+          box-shadow: 0 24px 64px rgba(darken($purple-dark, 8%), .64);
+        }
+
+        .login-card {
+          form {
+            > div:nth-child(2) {
+              filter: drop-shadow(0 8px 16px rgba($black, .32));
+            }
+          }
+        }
+
+        .md-form {
+          i {
+            color: lighten($black, 24%)!important;
+          }
+
+          input {
+            color: $black;
+            background-color: rgba(darken($white, 4%), .72);
+
+            &.form-control:focus,
+            &:active,
+            &:hover,
+            &:focus {
+              color: $black!important;
+              background-color: rgba(darken($white, 4%), .72)!important;
+            }
+
+            + label {
+              color: lighten($black, 24%)!important;
+            }
+          }
+        }
+
+        .btn,
+        .btn:focus,
+        .btn:hover,
+        .btn:active {
+          background-color: $blue!important;
+          background: linear-gradient(180deg, rgba($purple, .88), rgba($purple-dark, .88))!important;
+          color: $black!important;
+          box-shadow: 0 8px 16px rgba(darken($purple-dark, 32%), .48)!important;
+
+          &:disabled,
+          &.disabled {
+            color: lighten($black, 24%)!important;
+            background: rgba(lighten($white, 16%), .48)!important;
+          }
+        }
+      }
+
+
+      /*
+       * Modification json form
+       */
+
+      // Form
+
+      .list-group .list-group-item {
+        background-color: lighten($white, .16);
+        border-top: 1px solid lighten($white, 8%);
+
+        &:last-child {
+          border-bottom: 1px solid lighten($white, 8%);
+        }
+
+        .close {
+          background-color: $red;
+
+          span {
+            background-color: $white;
+          }
+        }
+      }
+
+
+      /*
+       * Modification settings modal
+       */
+
+      .modal {
+        .modal-dialog {
+          > .modal-content {
+            background-color: transparent;
+
+            .modal-content {
+              background-color: $white;
+              box-shadow: 0 20px 60px rgba($white, .15);
+            }
+          }
+        }
+
+        .modal-header,
+        .modal-footer {
+          background-color: darken($white, 4%);
+          background: linear-gradient(180deg, darken($white, 2%) 0%, darken($white, 6%) 100%);
+        }
+
+        .modal-body {
+          background-color: darken($white, 2%);
+
+          .card {
+            &.card-body {
+              > div > div:last-child {
+                a {
+                  border: 1px solid rgba(darken($red, 16%), .64);
+                  &:hover {
+                    background-color: rgba($red, .08);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+
+      /*
+       * Modification toast messages
+       */
+
+      #toast-container {
+        > div,
+        > div:hover,
+        .toast-close-button span {
+          color: $white!important;
+        }
+
+        > div,
+        > div:hover {
+          background-color: rgba(lighten($black, 4%), .72)!important;
+          box-shadow: 0 4px 8px rgba($white, .32);
+        }
+
+        .toast-close-button {
+          span {
+            background-color: rgba(darken($black, 4%), .32)!important;
+          }
+        }
+      }
+
+
+      .background:after {
+        background-color: rgba($white, .24);
+      }
+
+      /*
+       * Modification monaco editor
+       */
+
+      .monaco-editor,
+      .monaco-editor-background,
+      .monaco-editor .inputarea.ime-input,
+      .monaco-editor .margin {
+        background-color: $white;
+      }
+
+      .monaco-editor {
+        .cursor {
+          background-color: $black;
+          border-color: $black;
+          color: $black;
+        }
+
+        .current-line ~ .line-numbers {
+          color: $yellow;
+        }
+
+        .view-overlays {
+          .cigr {
+            box-shadow: 1px 0 0 0 lighten($white, 16%) inset;
+          }
+
+          .current-line {
+            border-color: lighten($white, 8%);
+          }
+
+          .selected-text {
+            background-color: lighten($white, 4%);
+          }
+
+          &.focused {
+            .selected-text {
+              background-color: lighten($white, 8%);
+            }
+          }
+        }
+
+        .mtk1 {
+          color: darken($black, 16%);
+        }
+
+        .mtk5 {
+          color: lighten($blue, 8%);
+        }
+
+        .mtk7 {
+          color: lighten($green, 8%);
+        }
+
+        .mtk20 {
+          color: lighten($red, 8%);
+        }
+      }
+
+
+
+      /*
+       * Modification status view
+       */
+
+      app-status {
+        .background:after {
+          display: block;
+        }
+
+        > div > .row {
+          &.flex-column {
+            box-shadow: 0 4px 24px rgba($white, .32);
+          }
+
+          &:last-child {
+            background-color: darken($white, 4%);
+
+            > div {
+              border-top: 1px solid darken($white, 8%);
+
+              &.grey-text,
+              small,
+              a {
+                color: lighten($black, 24%)!important;
+              }
+            }
+          }
+        }
+
+        gridster {
+          .gridster-preview {
+            box-shadow: 0 8px 16px rgba($white, .32) inset;
+            border: 1px solid rgba($black, .24) inset;
+          }
+
+          gridster-item {
+            color: $black;
+            box-shadow: 0 8px 16px rgba($white, .48);
+            border-top: 1px solid rgba(lighten($white, 100%), .24);
+
+            .drag-handler {
+              color: lighten($white, 48%);
+            }
+
+            &#MemoryWidgetComponent,
+            &#CpuWidgetComponent,
+            &#WeatherWidgetComponent,
+            &#HomebridgeLogsWidgetComponent,
+            &#ClockWidgetComponent,
+            &#UptimeWidgetComponent,
+            &#HapQrcodeWidgetComponent {
+              .drag-handler,
+              .widget-control-button {
+                color: $black!important;
+              }
+            }
+
+            &#HomebridgeStatusWidgetComponent {
+              $space-between: (4 * $padding);
+              background-color: rgba($white, .92);
+
+              .hb-status-item {
+                &:not(:last-child) {
+                  &:after {
+                    background-color: darken($white, 16%);
+                  }
+                }
+
+                .primary-text {
+                  color: $green!important;
+                }
+
+                .fa-cloud-upload-alt,
+                .fa-exclamation-circle {
+                  color: $orange!important;
+                }
+              }
+            }
+
+            &#HapQrcodeWidgetComponent {
+              $dark: $purple;
+              $light: $black;
+
+              background-color: lighten($dark, 16%);
+              background: linear-gradient(180deg, lighten($dark, 16%) 0%, lighten($dark, 8%) 100%);
+
+              color: $light;
+
+              .grey-text {
+                color: rgba($light, .64)!important;
+              }
+
+              .qr-code-container {
+                svg {
+                  fill: $light;
+                }
+              }
+
+              .gridster-item-content {
+                p {
+                  color: $light;
+                }
+              }
+            }
+
+            &#SystemInfoWidgetComponent {
+              background-color: $white;
+
+              .flex-wrap {
+                &:before {
+                  background-color: $white;
+                  border-bottom: 1px dashed lighten($white, 16%);
+                }
+              }
+
+              .drag-handler {
+                color: darken($yellow, 28%)!important;
+                background: rgba(lighten($yellow, 24%), .8);
+                background: linear-gradient(180deg, rgba(lighten($yellow, 16%), .92), rgba(saturate(lighten($yellow, 4%), 4%), .92));
+              }
+
+              tr {
+                border-top: 1px solid lighten($white, 8%);
+
+                &:first-child {
+                  border-top: none;
+                }
+
+                th {
+                  color: lighten($black, 16%);
+                }
+
+                td {
+                  color: lighten($black, 8%)!important;
+                }
+              }
+            }
+
+            &#WeatherWidgetComponent {
+              background-color: darken($purple-dark, 8%);
+              background: linear-gradient(180deg, darken($purple-dark, 12%), darken($purple-dark, 4%));
+
+              h1,
+              h2,
+              h3,
+              p {
+                color: $black;
+              }
+
+              p {
+                color: rgba($black, .88)!important;
+              }
+            }
+
+            &#MemoryWidgetComponent,
+            &#CpuWidgetComponent,
+            &#UptimeWidgetComponent {
+              color: $black!important;
+              background-color: $green;
+              background: linear-gradient(180deg, $green 0%, darken($green, 12%) 100%);
+
+              canvas {
+                background-color: transparent;
+              }
+
+              .grey-text {
+                color: $black!important;
+              }
+
+              .widget-value-parent-wrap {
+                &:not(:first-child) {
+                  &:before {
+                    background-color: $white;
+                  }
+                }
+              }
+            }
+
+            &#CpuWidgetComponent {
+              background-color: $blue;
+              background: linear-gradient(180deg, $blue 0%, darken($blue, 12%) 100%);
+            }
+
+            &#UptimeWidgetComponent {
+              background-color: $orange;
+              background: linear-gradient(180deg, $orange 0%, darken($orange, 12%) 100%);
+            }
+
+            &#ClockWidgetComponent {
+              background-color: $white;
+              background: linear-gradient(180deg, lighten($white, 12%), lighten($white, 8%));
+              color: $black!important;
+
+              .widget-value-label {
+                color: darken($black, 32%)!important;
+              }
+            }
+
+            &#HomebridgeLogsWidgetComponent {
+              background-color: #2b2b2b!important;
+            }
+          }
+        }
+
+        .add-widget-button {
+          box-shadow: 0 4px 16px rgba($white, .48)!important;
+        }
+      }
+
+
+      /*
+       * Modification plugins view
+       */
+
+      app-plugins {
+        .hb-plugin-space-between {
+          .card {
+            > div:last-child {
+              a {
+                &.card-link {
+                  color: lighten($black, 16%);
+                  background-color: transparent;
+
+                  &:hover {
+                    background-color: darken($white, 8%);
+                  }
+                }
+
+                // Install link
+                &.card-link-install {
+                  background-color: darken($white, 8%);
+
+                  &:hover {
+                    color: $white;
+                    background-color: $blue;
+                  }
+                }
+
+                // Settings Link
+                &.card-link-settings {
+                  color: $black;
+                  background-color: $green;
+
+                  &:hover {
+                    color: $black;
+                    background-color: desaturate($green, 44%);
+                  }
+                }
+
+
+                // Update link
+                &.card-link-update {
+                  animation-name: glow-dark;
+
+                  border: 1px solid lighten($white, 24%);
+
+                  &:hover {
+                    color: desaturate($green, 16%);
+                    border-color: desaturate($green, 16%);
+                    background-color: rgba(darken($green, 16%), .32);
+                  }
+
+                }
+
+                // Uninstall link
+                &.card-link-uninstall {
+                  color: lighten($black, 16%);
+                  background-color: transparent;
+                  border: 1px solid lighten($white, 24%);
+
+                  &:hover {
+                    color: desaturate($red, 24%);
+                    border-color: desaturate($red, 16%);
+                    background-color: rgba(darken($red, 32%), .32);
+                  }
+                }
+
+                // NPM Link
+                &.card-link-npm {
+                  color: $white;
+                  background-color: $black;
+
+                  &:hover {
+                    color: $black;
+                  }
+                }
+
+                // Github Link
+                &.card-link-external {
+                  background-color: darken($white, 8%);
+                  color: $black!important;
+
+                  &:hover {
+                    background-color: darken($white, 24%);
+                    color: $black!important;
+                  }
+                }
+              }
+            }
+
+            .card-text {
+              color: lighten($black, 8%);
+
+              span {
+                color: darken($blue, 8%);
+              }
+            }
+          }
+        }
+      }
+
+
+      /*
+       * Modification accesories view
+       */
+
+      app-accessories {
+        [ng-reflect-dragula="rooms-bag"] {
+          > div {
+            &:before {
+              border-top: 1px solid rgba($white, .16);
+            }
+          }
+        }
+
+        .dropdown-toggle {
+          box-shadow: 0 8px 36px rgba(darken($green, 48%), .64)!important;
+        }
+      }
+
+
+      app-accessories h3,
+      h5.room-title {
+        color: $black!important;
+        text-shadow: 0 4px 16px rgba($white, .48);
+      }
+
+      .accessory-box {
+        border: 1px solid lighten($white, 24%);
+        background-color: transparent;
+        box-shadow: 0 4px 16px rgba($white, .16);
+
+        &:after {
+          background-color: rgba(lighten($white, 16%), .68);
+        }
+
+        &.switch-on {
+          border: 1px solid lighten($white, 16%);
+        }
+
+        &.switch-on:after {
+          background-color: rgba(lighten($white, 8%), .96);
+        }
+
+        .accessory-label {
+          color: rgba($black, .8);
+
+          &.grey-text {
+            color: rgba($black, .24);
+          }
+        }
+      }
+
+      .no-drag .accessory-box {
+        color: rgba($white,.64)!important;
+        background-color: rgba(lighten($black, 16%), .48);
+
+        div {
+          color: inherit!important;
+        }
+      }
+    }
   }
 
-  50% {
-    color: $black;
-    border-color: darken($white, 12%);
+  @keyframes glow-dark {
+    0% {
+      color: $white;
+      border-color: lighten($black, 24%);
+    }
+
+    25% {
+      color: darken(desaturate($green, 16%), 8%);
+      border-color: desaturate($green, 16%);
+    }
+
+    50% {
+      color: $white;
+      border-color: lighten($black, 24%);
+    }
   }
 }
 
