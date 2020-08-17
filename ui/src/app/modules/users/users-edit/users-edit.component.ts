@@ -16,6 +16,7 @@ export class UsersEditComponent implements OnInit {
   form: FormGroup;
   page = {
     title: 'users.title_edit_user',
+    cancel: 'form.button_cancel',
     save: 'form.button_save',
     password: 'users.label_new_password',
   };

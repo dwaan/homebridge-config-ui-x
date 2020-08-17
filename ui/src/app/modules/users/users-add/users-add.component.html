@@ -1,8 +1,15 @@
 <div class="modal-content">
-  <div class="modal-body">
+  <form novalidate (ngSubmit)="onSubmit(form)" [formGroup]="form">
 
-    <form novalidate (ngSubmit)="onSubmit(form)" [formGroup]="form">
-      <p class="h4 text-center mb-4" [innerText]="page.title | translate"></p>
+    <div class="modal-header">
+      <h5 class="modal-title"[innerText]="page.title | translate"></h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+        (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
 
       <div class="md-form">
         <i class="fas fa-user-shield prefix grey-text"></i>
@@ -41,17 +48,19 @@
         </div>
       </div>
 
-      <div class="form-check text-center mb-4">
+      <div class="form-check mb-4">
         <input formControlName="admin" type="checkbox" class="form-check-input" id="isAdmin">
         <label class="form-check-label" for="isAdmin" [translate]="'users.label_admin_user'">Admin User?</label>
       </div>
 
-      <div class="text-center">
-        <button class="btn btn-primary" type="submit" [disabled]="!form.valid"
-          [innerText]="page.save | translate"></button>
-      </div>
+    </div>
 
-    </form>
+    <div class="modal-footer">
+      <button type="button" class="btn" data-dismiss="modal" aria-label="Close"
+        (click)="activeModal.dismiss('Cross click')" [innerText]="page.cancel | translate"></button>
+      <button class="btn btn-primary" type="submit" [disabled]="!form.valid"
+        [innerText]="page.save | translate"></button>
+    </div>
 
-  </div>
+  </form>
 </div>

@@ -15,6 +15,7 @@ export class UsersAddComponent implements OnInit {
   form: FormGroup;
   page = {
     title: 'users.title_add_user',
+    cancel: 'form.button_cancel',
     save: 'users.button_add_new_user',
     password: 'users.label_password',
   };
