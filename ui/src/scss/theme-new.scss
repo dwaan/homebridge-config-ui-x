@@ -1,5 +1,7 @@
 /* === Start New Theme CSS === */
 
+$name: "new";
+
 
 /*
  * New theme variables
@@ -153,56 +155,2192 @@ $font-size:     .9rem;
  * New theme - all style
  */
 
-@mixin make-new-theme() {
-  $name: "new";
+:root {
+  --base-size: 2vh;
+}
 
-  :root {
-    --base-size: 2vh;
+.config-ui-x-#{$name} {
+  font-family: var(--font-family-sans-serif);
+  font-size: $font-size;
+  font-weight: normal;
+  letter-spacing: .0064rem;
+  padding: 0;
+  background-color: darken($white, 4%);
+  color: lighten($black, 8%);
+
+  // Heading
+  @for $i from 1 through 5 {
+    h#{$i},
+    .h#{$i},
+    .plugin-md h#{$i},
+    .plugin-md .h#{$i} {
+      font-size: (($font-size + .8) - (0.1 * $i));
+      font-weight: 500;
+      letter-spacing: -.008rem;
+      line-height: 120%;
+      padding: 0;
+      margin: 0 0 (2 * $padding);
+    }
+
+    * ~ h#{$i},
+    * ~ .h#{$i},
+    .plugin-md * ~ h#{$i},
+    .plugin-md * ~ .h#{$i} {
+      margin-top: (((12 - (2 * $i)) * $padding));
+    }
   }
 
-  .config-ui-x-#{$name} {
-    font-family: var(--font-family-sans-serif);
+
+  // Paragraph
+  p {
+    line-height: 140%;
+    margin: (2 * $padding) 0;
+  }
+
+  @for $i from 1 through 10 {
+    .mt-#{$i}, .my-#{$i} { margin-top: ($padding * ($i + 2))!important }
+    .mb-#{$i}, .my-#{$i} { margin-bottom: ($padding * ($i + 2))!important }
+  }
+
+
+
+  // Commmon styles
+
+  .container-fluid,
+  .container-sm,
+  .container-md,
+  .container-lg,
+  .container-xl {
+    position: relative;
+    z-index: 1;
+    padding: 0 $canal;
+
+    h3.primary-text {
+      padding: 0;
+      color: $black;
+      font-weight: 500;
+    }
+
+    router-outlet + * {
+      display: block;
+      width: 100%;
+      height: 100%;
+      padding: $header-height 0 0;
+    }
+  }
+
+  a {
+    &.card-link {
+      color: $black;
+      line-height: 100%;
+
+      &:hover {
+        color: inherit;
+      }
+    }
+  }
+
+  .hb-uix-switch {
+    padding-left: (6 * $padding);
+
+    .hb-uix-slider  {
+      margin-top: 1px;
+      width: (5 * $padding);
+      height: (5 * $padding);
+      background-color: $white!important;
+      border-color: darken($white, 16%)!important;
+
+      &:after {
+        top: 50%;
+        left: 50%;
+        width: 40%;
+        height: 70%;
+        transform: translate(-50%, -50%) rotate(45deg);
+      }
+    }
+
+    input:checked ~ .hb-uix-slider {
+      background-color: $blue!important;
+      border-color: darken($blue, 16%)!important;
+    }
+  }
+
+  .hb-widget-chart-background {
+    background-color: rgba($white, .24);
+    display: none;
+  }
+
+  .alert {
     font-size: $font-size;
-    font-weight: normal;
-    letter-spacing: .0064rem;
-    padding: 0;
+    margin: 0 (-4 * $padding);
+    padding: 0 (4 * $padding);
+
+    border: none;
+    color: lighten($black, 16%);
+    font-size: $font-size;
+    letter-spacing: .048;
+    background-color: transparent;
+  }
+
+  .animate_loader {
+    svg {
+      position: relative!important;
+      width: 15vw!important;
+      height: 15vw!important;
+    }
+
+    .spinner_outer {
+      stroke: rgba($purple, .32);
+    }
+
+    .spinner_inner {
+      stroke: $purple;
+    }
+  }
+
+  .bg-primary {
+    background-color: $blue!important;
+  }
+
+  .grey-text {
+    color: lighten($black, 32%)!important;
+  }
+
+
+  // Markdown plugin
+  .plugin-md {
+    font-size: $font-size;
+  }
+
+
+  // Dragable plugin
+  [draggable=true] {
+    border: 1px solid darken($white, 20%)!important;
+    background-color: darken($white, 8%);
+    border-radius: none!important;
+    overflow: hidden!important;
+    margin-top: -1px!important;
+
+    &:hover {
+      margin-top: -1!important;
+      margin-bottom: 0!important;
+      margin-left: 0!important;
+      margin-right: 0!important;
+
+      background-color: darken($white, 4%);
+
+      box-shadow: 0 4px 16px rgba($black, .32)!important;
+    }
+
+    .list-group-item {
+      background-color: transparent!important;
+      border: none!important;
+    }
+  }
+
+
+  // Modification for header page
+  @include header-theme($blue, $white);
+
+
+  /*
+   * Modification for plugins page - search bar
+   */
+
+  form {
+    .hb-npm-search {
+      background-color: lighten($white, 50%);
+      height: auto;
+      margin: (8 * $padding) 0;
+      padding: $padding (6 * $padding);
+      border: 1px solid darken($white, 8%);
+
+      border-radius: $border-radius;
+      box-shadow: none;
+      transition: color .256s ease, background-color .256s ease, border-color .256s ease, box-shadow .256s ease;
+
+      &:hover,
+      &:focus {
+        border: 1px solid rgba(darken($blue, 4%), .32);
+        box-shadow: none;
+      }
+
+      &:focus {
+        box-shadow: 0 0 0 4px rgba($blue, .32);
+      }
+
+      &:before,
+      &:after {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+
+        content: "";
+        display: block;
+        border-radius: 1px;
+        background-color: $black;
+
+        width: (3 * $padding);
+        height: 2px;
+
+        transform: translate(-50%, -50%) rotate(45deg);
+        transform-origin: 50%;
+      }
+    }
+
+    .hb-npm-search-clear {
+      background-color: lighten($black, 30%);
+
+      top: (12 * $padding);
+      right: (10 * $padding);
+      width: (5 * $padding);
+      height: (5 * $padding);
+
+      border-radius: 100%;
+      transition: background-color .256s ease;
+
+      &:hover {
+        background-color: lighten($black, 15%);
+      }
+
+      &:before,
+      &:after {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+
+        content: "";
+        display: block;
+        border-radius: 1px;
+        background-color: $white;
+
+        width: (3 * $padding);
+        height: 2px;
+
+        transform: translate(-50%, -50%) rotate(45deg);
+        transform-origin: 50%;
+      }
+
+      &:after {
+        transform: translate(-50%, -50%) rotate(-45deg);
+      }
+    }
+  }
+
+
+  /*
+   * Modification for button style
+   */
+
+  .btn {
+    font-size: $font-size;
+    font-weight: 500;
+    line-height: 100%;
+    text-transform: capitalize;
+    margin: 0 ($padding * 2) 0 0;
+
+    background-color: transparent!important;
+    border: 1px solid darken($white, 16%);
+    color: lighten($black, 16%);
+    padding: 0 (6 * $padding);
+    height: (8 * $padding);
+
+    border-radius: (3/4 * $border-radius);
+    box-shadow: none!important;
+
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: color .256s ease, background-color .256s ease, border-color .256s ease, box-shadow .256s ease;
+
+    &.btn-default,
+    &.btn-primary {
+      border: none;
+      color: $white;
+    }
+
+    &.btn-elegant {
+      background-color: transparent!important;
+    }
+
+    &.btn-default {
+      background-color: $blue!important;
+      &:hover {
+        color: $white;
+        background-color: darken($blue, 8%)!important;
+      }
+    }
+
+    &.btn-primary {
+      background-color: $green!important;
+      &:hover {
+        color: $white;
+        background-color: darken($green, 8%)!important;
+      }
+    }
+
+    &:hover {
+      color: initial;
+      background-color: darken($white, 8%)!important;
+    }
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+
+  /*
+   * Modification for card style
+   */
+
+  .card {
+    border-radius: 12px;
+    background-color: $white;
+    box-shadow: 0 16px 24px rgba($black, .048);
+
+    &.card-body {
+      padding: (4 * $padding) (6 * $padding);
+    }
+  }
+
+
+  /*
+   * Modification for MD-Form
+   */
+
+  .md-form {
+    margin-top: (1 * $padding);
+    margin-bottom: (1 * $padding);
+
+    display: flex;
+    flex-flow: column-reverse;
+
+    .prefix {
+      $icon-size: 0;
+
+      top: 0;
+      font-size: $icon-size;
+      width: $icon-size;
+      height: $icon-size;
+      line-height: $icon-size;
+
+      ~ label,
+      ~ input,
+      ~ textarea {
+        margin-left: 0;
+        width: 100%;
+      }
+    }
+
+    input:not([type]),
+    input[type="text"]:not(.browser-default),
+    input[type="password"]:not(.browser-default),
+    input[type="email"]:not(.browser-default),
+    input[type="url"]:not(.browser-default),
+    input[type="time"]:not(.browser-default),
+    input[type="date"]:not(.browser-default),
+    input[type="datetime"]:not(.browser-default),
+    input[type="datetime-local"]:not(.browser-default),
+    input[type="tel"]:not(.browser-default),
+    input[type="number"]:not(.browser-default),
+    input[type="search"]:not(.browser-default),
+    input[type="phone"]:not(.browser-default),
+    input[type="search-md"],
+    textarea.md-textarea {
+      color: $black;
+      background-color: lighten($white, 100%);
+      border: 1px solid darken($white, 16%);
+      border-radius: (1/2 * $border-radius);
+
+      &:focus {
+        outline: 0;
+        color: $black;
+        background-color: lighten($white, 100%);
+        border-color: rgba($blue, .64);
+        box-shadow: 0 0 0 $padding rgba($blue, .24);
+      }
+    }
+
+    input,
+    select,
+    textarea {
+      &:-webkit-autofill,
+      &:-webkit-autofill:hover,
+      &:-webkit-autofill:focus {
+        background: 0 0 0 1000px lighten($yellow, 24%) inset!important;
+      }
+    }
+
+    label,
+    label.active {
+      margin-bottom: $padding;
+      position: relative;
+      font-size: $font-size;
+      transform: none;
+    }
+
+    .form-control {
+      padding: $padding (2 * $padding)!important;
+
+      &.is-invalid:focus {
+          border-color: rgba($red, .64)!important;
+          box-shadow: 0 0 0 $padding rgba($red, .24)!important;
+      }
+
+      &.is-valid,
+      &.is-invalid {
+        background-position: right 0.75rem center!important;
+      }
+    }
+  }
+
+
+  /*
+   * Modification for Dropdown menu
+   */
+
+  .dropdown-menu,
+  .monaco-menu-container {
+    z-index: 99;
+    padding: (2 * $padding);
+    overflow: hidden;
+    border-radius: $border-radius!important;
+    background-color: transparent;
+    box-shadow: 0 8px 16px rgba($black, .32)!important;
+
+    .monaco-scrollable-element {
+      padding: 0;
+      background-color: transparent;
+      box-shadow: none!important;
+    }
+
+    &:after {
+      position: absolute;
+      z-index: -1;
+      content: "";
+      display: block;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: rgba(darken($white, 4%), .72);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+    }
+
+    a {
+      background-color: transparent!important;
+      margin: 0;
+      padding: (2 * $padding) (4 * $padding);
+      color: $black!important;
+      font-size: $font-size;
+      font-weight: 400;
+      line-height: 100%;
+      height: auto;
+      border-radius: $border-radius;
+
+      &:active,
+      &:focus,
+      &:hover {
+        background-color: rgba($purple, .88)!important;
+        color: $white!important;
+      }
+
+      &.action-menu-item {
+        padding: (2 * $padding) (1/2 * $padding);
+      }
+
+      span {
+        font-size: $font-size!important;
+        font-weight: 400;
+        line-height: 100%;
+      }
+    }
+
+    .dropdown-divider,
+    .action-label.separator {
+      padding: 0!important;
+      margin: (2 * $padding) 0!important;
+      border-top: 2px solid rgba(darken($white, 16%), .48);
+      border-bottom: none!important;
+    }
+
+    .action-item {
+      border: none!important;
+    }
+
+    .monaco-action-bar {
+      background-color: transparent!important;
+    }
+  }
+
+
+
+  /*
+   * Modification login view
+   */
+
+  .login-container {
+    .logo {
+      display: block;
+      width: 160px;
+      height: 160px;
+      padding: (8 * $padding);
+      margin: 0 auto (12 * $padding);
+      background: rgba($purple, .88);
+      background: linear-gradient(180deg, rgba($purple, .88), rgba($purple-dark, .88));
+      border: 1px solid rgba($purple-dark, .92);
+      border-radius: 100%;
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      box-shadow: 0 24px 64px rgba(darken($purple-dark, 8%), .64);
+    }
+
+    .login-card {
+      overflow: hidden;
+      padding: 0;
+      margin: (6 * $padding)!important;
+      border: none;
+      background-color: transparent;
+      max-width: (100 * $padding);
+      box-shadow: none;
+
+      form {
+        padding: (12 * $padding) (10 * $padding) (10 * $padding);
+
+        > div:nth-child(2) {
+          filter: drop-shadow(0 8px 16px rgba($black, .32));
+        }
+      }
+    }
+
+    .md-form {
+      margin: 0 auto;
+      max-width: (75 * $padding);
+
+      &:first-child {
+        margin-top: (8 * $padding);
+
+        input {
+          border-radius: $border-radius $border-radius 0 0;
+        }
+      }
+
+      &:last-child {
+        margin-top: 1px;
+        margin-bottom: (6 * $padding);
+
+        input {
+          border-radius: 0 0 $border-radius $border-radius;
+        }
+      }
+
+      .form-control {
+        margin: 0;
+
+        &:invalid,
+        &.is-invalid,
+        .ng-invalid {
+          background-position: calc(100% - #{(3 * $padding)}) center !important;
+          background-size: (4 * $padding);
+        }
+      }
+
+      .prefix {
+        display: block;
+        z-index: 1;
+        margin: 0;
+        color: lighten($black, 24%)!important;
+        top: 50%;
+        left: (6 * $padding);
+        width: (4 * $padding);
+        height: (4 * $padding);
+        line-height: (4 * $padding);
+        font-size: (4 * $padding);
+        transform: translateY(-50%);
+      }
+
+      input,
+      label {
+        margin-left: 0;
+        padding: (3 * $padding) (3 * $padding) (3 * $padding) (14 * $padding)!important;
+      }
+
+      input {
+        position: relative;
+        z-index: 0;
+        width: 100%;
+        color: $black;
+        font-size: $font-size;
+        border: none!important;
+        background-color: rgba(darken($white, 4%), .72)!important;
+
+        -webkit-backdrop-filter: saturate(180%) blur(20px);
+
+        &.form-control:focus,
+        &:active,
+        &:hover,
+        &:focus {
+          color: $black!important;
+          border: none!important;
+          background-color: rgba(darken($white, 4%), .72)!important;
+          box-shadow: none!important;
+        }
+
+        &:-webkit-autofill,
+        &:-webkit-autofill:active,
+        &:-webkit-autofill:hover,
+        &:-webkit-autofill:focus {
+          -webkit-text-fill-color: $black!important;
+          -webkit-box-shadow: 0 0 0 1000px lighten($yellow, 24%) inset!important;
+        }
+
+        + label {
+          position: absolute!important;
+          color: lighten($black, 24%)!important;
+          font-size: $font-size;
+          font-weight: 500;
+          transform: none;
+          transition: opacity .256 ease;
+          pointer-events: none;
+
+          &:before {
+            display: none;
+          }
+
+          &.active {
+            opacity: 0;
+            transform: none;
+          }
+        }
+      }
+    }
+
+    .btn,
+    .btn:focus,
+    .btn:hover,
+    .btn:active {
+      padding: (3 * $padding) (8 * $padding)!important;
+      height: auto!important;
+      border: none!important;
+      background-color: $blue!important;
+      background: linear-gradient(180deg, rgba($purple, .88), rgba($purple-dark, .88))!important;
+      color: $white!important;
+      box-shadow: 0 8px 16px rgba(darken($purple-dark, 32%), .48)!important;
+      border: none!important;
+      transition: all .256s ease;
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+
+      &:disabled,
+      &.disabled {
+        opacity: 1!important;
+        color: lighten($white, 24%)!important;
+        background: rgba(lighten($black, 16%), .48)!important;
+        box-shadow: none!important;
+      }
+    }
+
+    .red-text{
+      margin: 0 auto (3 * $padding);
+
+      small {
+        padding: $padding (4 * $padding);
+        display: inline-block;
+        font-size: $font-size;
+
+        @include neomorphism($red, $white, $border-radius);
+      }
+    }
+  }
+
+
+  /*
+   * Modification json form
+   */
+
+  // Form
+  legend {
+    font-size: ($font-size + .4);
+    font-weight: 500;
+    margin: (2 * $padding) 0 $padding;
+  }
+  .expandable,
+  .expanded {
+    legend{
+      &:before {
+        align-self: center;
+        font-size: $font-size;
+        padding-right: (2 * $padding);
+      }
+    }
+  }
+
+  .form-control {
+    font-size: $font-size;
+  }
+
+  .form-flex-row {
+    display: flex;
+    flex-flow: row nowrap;
+
+    > .form-flex-item {
+      margin: $padding 0;
+      padding: 0 $padding;
+
+      .form-flex-column {
+        display: flex;
+        flex-flow: column nowrap;
+
+        padding: 0 (2 * $padding);
+
+        > .form-flex-item {
+          margin: $padding 0;
+        }
+
+        .form-group {
+          padding: 0;
+        }
+      }
+
+      &:first-child {
+        padding-left: 0;
+
+        .form-flex-column {
+          padding-left: 0;
+        }
+      }
+
+      &:last-child {
+        padding-right: 0;
+
+        .form-flex-column {
+          padding-right: 0;
+        }
+      }
+    }
+  }
+
+  fieldset {
+    > root-widget {
+      > div:last-child {
+        margin-top: (4 * $padding);
+      }
+    }
+  }
+
+  json-schema-form {
+    .form-group {
+      margin: 0;
+      padding: $padding 0;
+    }
+  }
+
+  .list-group .list-group-item {
+    background-color: $white;
+    margin: 0;
+    padding: $padding (4 * $padding);
+    border-radius: 0;
+    border: 0;
+    border-top: 1px solid darken($white, 8%);
+
+    &:last-child {
+      border-bottom: 1px solid darken($white, 8%);
+    }
+
+    .close {
+      background-color: $red;
+      text-shadow: none;
+      opacity: 1;
+
+      border-radius: (3 * $padding);
+
+      position: absolute;
+      right: (4 * $padding);
+      top: (2.5 * $padding);
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      width: (5 * $padding);
+      height: (5 * $padding);
+
+      span {
+        display: block;
+        text-indent: -666em;
+        width: (2.5 * $padding);
+        height: 2px;
+        background-color: $white;
+      }
+    }
+  }
+
+
+  /*
+   * Modification settings modal
+   */
+
+  .modal {
+    .modal-dialog {
+      height: 100%;
+      padding: (6 * $padding) 0;
+      margin: 0 auto;
+
+      > .modal-content {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        background-color: transparent;
+        border-radius: 0;
+        box-shadow: none;
+
+        > * {
+          display: block;
+          width: 100%;
+          max-height: 100%;
+          box-shadow: 0 20px 60px rgba($black, .16);
+
+          > .modal-content {
+            position: relative;
+            width: inherit;
+            max-height: inherit;
+            background-color: rgba($white, .88);
+            border-radius: (1.5 * $border-radius);
+            overflow: hidden;
+
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+          }
+        }
+
+        .plugin-md p {
+          margin: 0;
+        }
+      }
+    }
+
+    .modal-header,
+    .modal-footer {
+      position: relative;
+      flex: 0 0;
+      padding: (4 * $padding);
+      background-color: transparent;
+    }
+
+    .modal-header{
+      padding-left: (12 * $padding);
+      border-bottom: 1px solid darken($white, 12%);
+
+      h5 {
+        display: inline-block;
+        font-size: ($font-size + .1);
+        margin: 0 auto;
+        padding: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .close {
+        $icon-size: (4 * $padding);
+
+        position: absolute;
+        top: 50%;
+        left: (4 * $padding);
+
+        width: $icon-size;
+        height: $icon-size;
+        margin: 0;
+        padding: 0;
+        background-color: lighten($red, 8%);
+        border: 1px solid rgba(darken($red, 16%), .72);
+        opacity: 1;
+
+        color: lighten($red, 8%);
+        line-height: (3/4 * $icon-size);
+        font-size: (3/4 * $icon-size);
+        text-shadow: none;
+
+        border-radius: 100%;
+        transform: translateY(-50%);
+        transition: color .256s ease;
+
+        span {
+          line-height: inherit;
+          font-size: inherit;
+          text-shadow: inherit;
+        }
+
+        &:hover {
+          color: rgba($black, .64);
+        }
+      }
+    }
+
+    .modal-body {
+      flex: 1 1;
+      padding: (3 * $padding) (4 * $padding);
+      overflow: auto;
+
+      .card {
+        border: none;
+        background-color: transparent;
+
+        &.card-body {
+          padding: 0;
+          border-radius: 0;
+          box-shadow: none;
+
+          > div > div:last-child {
+            position: absolute;
+            top: initial;
+            bottom: ($padding + 2);
+            left: initial;
+            right: 0;
+
+            a {
+              border: 1px solid rgba(darken($red, 16%), .64);
+              padding: $padding (4 * $padding);
+              border-radius: $border-radius;
+
+              &:hover {
+                background-color: rgba($red, .08);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .modal-footer {
+      padding: (2 * $padding) (4 * $padding);
+      border-top: 1px solid darken($white, 12%);
+    }
+  }
+
+
+  /*
+   * Modification toast messages
+   */
+
+  #toast-container {
+    $icon-size: (8 * $padding);
+
+    > div,
+    > div:hover,
+    .toast-close-button span {
+      color: $black!important;
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+    }
+
+    > div,
+    > div:hover {
+      overflow: initial;
+      padding: (4 * $padding) (4 * $padding) (4 * $padding) ($icon-size + (8 * $padding));
+
+      border: 1px solid darken($white, 8%);
+      background-color: rgba(darken($white, 8%), .72)!important;
+
+      box-shadow: none;
+      border-radius: $border-radius;
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+
+      &:after {
+        content: "";
+        display: block;
+
+        position: absolute;
+        z-index: 0;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        box-shadow: 0 4px 16px rgba($black, .24);
+        border-radius: $border-radius;
+      }
+    }
+
+    .toast-close-button {
+      position: absolute;
+      top: (2 * $padding);
+      right: (2 * $padding);
+
+      display: flex;
+      justify-items: center;
+      align-items: center;
+
+      span {
+        display: block;;
+
+        width: (6 * $padding);
+        height: (6 * $padding);
+        line-height: (5 * $padding);
+
+        text-align: center;
+        font-weight: 300;
+
+        border: 1px solid darken($white, 16%);
+        background-color: rgba(darken($white, 16%), .32)!important;
+
+        box-shadow: 0 2px 4px rgba($black, .16);
+        border-radius: 100%;
+      }
+    }
+
+    .toast-title {
+      margin: 0;
+      font-size: ($font-size + .2);
+      line-height: 100%;
+    }
+
+    .toast-message {
+      margin: $padding 0 0;
+    }
+
+    .toast-info,
+    .toast-error,
+    .toast-success,
+    .toast-warning {
+      background-image: none;
+
+      &:before {
+        content: "";
+        display: block;
+        position: absolute;
+        left: (4 * $padding);
+        top: (4 * $padding);
+        width: $icon-size;
+        height: $icon-size;
+
+        line-height: $icon-size;
+        font-size: (1/2 * $icon-size);
+        text-align: center;
+
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        content: "\f093";
+        color: $white;
+        text-shadow: 0 4px 8px rgba($black, .24);
+
+        border-radius: 100%;
+        box-shadow: 0 4px 8px rgba($black, .24), inset -2px -4px 16px rgba($black, .24);
+      }
+    }
+
+    .toast-info:before {
+      content: "\f05a";
+      background-color: $blue;
+    }
+    .toast-error:before {
+      content: "\f057";
+      background-color: $red;
+    }
+    .toast-success:before {
+      content: "\f00c";
+      background-color: $green;
+    }
+    .toast-warning:before {
+      content: "\f071";
+      background-color: $orange;
+    }
+  }
+
+
+
+  // Background
+
+  .background,
+  .background:after {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .background:after {
+    content: "";
+    display: block;
+    background-color: rgba($black, .16);
+  }
+
+
+  /*
+   * Modification status view
+   */
+
+  app-status {
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+
+    .background:after {
+      display: none;
+    }
+
+    .status-container {
+      margin: 0 (-$canal)!important;
+      padding: 0 $canal!important;
+    }
+
+    .scrollVertical {
+      overflow-x: initial;
+      overflow-y: initial;
+    }
+
+    > div > .row {
+      margin: 0 (-$canal);
+
+      &.flex-column {
+        position: relative;
+        z-index: 3;
+        height: calc(100vh - #{$header-height});
+        box-shadow: 0 4px 24px rgba($black, .32);
+      }
+
+      &:last-child {
+        $footer-height: (9 * $padding);
+
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+        height: $footer-height;
+        line-height: $footer-height;
+        background-color: darken($white, 4%);
+
+        > div {
+          position: fixed;
+          left: 0;
+          right: 0;
+          top: initial;
+          bottom: 0;
+          height: $footer-height;
+          margin: 0!important;
+          border-top: 1px solid darken($white, 8%);
+
+          &.grey-text,
+          small,
+          a {
+            font-weight: 500;
+            letter-spacing: .064rem;
+            color: lighten($black, 24%)!important;
+          }
+        }
+      }
+    }
+
+    gridster {
+      &.fit {
+        overflow-x: initial;
+        overflow-y: initial;
+      }
+
+      .p-2 {
+        padding: (2 * $padding)!important;
+      }
+
+      .gridster-preview {
+        border-radius: var(--base-size);
+        box-shadow: 0 8px 16px rgba($black, .32) inset;
+        border: 1px solid rgba($black, .24) inset;
+      }
+
+      gridster-item {
+        border-radius: var(--base-size);
+        box-shadow: 0 8px 16px rgba($black, .48);
+        border-top: 1px solid rgba(lighten($white, 100%), .24);
+
+        .drag-handler {
+          padding: (3 * $padding) (10 * $padding) (3 * $padding) (6 * $padding)!important;
+          overflow: hidden;
+
+          color: lighten($black, 48%);
+          font-size: ($font-size - .2);
+          font-weight: 600;
+          text-transform: uppercase;
+          text-overflow: ellipsis;
+          letter-spacing: .048rem;
+          white-space: nowrap;
+        }
+
+        .widget-control-button {
+          top: (3 * $padding);
+          right: (3 * $padding);
+          z-index: 3;
+        }
+
+        &#MemoryWidgetComponent,
+        &#CpuWidgetComponent,
+        &#WeatherWidgetComponent,
+        &#HomebridgeLogsWidgetComponent,
+        &#ClockWidgetComponent,
+        &#UptimeWidgetComponent,
+        &#HapQrcodeWidgetComponent {
+          .drag-handler,
+          .widget-control-button {
+            color: $white!important;
+          }
+        }
+
+        &#HomebridgeStatusWidgetComponent {
+          $space-between: (4 * $padding);
+          background-color: rgba($white, .92);
+          -webkit-backdrop-filter: saturate(180%) blur(20px);
+
+          .gridster-item-content {
+            flex: 1;
+            padding: 0!important;
+            justify-content: center!important;
+          }
+
+          .hb-status-item {
+            position: relative;
+            display: flex;
+            flex: 0;
+            align-items: center;
+            justify-content:center;
+
+            &:not(:last-child) {
+              margin-right: 0!important;
+              padding-right: (4 * $space-between);
+
+              &:after {
+                content: "";
+                display: block;
+                position: absolute;
+                right: (2 * $space-between);
+                top: 25%;
+                bottom: 25%;
+                width: 1px;
+                background-color: darken($white, 16%);
+              }
+            }
+
+            .align-self-center {
+              a:first-child,
+              span:first-child {
+                font-size: var(--base-size)!important;
+                font-weight: 500;
+              }
+
+              br {
+                display: none;
+              }
+
+              span,
+              .grey-text,
+              .primary-text {
+                display: block;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+              }
+
+              .grey-text,
+              .primary-text {
+                margin-top: calc(-1/4 * var(--base-size));
+                font-size: var(--base-size);
+
+                span {
+                  display: inline-block;
+                  font-size: inherit;
+                }
+              }
+            }
+
+            .hb-status-icon {
+              display: flex;
+              align-self: center;
+              padding: 0 calc(1 * var(--base-size)) 0 0!important;
+
+              i {
+                width: calc(3 * var(--base-size));
+                height: calc(3 * var(--base-size));
+                line-height: calc(3 * var(--base-size));
+
+                text-align: center;
+                font-size: calc(1.5 * var(--base-size));
+
+                @include neomorphism($green, $white, 100%);
+
+                &:before {
+                  text-align: center;
+                  margin: 0 auto;
+                }
+
+                &.fa-check-circle:before {
+                  content: "\f00c";
+                }
+
+                &.fa-exclamation-circle:before {
+                  content: "\f12a";
+                }
+
+                &.fa-spin {
+                  font-size: calc(3 * var(--base-size));
+                  text-shadow: none!important;
+
+                  background: transparent!important;
+                  box-shadow: none!important;
+
+                  &:before {
+                    color: lighten($black, 16%)!important;
+                  }
+                }
+
+                &.fa-cloud-upload-alt,
+                &.fa-exclamation-circle {
+                  @include neomorphism($orange, $white, 100%);
+                }
+              }
+            }
+          }
+        }
+
+        &#HapQrcodeWidgetComponent {
+          $dark: $purple;
+          $light: $white;
+
+          background-color: lighten($dark, 16%);
+          background: linear-gradient(180deg, lighten($dark, 16%) 0%, lighten($dark, 8%) 100%);
+
+          color: $light;
+
+          .grey-text {
+            color: rgba($light, .64)!important;
+          }
+
+          .p-2 {
+            padding: calc(2 * var(--base-size))!important;
+          }
+
+          .drag-handler {
+            font-size: $font-size;
+            font-weight: normal;
+            letter-spacing: inherit;
+            text-transform: initial;
+            padding: 0!important;
+            white-space: normal;
+
+            > div {
+              display: flex;
+              flex-flow: column nowrap;
+              justify-content: flex-end;
+              align-items: flex-end;
+
+              &:first-child {
+                height: auto!important;
+                flex: 1 1 auto;
+              }
+            }
+          }
+
+          .qr-code-container {
+            display: flex;
+            margin-top: auto;
+
+            svg {
+              width: 20vh;
+              height: 20vh;
+              border: 1px solid $light;
+              align-self: flex-end;
+              position: initial;
+              fill: $light;
+            }
+          }
+
+          .gridster-item-content {
+            padding: 0!important;
+            margin: 0 auto;
+
+            p {
+              width: 100%;
+              text-align: left;
+              margin-bottom: 0!important;
+              font-size: var(--base-size);
+              color: $light;
+
+              &:first-child {
+                margin-top: 2vh!important;
+                font-size: calc(2 * var(--base-size));
+                font-weight: 500;
+                white-space: nowrap;
+              }
+            }
+          }
+        }
+
+        &#SystemInfoWidgetComponent {
+          $drag-handler-height: 10 * $padding;
+          border-top: none;
+
+          background-color: $white;
+
+          .overflow-auto {
+            padding: 0!important;
+          }
+
+          .flex-wrap {
+            padding: ($drag-handler-height + $padding) 0 0!important;
+
+            &:before {
+              content: "";
+              display: block;
+              position: absolute;
+              left: 0;
+              right: 0;
+              top: $drag-handler-height;
+              height: $padding;
+              background-color: $white;
+              border-bottom: 1px dashed darken($white, 24%);
+            }
+          }
+
+          .drag-handler {
+            position: absolute;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            right: 0;
+            color: darken($yellow, 28%)!important;
+            height: $drag-handler-height;
+            line-height: $drag-handler-height + $padding;
+            padding-top: 0!important;
+            padding-bottom: 0!important;
+            background: rgba(lighten($yellow, 24%), .8);
+            background: linear-gradient(180deg, rgba(lighten($yellow, 16%), .92), rgba(saturate(lighten($yellow, 4%), 4%), .92));
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+          }
+
+          table,
+          tbody {
+            display: block;
+            width: 100%;
+          }
+
+          tr {
+            display: flex;
+            flex-flow: column nowrap;
+            border-top: 1px solid darken($white, 4%);
+
+            &:first-child {
+              border-top: none;
+            }
+
+            th,
+            td {
+              display: block;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+
+            th {
+              padding: (1.5 * $padding) (6 * $padding) 0!important;
+              margin-bottom: -($padding / 2);
+              font-size: ($font-size - .4);
+              letter-spacing: .064rem;
+              text-transform: uppercase;
+              color: lighten($black, 16%);
+            }
+            td {
+              padding: 0 (6 * $padding) (1.5 * $padding)!important;
+              font-size: $font-size;
+              font-weight: 500;
+              color: lighten($black, 8%)!important;
+            }
+          }
+        }
+
+        &#WeatherWidgetComponent {
+          background-color: lighten($blue, 24%);
+          background: linear-gradient(180deg, lighten($blue, 24%), lighten($blue, 28%));
+
+          .p-2 {
+            padding-top: 0!important;
+          }
+
+          .weather-now {
+            flex-flow: row wrap!important;
+            align-items: flex-end!important;
+          }
+
+          h1,
+          h2,
+          h3,
+          p {
+            padding: .5vh (6 * $padding);
+            margin: 0;
+            flex: 0;
+            color: $white;
+            text-align: left;
+          }
+
+          h1 {
+            order: 1;
+            font-size: calc(3 * var(--base-size));
+          }
+
+          h2 {
+            order: 2;
+            font-weight: 300;
+            font-size: calc(3.5 * var(--base-size));
+          }
+
+          h3 {
+            order: 3;
+            flex: 100%;
+            font-weight: 500;
+            font-size: var(--base-size);
+          }
+
+          p {
+            order: 4;
+            flex: 100%;
+            font-size: calc(5/6 * var(--base-size));
+            letter-spacing: calc(var(--base-size) / 100);
+            margin-top: -.5vh;
+            color: rgba($white, .88)!important;
+          }
+        }
+
+        &#MemoryWidgetComponent,
+        &#CpuWidgetComponent,
+        &#UptimeWidgetComponent {
+          color: $white!important;
+          background-color: $green;
+          background: linear-gradient(180deg, $green 0%, darken($green, 12%) 100%);
+
+          canvas {
+            background-color: transparent;
+          }
+
+          .hb-widget-chart-background {
+            background-color: rgba($white, .16);
+          }
+
+          .justify-content-around {
+            justify-content: flex-start!important;
+          }
+
+          .grey-text {
+            font-weight: 500;
+            color: $white!important;
+          }
+
+          .widget-value-parent-wrap {
+            position: relative;
+            padding: 0 0 0 (6 * $padding);
+            text-align: left!important;
+            min-width: auto;
+
+            &:not(:first-child) {
+              padding-left: (8 * $padding);
+
+              &:before {
+                content: "";
+                display: block;
+                position: absolute;
+                left: (4 * $padding);
+                top: 25%;
+                bottom: 25%;
+                width: 1px;
+                background-color: $white;
+              }
+            }
+          }
+
+          .widget-value {
+            font-weight: 600;
+            font-size: calc(2 * var(--base-size));
+          }
+
+          .widget-value-label {
+            font-size: var(--base-size);
+          }
+        }
+
+        &#CpuWidgetComponent {
+          background-color: $blue;
+          background: linear-gradient(180deg, $blue 0%, darken($blue, 12%) 100%);
+        }
+
+        &#UptimeWidgetComponent {
+          background-color: $orange;
+          background: linear-gradient(180deg, $orange 0%, darken($orange, 12%) 100%);
+        }
+
+        &#ClockWidgetComponent {
+          background-color: $black;
+          background: linear-gradient(180deg, lighten($black, 12%), lighten($black, 8%));
+          color: $white!important;
+
+          .widget-value {
+            font-size: calc(3 * var(--base-size));
+            font-weight: 500;
+          }
+
+          .widget-value-label {
+            font-size: var(--base-size);
+            color: darken($white, 32%)!important;
+          }
+        }
+
+        &#HomebridgeLogsWidgetComponent {
+          background-color: #2b2b2b!important;
+
+          .drag-handler {
+            // flex: 0 0 auto;
+          }
+
+          .p-2 {
+            border-top: 1px solid lighten($black, 16%);
+            padding: 0 (6 * $padding)!important;
+          }
+        }
+      }
+    }
+
+    .add-widget-button {
+      opacity: 1;
+      width: (12 * $padding);
+      height: (12 * $padding);
+      border-radius: 100%;
+      box-shadow: 0 4px 16px rgba($black, .48)!important;
+
+      i {
+        text-shadow: 2px 2px 8px rgba(darken($green, 48%), .48);
+      }
+    }
+  }
+
+
+  /*
+   * Modification plugins view
+   */
+
+  app-plugins {
+    .hb-plugin-space-between {
+      width: calc(100% - (1 - 1/3) * 10px)!important;
+
+      .card {
+        > div:first-child {
+          padding-left: (15 * $padding);
+
+          > div:first-child {
+            flex: 1 1;
+          }
+        }
+
+        > div:last-child {
+          margin-top: (3 * $padding);
+
+          a {
+            &.card-link {
+              text-transform: capitalize;
+
+              color: lighten($black, 16%);
+              background-color: transparent;
+              border: 1px solid darken($white, 16%);
+
+              padding: 0 (5 * $padding);
+              height: (8 * $padding);
+              line-height: 100%;
+
+              display: flex;
+              justify-content: center;
+              align-items: center;
+
+              border-radius: $border-radius;
+              transition: color .256s ease, background-color .256s ease, border-color .256s ease, box-shadow .256s ease;
+
+              &:nth-child(2) {
+                margin-left: 0;
+              }
+
+              &:hover {
+                color: initial;
+                background-color: darken($white, 8%);
+              }
+            }
+
+            // Install link
+            &.card-link-install {
+              background-color: darken($white, 8%);
+              border: none;
+
+              &:hover {
+                color: $white;
+                background-color: $blue;
+              }
+            }
+
+            // Settings Link
+            &.card-link-settings {
+              color: $white;
+              background-color: $green;
+              border: none;
+              margin: 0 (12 * $padding) 0 auto!important;
+
+              &:hover {
+                color: $white;
+                background-color: desaturate($green, 44%);
+              }
+            }
+
+            // Update link
+            &.card-link-update {
+              animation-name: glow;
+              animation-duration: 1.768s;
+              animation-iteration-count: infinite;
+
+              &:hover {
+                animation-name: none;
+                color: desaturate($green, 16%);
+                border-color: desaturate($green, 16%);
+                background-color: desaturate(lighten($green, 48%), 64%);
+              }
+
+            }
+
+            // Uninstall link
+            &.card-link-uninstall {
+              color: lighten($black, 16%);
+              background-color: transparent;
+              border: 1px solid darken($white, 16%);
+
+              &:hover {
+                color: desaturate($red, 24%);
+                border-color: desaturate($red, 16%);
+                background-color: lighten($red, 40%);
+              }
+            }
+
+            // NPM Link
+            &.card-link-npm {
+              position: absolute;
+              top: ((6 * $padding) + 1);
+              left: (6 * $padding);
+              width: (12 * $padding);
+              height: (5 * $padding);
+              padding: 0;
+
+              border: none;
+              font-size: ($font-size - .2);
+              font-weight: 600;
+              letter-spacing: .05rem;
+
+              color: $white;
+              background-color: $black;
+            }
+
+            // Github Link
+            &.card-link-external {
+              position: absolute;
+              right: (6 * $padding);
+              padding: 0;
+              width: (8 * $padding);
+              border: none;
+              background-color: darken($white, 8%);
+              color: $black!important;
+              font-size: ($font-size - .1);
+
+              &:hover {
+                background-color: darken($white, 24%);
+                color: $black!important;
+              }
+            }
+          }
+        }
+
+        > p,
+        > h4 {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .card-title {
+          font-weight: 600;
+          margin-top: (3 * $padding);
+          padding: 0;
+        }
+
+        .card-text {
+          font-size: $font-size;
+          color: lighten($black, 8%);
+          margin: 0 0 (2 * $padding);
+
+          span {
+            font-weight: 500;
+            font-size: ($font-size - .2);
+            letter-spacing: .032rem;
+            color: darken($blue, 8%);
+          }
+        }
+      }
+    }
+
+    .mb-3,
+    .my-3 {
+      margin-bottom: $canal!important;
+    }
+  }
+
+  app-settings-plugins-modal {
+    max-width: 500px;
+  }
+
+  /*
+   * Modification settings view
+   */
+
+  app-settings {
+    height: initial!important;
+    min-height: 100%;
+    padding: (16 * $padding) 0 (2 * $padding)!important;
+
+    .list-group .list-group-item {
+      font-size: $font-size;
+      margin: 0 (-6 * $padding);
+      padding: (3 * $padding) (6 * $padding);
+    }
+  }
+
+
+  /*
+   * Modification config view
+   */
+
+  app-config {
+    > div > .row {
+      padding: (4 * $padding) 0;
+    }
+
+    .text-right {
+      button {
+        &:nth-child(1) {
+          border-radius: $border-radius 0 0 $border-radius;
+          margin-right: 0;
+          border-right: none;
+        }
+
+        &:nth-child(2) {
+          border-radius: 0 $border-radius $border-radius 0;
+        }
+
+        &:before {
+          display: block;
+          font-family: "Font Awesome 5 Free";
+          font-weight: 900;
+          margin: 0 (2 * $padding) 0 0;
+        }
+
+        &:nth-child(1):before {
+          content: "\f093";
+        }
+
+        &:nth-child(2):before {
+          content: "\f019";
+        }
+
+        &:nth-child(3):before {
+          content: "\f0c7";
+        }
+      }
+    }
+
+    ngx-monaco-editor,
+    ngx-monaco-editor.flex-grow-1 {
+      margin: 0 -20px!important;
+      width: auto!important;
+
+      .editor-container {
+        height: 100%;
+      }
+    }
+  }
+
+
+  /*
+   * Modification accesories view
+   */
+
+  app-accessories {
+    .background,
+    .background:after {
+      position: fixed;
+      z-index: 0;
+    }
+
+    > div {
+      margin: 0 (-6 * $padding);
+      padding: 0 (6 * $padding);
+      min-height: 100%;
+    }
+
+    .manage-accessory-button {
+      position: relative;
+      z-index: 999;
+      margin: (5 * $padding) (5 * $padding) 0 0;
+
+      transition: opacity .356s ease, transform .512s ease;
+
+      &:hover {
+        transform-origin: 50%;
+        transform: rotate(180deg);
+      }
+    }
+
+    .background:after {
+      display: block;
+    }
+
+    .room-title {
+      margin-left: 0;
+    }
+
+    [ng-reflect-dragula="rooms-bag"] {
+      padding-bottom: (2 * $padding);
+
+      > div {
+        position: relative;
+        padding-top: (2 * $padding);
+
+        &:before {
+          content: "";
+          display: block;
+
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+
+          border-top: 1px solid rgba($white, .16);
+        }
+      }
+    }
+
+    .services-bag {
+      padding: 0 (2 * $padding);
+    }
+
+    > div > .row {
+      padding: (4 * $padding) 0;
+      margin-bottom: 0!important;
+    }
+
+    #accessory-dropdown-menu {
+      margin-right: 0;
+      box-shadow: 0 8px 20px rgba(darken($green, 48%), .48)!important;
+
+      i {
+        text-shadow: 2px 2px 8px rgba(darken($green, 48%), .48);
+      }
+    }
+  }
+
+  app-add-room-modal {
+    max-width: 400px;
+  }
+
+
+  app-accessories h3,
+  h5.room-title {
+    color: $white!important;
+    text-shadow: 0 4px 16px rgba($black, .48);
+  }
+
+  .accessory-box {
+    position: relative;
+    margin: (2 * $padding);
+    padding: (4 * $padding);
+    background-color: transparent;
+
+    border-radius: (2 * $border-radius)!important;
+    box-shadow: 0 4px 16px rgba($black, .16);
+
+    > div {
+      position: relative;
+      z-index: 1;
+    }
+
+    &:after {
+      content: "";
+      display: block;
+
+      position: absolute;
+      z-index: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+
+      background-color: rgba(darken($white, 24%), .68);
+
+      border-radius: (2 * $border-radius)!important;
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+    }
+
+    &.switch-on:after {
+      background-color: rgba($white, .96);
+    }
+
+    .accessory-label {
+      line-height: 1.1rem;
+      font-size: $font-size;
+      font-weight: 500;
+      color: rgba($black, .8);
+      max-height: initial;
+
+      &.grey-text {
+        margin-top: $padding;
+        font-weight: 400;
+        font-size: ($font-size - .1);
+        color: rgba($black, .24);
+        -webkit-line-clamp: 1;
+      }
+    }
+
+    .accessory-svg svg,
+    .temperature-circle {
+      width: (9 * $padding);
+      height: (9 * $padding);
+      line-height: (9 * $padding);
+      font-weight: 500;
+    }
+  }
+
+  .no-drag .accessory-box {
+    opacity: 1;
+    margin-left: 0;
+    display: flex;
+
+    color: rgba($white,.64)!important;
+
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background-color: rgba(lighten($black, 16%), .48);
+
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    box-shadow: none;
+
+    &:after {
+      display: none;
+    }
+
+    div {
+      margin-top: 0;
+      color: inherit!important;
+    }
+  }
+
+  /*
+   * Modification user view
+   */
+
+  app-users {
+    height: initial!important;
+    min-height: 100%;
+    padding: (16 * $padding) 0 (2 * $padding)!important;
+
+    h4 {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-right: (4 * $padding);
+    }
+
+    .btn {
+      flex: 0 0 auto;
+    }
+  }
+
+  app-users-add,
+  app-users-edit,
+  app-users-setup2fa {
+    max-width: 400px;
+  }
+
+
+  /*
+   * Restart page
+   */
+
+  app-restart {
+    display: flex!important;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
+
+    .row {
+      max-width: (100 * $padding);
+    }
+
+    .app-spinner-container {
+      position: relative;
+    }
+  }
+
+
+  // /platform-tools/docker/restart-container
+
+
+
+  /*
+   * Modal Animation
+   */
+
+  .fade {
+    animation-name: fade;
+    animation-duration: .88s;
+    animation-iteration-count: 1;
+
+    &.modal-backdrop {
+      animation-duration: .36s;
+      animation-name: fade-backdrop;
+    }
+  }
+}
+
+
+/*
+ * New theme - Dark style
+ */
+
+@media (prefers-color-scheme: dark) {
+  // Common colors
+  $red:     darken($red, 4%);
+  $orange:  darken($orange, 4%);
+  $yellow:  darken($yellow, 4%);
+  $green:   darken($green, 4%);
+  $blue:    darken($blue, 4%);
+
+  // Homebridge color
+  $purple:      darken($purple, 8%);
+  $purple-dark: darken($purple-dark, 8%);
+
+  // B/W
+  $t_black: $black;
+  $t_white: $white;
+  $black: darken($t_white, 4%);
+  $white: $t_black;
+
+  .config-ui-x-#{$name} {
     background-color: darken($white, 4%);
     color: lighten($black, 8%);
-
-    // Heading
-    @for $i from 1 through 5 {
-      h#{$i},
-      .h#{$i},
-      .plugin-md h#{$i},
-      .plugin-md .h#{$i} {
-        font-size: (($font-size + .8) - (0.1 * $i));
-        font-weight: 500;
-        letter-spacing: -.008rem;
-        line-height: 120%;
-        padding: 0;
-        margin: 0 0 (2 * $padding);
-      }
-
-      * ~ h#{$i},
-      * ~ .h#{$i},
-      .plugin-md * ~ h#{$i},
-      .plugin-md * ~ .h#{$i} {
-        margin-top: (((12 - (2 * $i)) * $padding));
-      }
-    }
-
-
-    // Paragraph
-    p {
-      line-height: 140%;
-      margin: (2 * $padding) 0;
-    }
-
-    @for $i from 1 through 10 {
-      .mt-#{$i}, .my-#{$i} { margin-top: ($padding * ($i + 2))!important }
-      .mb-#{$i}, .my-#{$i} { margin-bottom: ($padding * ($i + 2))!important }
-    }
-
+    overflow-x: hidden;
 
 
     // Commmon styles
@@ -212,84 +2350,36 @@ $font-size:     .9rem;
     .container-md,
     .container-lg,
     .container-xl {
-      position: relative;
-      z-index: 1;
-      padding: 0 $canal;
-
       h3.primary-text {
-        padding: 0;
         color: $black;
-        font-weight: 500;
-      }
-
-      router-outlet + * {
-        display: block;
-        width: 100%;
-        height: 100%;
-        padding: $header-height 0 0;
       }
     }
 
     a {
       &.card-link {
         color: $black;
-        line-height: 100%;
-
-        &:hover {
-          color: inherit;
-        }
       }
     }
 
     .hb-uix-switch {
-      padding-left: (6 * $padding);
-
       .hb-uix-slider  {
-        margin-top: 1px;
-        width: (5 * $padding);
-        height: (5 * $padding);
-        background-color: $white!important;
-        border-color: darken($white, 16%)!important;
-
-        &:after {
-          top: 50%;
-          left: 50%;
-          width: 40%;
-          height: 70%;
-          transform: translate(-50%, -50%) rotate(45deg);
-        }
+        border-color: $blue!important;
       }
 
       input:checked ~ .hb-uix-slider {
         background-color: $blue!important;
-        border-color: darken($blue, 16%)!important;
       }
     }
 
     .hb-widget-chart-background {
       background-color: rgba($white, .24);
-      display: none;
     }
 
     .alert {
-      font-size: $font-size;
-      margin: 0 (-4 * $padding);
-      padding: 0 (4 * $padding);
-
-      border: none;
       color: lighten($black, 16%);
-      font-size: $font-size;
-      letter-spacing: .048;
-      background-color: transparent;
     }
 
     .animate_loader {
-      svg {
-        position: relative!important;
-        width: 15vw!important;
-        height: 15vw!important;
-      }
-
       .spinner_outer {
         stroke: rgba($purple, .32);
       }
@@ -308,40 +2398,19 @@ $font-size:     .9rem;
     }
 
 
-    // Markdown plugin
-    .plugin-md {
-      font-size: $font-size;
-    }
-
-
     // Dragable plugin
     [draggable=true] {
-      border: 1px solid darken($white, 20%)!important;
-      background-color: darken($white, 8%);
-      border-radius: none!important;
-      overflow: hidden!important;
-      margin-top: -1px!important;
+      border: 1px solid lighten($white, 12%)!important;
+      background-color: lighten($white, 8%);
 
       &:hover {
-        margin-top: -1!important;
-        margin-bottom: 0!important;
-        margin-left: 0!important;
-        margin-right: 0!important;
-
-        background-color: darken($white, 4%);
-
-        box-shadow: 0 4px 16px rgba($black, .32)!important;
-      }
-
-      .list-group-item {
-        background-color: transparent!important;
-        border: none!important;
+        background-color: lighten($white, 4%);
+        box-shadow: 0 4px 16px rgba($white, .32)!important;
       }
     }
 
-
     // Modification for header page
-    @include header-theme($blue, $white);
+    @include header-theme(rgba(lighten($white, 4%), .64), $black);
 
 
     /*
@@ -350,21 +2419,8 @@ $font-size:     .9rem;
 
     form {
       .hb-npm-search {
+        color: $black;
         background-color: rgba($black, .08);
-        height: auto;
-        margin: (8 * $padding) 0;
-        padding: $padding (6 * $padding);
-        border: none;
-
-        border-radius: $border-radius;
-        box-shadow: none;
-        transition: color .256s ease, background-color .256s ease, border-color .256s ease, box-shadow .256s ease;
-
-        &:hover,
-        &:focus {
-          border: none;
-          box-shadow: none;
-        }
 
         &:focus {
           box-shadow: 0 0 0 4px rgba($blue, .32);
@@ -372,33 +2428,12 @@ $font-size:     .9rem;
 
         &:before,
         &:after {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-
-          content: "";
-          display: block;
-          border-radius: 1px;
           background-color: $black;
-
-          width: (3 * $padding);
-          height: 2px;
-
-          transform: translate(-50%, -50%) rotate(45deg);
-          transform-origin: 50%;
         }
       }
 
       .hb-npm-search-clear {
         background-color: lighten($black, 30%);
-
-        top: (12 * $padding);
-        right: (10 * $padding);
-        width: (5 * $padding);
-        height: (5 * $padding);
-
-        border-radius: 100%;
-        transition: background-color .256s ease;
 
         &:hover {
           background-color: lighten($black, 15%);
@@ -406,24 +2441,7 @@ $font-size:     .9rem;
 
         &:before,
         &:after {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-
-          content: "";
-          display: block;
-          border-radius: 1px;
           background-color: $white;
-
-          width: (3 * $padding);
-          height: 2px;
-
-          transform: translate(-50%, -50%) rotate(45deg);
-          transform-origin: 50%;
-        }
-
-        &:after {
-          transform: translate(-50%, -50%) rotate(-45deg);
         }
       }
     }
@@ -434,79 +2452,66 @@ $font-size:     .9rem;
      */
 
     .btn {
-      font-size: $font-size;
-      font-weight: 500;
-      line-height: 100%;
-      text-transform: capitalize;
-      margin: 0 ($padding * 2) 0 0;
-
-      background-color: transparent!important;
-      border: 1px solid darken($white, 16%);
+      border: 1px solid lighten($white, 24%);
       color: lighten($black, 16%);
-      padding: 0 (6 * $padding);
-      height: (8 * $padding);
-
-      border-radius: (3/4 * $border-radius);
-      box-shadow: none!important;
-
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-
-      transition: color .256s ease, background-color .256s ease, border-color .256s ease, box-shadow .256s ease;
 
       &.btn-default,
       &.btn-primary {
-        border: none;
-        color: $white;
-      }
-
-      &.btn-elegant {
-        background-color: transparent!important;
+        color: $black;
       }
 
       &.btn-default {
         background-color: $blue!important;
+
         &:hover {
-          color: $white;
+          color: $black;
           background-color: darken($blue, 8%)!important;
         }
       }
 
       &.btn-primary {
         background-color: $green!important;
+
         &:hover {
-          color: $white;
+          color: $black;
           background-color: darken($green, 8%)!important;
         }
       }
 
       &:hover {
-        color: initial;
-        background-color: darken($white, 8%)!important;
-      }
-
-      &:first-child {
-        margin-left: 0;
-      }
-
-      &:last-child {
-        margin-right: 0;
+        color: $black;
+        background-color: lighten($white, 8%)!important;
       }
     }
 
 
     /*
-     * Modification for card style
+     * Dropdown menu
      */
 
-    .card {
-      border-radius: 12px;
-      background-color: $white;
-      box-shadow: 0 16px 24px rgba($black, .048);
+    .dropdown-menu,
+    .monaco-menu-container {
+      border: 1px solid lighten($white, 16%);
+      box-shadow: 0 8px 16px rgba(darken($white, 24%), .32)!important;
 
-      &.card-body {
-        padding: (4 * $padding) (6 * $padding);
+      &:after {
+        background-color: rgba(lighten($white, 4%), .72);
+      }
+
+      a {
+        color: $black!important;
+
+        &:active,
+        &:focus,
+        &:hover {
+          background-color: rgba($purple, .88);
+          color: $black!important;
+        }
+      }
+
+      .dropdown-divider,
+      .action-label.separator {
+        border-top: 2px solid rgba(darken($black, 16%), .48);
       }
     }
 
@@ -516,29 +2521,6 @@ $font-size:     .9rem;
      */
 
     .md-form {
-      margin-top: (1 * $padding);
-      margin-bottom: (1 * $padding);
-
-      display: flex;
-      flex-flow: column-reverse;
-
-      .prefix {
-        $icon-size: 0;
-
-        top: 0;
-        font-size: $icon-size;
-        width: $icon-size;
-        height: $icon-size;
-        line-height: $icon-size;
-
-        ~ label,
-        ~ input,
-        ~ textarea {
-          margin-left: 0;
-          width: 100%;
-        }
-      }
-
       input:not([type]),
       input[type="text"]:not(.browser-default),
       input[type="password"]:not(.browser-default),
@@ -557,14 +2539,12 @@ $font-size:     .9rem;
         color: $black;
         background-color: lighten($white, 100%);
         border: 1px solid darken($white, 16%);
-        border-radius: (1/2 * $border-radius);
 
         &:focus {
-          outline: 0;
           color: $black;
           background-color: lighten($white, 100%);
           border-color: rgba($blue, .64);
-          box-shadow: 0 0 0 $padding rgba($blue, .24);
+          box-shadow: 0 0 0 0.2rem rgba($blue, .24);
         }
       }
 
@@ -574,112 +2554,28 @@ $font-size:     .9rem;
         &:-webkit-autofill,
         &:-webkit-autofill:hover,
         &:-webkit-autofill:focus {
-          background: 0 0 0 1000px lighten($yellow, 24%) inset!important;
+          background: 0 0 0 1000px lighten($yellow, 32%) inset!important;
         }
-      }
-
-      label,
-      label.active {
-        margin-bottom: $padding;
-        position: relative;
-        font-size: $font-size;
-        transform: none;
       }
 
       .form-control {
-        padding: $padding (2 * $padding)!important;
-
         &.is-invalid:focus {
             border-color: rgba($red, .64)!important;
             box-shadow: 0 0 0 $padding rgba($red, .24)!important;
-        }
-
-        &.is-valid,
-        &.is-invalid {
-          background-position: right 0.75rem center!important;
         }
       }
     }
 
 
     /*
-     * Modification for Dropdown menu
+     * Modification for card style
      */
 
-    .dropdown-menu,
-    .monaco-menu-container {
-      z-index: 99;
-      padding: (2 * $padding);
-      overflow: hidden;
-      border-radius: $border-radius!important;
-      background-color: transparent;
-      box-shadow: 0 8px 16px rgba($black, .32)!important;
-
-      .monaco-scrollable-element {
-        padding: 0;
-        background-color: transparent;
-        box-shadow: none!important;
-      }
-
-      &:after {
-        position: absolute;
-        z-index: -1;
-        content: "";
-        display: block;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: rgba(darken($white, 4%), .72);
-        -webkit-backdrop-filter: saturate(180%) blur(20px);
-      }
-
-      a {
-        background-color: transparent!important;
-        margin: 0;
-        padding: (2 * $padding) (4 * $padding);
-        color: $black!important;
-        font-size: $font-size;
-        font-weight: 400;
-        line-height: 100%;
-        height: auto;
-        border-radius: $border-radius;
-
-        &:active,
-        &:focus,
-        &:hover {
-          background-color: rgba($purple, .88)!important;
-          color: $white!important;
-        }
-
-        &.action-menu-item {
-          padding: (2 * $padding) (1/2 * $padding);
-        }
-
-        span {
-          font-size: $font-size!important;
-          font-weight: 400;
-          line-height: 100%;
-        }
-      }
-
-      .dropdown-divider,
-      .action-label.separator {
-        padding: 0!important;
-        margin: (2 * $padding) 0!important;
-        border-top: 2px solid rgba(darken($white, 16%), .48);
-        border-bottom: none!important;
-      }
-
-      .action-item {
-        border: none!important;
-      }
-
-      .monaco-action-bar {
-        background-color: transparent!important;
-      }
+    .card {
+      border: 1px solid lighten($white, 4%);
+      background-color: $white;
+      box-shadow: 0 16px 24px rgba(darken($white, 24%), .32);
     }
-
 
 
     /*
@@ -688,27 +2584,14 @@ $font-size:     .9rem;
 
     .login-container {
       .logo {
-        display: block;
-        width: 160px;
-        height: 160px;
-        padding: (8 * $padding);
-        margin: 0 auto (12 * $padding);
         background: rgba($purple, .88);
         background: linear-gradient(180deg, rgba($purple, .88), rgba($purple-dark, .88));
         border: 1px solid rgba($purple-dark, .92);
-        border-radius: 100%;
-        -webkit-backdrop-filter: saturate(180%) blur(20px);
         box-shadow: 0 24px 64px rgba(darken($purple-dark, 8%), .64);
       }
 
       .login-card {
-        overflow: hidden;
-        padding: 0;
-        margin: (6 * $padding)!important;
-        border: none;
         background-color: transparent;
-        max-width: (100 * $padding);
-        box-shadow: none;
 
         form {
           padding: (12 * $padding) (10 * $padding) (10 * $padding);
@@ -720,67 +2603,14 @@ $font-size:     .9rem;
       }
 
       .md-form {
-        margin: 0 auto;
-        max-width: (75 * $padding);
-
-        &:first-child {
-          margin-top: (8 * $padding);
-
-          input {
-            border-radius: $border-radius $border-radius 0 0;
-          }
-        }
-
-        &:last-child {
-          margin-top: 1px;
-          margin-bottom: (6 * $padding);
-
-          input {
-            border-radius: 0 0 $border-radius $border-radius;
-          }
-        }
-
-        .form-control {
-          margin: 0;
-
-          &:invalid,
-          &.is-invalid,
-          .ng-invalid {
-            background-position: calc(100% - #{(3 * $padding)}) center !important;
-            background-size: (4 * $padding);
-          }
-        }
-
         .prefix {
-          display: block;
-          z-index: 1;
-          margin: 0;
           color: lighten($black, 24%)!important;
-          top: 50%;
-          left: (6 * $padding);
-          width: (4 * $padding);
-          height: (4 * $padding);
-          line-height: (4 * $padding);
-          font-size: (4 * $padding);
-          transform: translateY(-50%);
         }
 
-        input,
-        label {
-          margin-left: 0;
-          padding: (3 * $padding) (3 * $padding) (3 * $padding) (14 * $padding)!important;
-        }
 
         input {
-          position: relative;
-          z-index: 0;
-          width: 100%;
           color: $black;
-          font-size: $font-size;
-          border: none!important;
           background-color: rgba(darken($white, 4%), .72)!important;
-
-          -webkit-backdrop-filter: saturate(180%) blur(20px);
 
           &.form-control:focus,
           &:active,
@@ -797,26 +2627,11 @@ $font-size:     .9rem;
           &:-webkit-autofill:hover,
           &:-webkit-autofill:focus {
             -webkit-text-fill-color: $black!important;
-            -webkit-box-shadow: 0 0 0 1000px lighten($yellow, 24%) inset!important;
+            -webkit-box-shadow: 0 0 0 1000px darken($yellow, 24%) inset!important;
           }
 
           + label {
-            position: absolute!important;
             color: lighten($black, 24%)!important;
-            font-size: $font-size;
-            font-weight: 500;
-            transform: none;
-            transition: opacity .256 ease;
-            pointer-events: none;
-
-            &:before {
-              display: none;
-            }
-
-            &.active {
-              opacity: 0;
-              transform: none;
-            }
           }
         }
       }
@@ -825,35 +2640,22 @@ $font-size:     .9rem;
       .btn:focus,
       .btn:hover,
       .btn:active {
-        padding: (3 * $padding) (8 * $padding)!important;
-        height: auto!important;
-        border: none!important;
         background-color: $blue!important;
         background: linear-gradient(180deg, rgba($purple, .88), rgba($purple-dark, .88))!important;
-        color: $white!important;
+        color: $black!important;
         box-shadow: 0 8px 16px rgba(darken($purple-dark, 32%), .48)!important;
-        border: none!important;
-        transition: all .256s ease;
-        -webkit-backdrop-filter: saturate(180%) blur(20px);
 
         &:disabled,
         &.disabled {
-          opacity: 1!important;
-          color: lighten($white, 24%)!important;
-          background: rgba(lighten($black, 16%), .48)!important;
+          color: lighten($black, 24%)!important;
+          background: rgba(lighten($white, 16%), .48)!important;
           box-shadow: none!important;
         }
       }
 
       .red-text{
-        margin: 0 auto (3 * $padding);
-
         small {
-          padding: $padding (4 * $padding);
-          display: inline-block;
-          font-size: $font-size;
-
-          @include neomorphism($red, $white, $border-radius);
+          @include neomorphism($red, $black, $border-radius);
         }
       }
     }
@@ -864,117 +2666,19 @@ $font-size:     .9rem;
      */
 
     // Form
-    legend {
-      font-size: ($font-size + .4);
-      font-weight: 500;
-      margin: (2 * $padding) 0 $padding;
-    }
-    .expandable,
-    .expanded {
-      legend{
-        &:before {
-          align-self: center;
-          font-size: $font-size;
-          padding-right: (2 * $padding);
-        }
-      }
-    }
-
-    .form-control {
-      font-size: $font-size;
-    }
-
-    .form-flex-row {
-      display: flex;
-      flex-flow: row nowrap;
-
-      > .form-flex-item {
-        margin: $padding 0;
-        padding: 0 $padding;
-
-        .form-flex-column {
-          display: flex;
-          flex-flow: column nowrap;
-
-          padding: 0 (2 * $padding);
-
-          > .form-flex-item {
-            margin: $padding 0;
-          }
-
-          .form-group {
-            padding: 0;
-          }
-        }
-
-        &:first-child {
-          padding-left: 0;
-
-          .form-flex-column {
-            padding-left: 0;
-          }
-        }
-
-        &:last-child {
-          padding-right: 0;
-
-          .form-flex-column {
-            padding-right: 0;
-          }
-        }
-      }
-    }
-
-    fieldset {
-      > root-widget {
-        > div:last-child {
-          margin-top: (4 * $padding);
-        }
-      }
-    }
-
-    json-schema-form {
-      .form-group {
-        margin: 0;
-        padding: $padding 0;
-      }
-    }
 
     .list-group .list-group-item {
-      background-color: $white;
-      margin: 0;
-      padding: $padding (4 * $padding);
-      border-radius: 0;
-      border: 0;
-      border-top: 1px solid darken($white, 8%);
+      background-color: lighten($white, .16);
+      border-top: 1px solid lighten($white, 8%);
 
       &:last-child {
-        border-bottom: 1px solid darken($white, 8%);
+        border-bottom: 1px solid lighten($white, 8%);
       }
 
       .close {
         background-color: $red;
-        text-shadow: none;
-        opacity: 1;
-
-        border-radius: (3 * $padding);
-
-        position: absolute;
-        right: (4 * $padding);
-        top: (2.5 * $padding);
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        width: (5 * $padding);
-        height: (5 * $padding);
 
         span {
-          display: block;
-          text-indent: -666em;
-          width: (2.5 * $padding);
-          height: 2px;
           background-color: $white;
         }
       }
@@ -987,128 +2691,49 @@ $font-size:     .9rem;
 
     .modal {
       .modal-dialog {
-        height: 100%;
-        padding: (6 * $padding) 0;
-        margin: 0 auto;
 
         > .modal-content {
-          display: flex;
-          flex-flow: column nowrap;
-          justify-content: center;
-          align-items: center;
-          width: 100%;
-          height: 100%;
           background-color: transparent;
-          border-radius: 0;
-          box-shadow: none;
 
           > * {
-            display: block;
-            width: 100%;
-            max-height: 100%;
-            box-shadow: 0 20px 60px rgba($black, .16);
+            box-shadow: 0 20px 60px rgba($white, .16);
 
-            > .modal-content {
-              position: relative;
-              width: inherit;
-              max-height: inherit;
-              background-color: rgba($white, .88);
-              border-radius: (1.5 * $border-radius);
-              overflow: hidden;
-
-              -webkit-backdrop-filter: saturate(180%) blur(20px);
+            .modal-content {
+              background-color: rgba(lighten($white, 12%), .88);
             }
-          }
-
-          .plugin-md p {
-            margin: 0;
           }
         }
       }
 
       .modal-header,
       .modal-footer {
-        position: relative;
-        flex: 0 0;
-        padding: (4 * $padding);
         background-color: transparent;
       }
 
       .modal-header{
-        padding-left: (12 * $padding);
-        border-bottom: 1px solid darken($white, 12%);
-
-        h5 {
-          display: inline-block;
-          font-size: ($font-size + .1);
-          margin: 0 auto;
-          padding: 0;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
+        border-bottom: 1px solid lighten($white, 8%);
 
         .close {
-          $icon-size: (4 * $padding);
-
-          position: absolute;
-          top: 50%;
-          left: (4 * $padding);
-
-          width: $icon-size;
-          height: $icon-size;
-          margin: 0;
-          padding: 0;
           background-color: lighten($red, 8%);
           border: 1px solid rgba(darken($red, 16%), .72);
-          opacity: 1;
 
           color: lighten($red, 8%);
-          line-height: (3/4 * $icon-size);
-          font-size: (3/4 * $icon-size);
-          text-shadow: none;
-
-          border-radius: 100%;
-          transform: translateY(-50%);
-          transition: color .256s ease;
-
-          span {
-            line-height: inherit;
-            font-size: inherit;
-            text-shadow: inherit;
-          }
 
           &:hover {
-            color: rgba($black, .64);
+            color: rgba($white, .64);
           }
         }
       }
 
       .modal-body {
-        flex: 1 1;
-        padding: (3 * $padding) (4 * $padding);
-        overflow: auto;
-
         .card {
           border: none;
           background-color: transparent;
 
           &.card-body {
-            padding: 0;
-            border-radius: 0;
-            box-shadow: none;
-
             > div > div:last-child {
-              position: absolute;
-              top: initial;
-              bottom: ($padding + 2);
-              left: initial;
-              right: 0;
-
               a {
                 border: 1px solid rgba(darken($red, 16%), .64);
-                padding: $padding (4 * $padding);
-                border-radius: $border-radius;
 
                 &:hover {
                   background-color: rgba($red, .08);
@@ -1120,8 +2745,7 @@ $font-size:     .9rem;
       }
 
       .modal-footer {
-        padding: (2 * $padding) (4 * $padding);
-        border-top: 1px solid darken($white, 12%);
+        border-top: 1px solid lighten($white, 8%);
       }
     }
 
@@ -1131,147 +2755,89 @@ $font-size:     .9rem;
      */
 
     #toast-container {
-      $icon-size: (8 * $padding);
-
       > div,
       > div:hover,
       .toast-close-button span {
-        color: $black!important;
-        -webkit-backdrop-filter: saturate(180%) blur(20px);
+        color: $white!important;
       }
 
       > div,
       > div:hover {
-        overflow: initial;
-        padding: (4 * $padding) (4 * $padding) (4 * $padding) ($icon-size + (8 * $padding));
-
-        border: 1px solid darken($white, 8%);
-        background-color: rgba(darken($white, 8%), .72)!important;
-
-        box-shadow: none;
-        border-radius: $border-radius;
-        -webkit-backdrop-filter: saturate(180%) blur(20px);
-
-        &:after {
-          content: "";
-          display: block;
-
-          position: absolute;
-          z-index: 0;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-
-          box-shadow: 0 4px 16px rgba($black, .24);
-          border-radius: $border-radius;
-        }
+        background-color: rgba(lighten($black, 4%), .72)!important;
+        box-shadow: 0 4px 8px rgba($white, .32);
       }
 
       .toast-close-button {
-        position: absolute;
-        top: (2 * $padding);
-        right: (2 * $padding);
-
-        display: flex;
-        justify-items: center;
-        align-items: center;
-
         span {
-          display: block;;
+          background-color: rgba(darken($black, 4%), .32)!important;
+        }
+      }
+    }
 
-          width: (6 * $padding);
-          height: (6 * $padding);
-          line-height: (5 * $padding);
 
-          text-align: center;
-          font-weight: 300;
+    .background:after {
+      background-color: rgba($white, .24);
+    }
 
-          border: 1px solid darken($white, 16%);
-          background-color: rgba(darken($white, 16%), .32)!important;
+    /*
+     * Modification monaco editor
+     */
 
-          box-shadow: 0 2px 4px rgba($black, .16);
-          border-radius: 100%;
+    .monaco-editor,
+    .monaco-editor-background,
+    .monaco-editor .inputarea.ime-input,
+    .monaco-editor .margin {
+      background-color: $white;
+    }
+
+    .monaco-editor {
+      .cursor {
+        background-color: $black;
+        border-color: $black;
+        color: $black;
+      }
+
+      .current-line ~ .line-numbers {
+        color: $yellow;
+      }
+
+      .view-overlays {
+        .cigr {
+          box-shadow: 1px 0 0 0 lighten($white, 16%) inset;
+        }
+
+        .current-line {
+          border-color: lighten($white, 8%);
+        }
+
+        .selected-text {
+          background-color: lighten($white, 4%);
+        }
+
+        &.focused {
+          .selected-text {
+            background-color: lighten($white, 8%);
+          }
         }
       }
 
-      .toast-title {
-        margin: 0;
-        font-size: ($font-size + .2);
-        line-height: 100%;
+      .mtk1 {
+        color: darken($black, 16%);
       }
 
-      .toast-message {
-        margin: $padding 0 0;
+      .mtk5 {
+        color: lighten($blue, 8%);
       }
 
-      .toast-info,
-      .toast-error,
-      .toast-success,
-      .toast-warning {
-        background-image: none;
-
-        &:before {
-          content: "";
-          display: block;
-          position: absolute;
-          left: (4 * $padding);
-          top: (4 * $padding);
-          width: $icon-size;
-          height: $icon-size;
-
-          line-height: $icon-size;
-          font-size: (1/2 * $icon-size);
-          text-align: center;
-
-          font-family: "Font Awesome 5 Free";
-          font-weight: 900;
-          content: "\f093";
-          color: $white;
-          text-shadow: 0 4px 8px rgba($black, .24);
-
-          border-radius: 100%;
-          box-shadow: 0 4px 8px rgba($black, .24), inset -2px -4px 16px rgba($black, .24);
-        }
+      .mtk7 {
+        color: lighten($green, 8%);
       }
 
-      .toast-info:before {
-        content: "\f05a";
-        background-color: $blue;
-      }
-      .toast-error:before {
-        content: "\f057";
-        background-color: $red;
-      }
-      .toast-success:before {
-        content: "\f00c";
-        background-color: $green;
-      }
-      .toast-warning:before {
-        content: "\f071";
-        background-color: $orange;
+      .mtk20 {
+        color: lighten($red, 8%);
       }
     }
 
-
-
-    // Background
-
-    .background,
-    .background:after {
-      position: absolute;
-      z-index: 2;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-    }
-
-    .background:after {
-      content: "";
-      display: block;
-      background-color: rgba($black, .16);
-    }
 
 
     /*
@@ -1279,60 +2845,24 @@ $font-size:     .9rem;
      */
 
     app-status {
-      z-index: 0;
-      width: 100%;
-      height: 100%;
-      display: block;
-
       .background:after {
-        display: none;
-      }
-
-      .status-container {
-        margin: 0 (-$canal)!important;
-        padding: 0 $canal!important;
-      }
-
-      .scrollVertical {
-        overflow-x: initial;
-        overflow-y: initial;
+        display: block;
       }
 
       > div > .row {
-        margin: 0 (-$canal);
-
         &.flex-column {
-          position: relative;
-          z-index: 3;
-          height: calc(100vh - #{$header-height});
-          box-shadow: 0 4px 24px rgba($black, .32);
+          box-shadow: 0 4px 24px rgba($white, .32);
         }
 
         &:last-child {
-          $footer-height: (9 * $padding);
-
-          position: relative;
-          z-index: 1;
-          overflow: hidden;
-          height: $footer-height;
-          line-height: $footer-height;
           background-color: darken($white, 4%);
 
           > div {
-            position: fixed;
-            left: 0;
-            right: 0;
-            top: initial;
-            bottom: 0;
-            height: $footer-height;
-            margin: 0!important;
             border-top: 1px solid darken($white, 8%);
 
             &.grey-text,
             small,
             a {
-              font-weight: 500;
-              letter-spacing: .064rem;
               color: lighten($black, 24%)!important;
             }
           }
@@ -1340,43 +2870,18 @@ $font-size:     .9rem;
       }
 
       gridster {
-        &.fit {
-          overflow-x: initial;
-          overflow-y: initial;
-        }
-
-        .p-2 {
-          padding: (2 * $padding)!important;
-        }
-
         .gridster-preview {
-          border-radius: var(--base-size);
-          box-shadow: 0 8px 16px rgba($black, .32) inset;
+          box-shadow: 0 8px 16px rgba($white, .32) inset;
           border: 1px solid rgba($black, .24) inset;
         }
 
         gridster-item {
-          border-radius: var(--base-size);
-          box-shadow: 0 8px 16px rgba($black, .48);
+          color: $black;
+          box-shadow: 0 8px 16px rgba($white, .48);
           border-top: 1px solid rgba(lighten($white, 100%), .24);
 
           .drag-handler {
-            padding: (3 * $padding) (10 * $padding) (3 * $padding) (6 * $padding)!important;
-            overflow: hidden;
-
-            color: lighten($black, 48%);
-            font-size: ($font-size - .2);
-            font-weight: 600;
-            text-transform: uppercase;
-            text-overflow: ellipsis;
-            letter-spacing: .048rem;
-            white-space: nowrap;
-          }
-
-          .widget-control-button {
-            top: (3 * $padding);
-            right: (3 * $padding);
-            z-index: 3;
+            color: lighten($white, 48%);
           }
 
           &#MemoryWidgetComponent,
@@ -1388,74 +2893,23 @@ $font-size:     .9rem;
           &#HapQrcodeWidgetComponent {
             .drag-handler,
             .widget-control-button {
-              color: $white!important;
+              color: $black!important;
             }
           }
 
           &#HomebridgeStatusWidgetComponent {
             $space-between: (4 * $padding);
             background-color: rgba($white, .92);
-            -webkit-backdrop-filter: saturate(180%) blur(20px);
-
-            .gridster-item-content {
-              flex: 1;
-              padding: 0!important;
-              justify-content: center!important;
-            }
 
             .hb-status-item {
-              position: relative;
-              display: flex;
-              flex: 0;
-              align-items: center;
-              justify-content:center;
-
               &:not(:last-child) {
-                margin-right: 0!important;
-                padding-right: (4 * $space-between);
-
                 &:after {
-                  content: "";
-                  display: block;
-                  position: absolute;
-                  right: (2 * $space-between);
-                  top: 25%;
-                  bottom: 25%;
-                  width: 1px;
                   background-color: darken($white, 16%);
                 }
               }
 
-              .align-self-center {
-                a:first-child,
-                span:first-child {
-                  font-size: var(--base-size)!important;
-                  font-weight: 500;
-                }
-
-                br {
-                  display: none;
-                }
-
-                span,
-                .grey-text,
-                .primary-text {
-                  display: block;
-                  overflow: hidden;
-                  white-space: nowrap;
-                  text-overflow: ellipsis;
-                }
-
-                .grey-text,
-                .primary-text {
-                  margin-top: calc(-1/4 * var(--base-size));
-                  font-size: var(--base-size);
-
-                  span {
-                    display: inline-block;
-                    font-size: inherit;
-                  }
-                }
+              .primary-text {
+                color: $green!important;
               }
 
               .hb-status-icon {
@@ -1464,30 +2918,9 @@ $font-size:     .9rem;
                 padding: 0 calc(1 * var(--base-size)) 0 0!important;
 
                 i {
-                  width: calc(3 * var(--base-size));
-                  height: calc(3 * var(--base-size));
-                  line-height: calc(3 * var(--base-size));
-
-                  text-align: center;
-                  font-size: calc(1.5 * var(--base-size));
-
-                  @include neomorphism($green, $white, 100%);
-
-                  &:before {
-                    text-align: center;
-                    margin: 0 auto;
-                  }
-
-                  &.fa-check-circle:before {
-                    content: "\f00c";
-                  }
-
-                  &.fa-exclamation-circle:before {
-                    content: "\f12a";
-                  }
+                  @include neomorphism($green, $black, 100%);
 
                   &.fa-spin {
-                    font-size: calc(3 * var(--base-size));
                     text-shadow: none!important;
 
                     background: transparent!important;
@@ -1500,7 +2933,7 @@ $font-size:     .9rem;
 
                   &.fa-cloud-upload-alt,
                   &.fa-exclamation-circle {
-                    @include neomorphism($orange, $white, 100%);
+                    @include neomorphism($orange, $black, 100%);
                   }
                 }
               }
@@ -1509,7 +2942,7 @@ $font-size:     .9rem;
 
           &#HapQrcodeWidgetComponent {
             $dark: $purple;
-            $light: $white;
+            $light: $black;
 
             background-color: lighten($dark, 16%);
             background: linear-gradient(180deg, lighten($dark, 16%) 0%, lighten($dark, 8%) 100%);
@@ -1520,204 +2953,72 @@ $font-size:     .9rem;
               color: rgba($light, .64)!important;
             }
 
-            .p-2 {
-              padding: calc(2 * var(--base-size))!important;
-            }
-
-            .drag-handler {
-              font-size: $font-size;
-              font-weight: normal;
-              letter-spacing: inherit;
-              text-transform: initial;
-              padding: 0!important;
-              white-space: normal;
-
-              > div {
-                display: flex;
-                flex-flow: column nowrap;
-                justify-content: flex-end;
-                align-items: flex-end;
-
-                &:first-child {
-                  height: auto!important;
-                  flex: 1 1 auto;
-                }
-              }
-            }
-
             .qr-code-container {
-              display: flex;
-              margin-top: auto;
-
               svg {
-                width: 20vh;
-                height: 20vh;
-                border: 1px solid $light;
-                align-self: flex-end;
-                position: initial;
                 fill: $light;
               }
             }
 
             .gridster-item-content {
-              padding: 0!important;
-              margin: 0 auto;
-
               p {
-                width: 100%;
-                text-align: left;
-                margin-bottom: 0!important;
-                font-size: var(--base-size);
                 color: $light;
-
-                &:first-child {
-                  margin-top: 2vh!important;
-                  font-size: calc(2 * var(--base-size));
-                  font-weight: 500;
-                  white-space: nowrap;
-                }
               }
             }
           }
 
           &#SystemInfoWidgetComponent {
-            $drag-handler-height: 10 * $padding;
-            border-top: none;
-
             background-color: $white;
 
-            .overflow-auto {
-              padding: 0!important;
-            }
-
             .flex-wrap {
-              padding: ($drag-handler-height + $padding) 0 0!important;
-
               &:before {
-                content: "";
-                display: block;
-                position: absolute;
-                left: 0;
-                right: 0;
-                top: $drag-handler-height;
-                height: $padding;
                 background-color: $white;
-                border-bottom: 1px dashed darken($white, 24%);
+                border-bottom: 1px dashed lighten($white, 16%);
               }
             }
 
             .drag-handler {
-              position: absolute;
-              z-index: 1;
-              top: 0;
-              left: 0;
-              right: 0;
               color: darken($yellow, 28%)!important;
-              height: $drag-handler-height;
-              line-height: $drag-handler-height + $padding;
-              padding-top: 0!important;
-              padding-bottom: 0!important;
               background: rgba(lighten($yellow, 24%), .8);
               background: linear-gradient(180deg, rgba(lighten($yellow, 16%), .92), rgba(saturate(lighten($yellow, 4%), 4%), .92));
-              -webkit-backdrop-filter: saturate(180%) blur(20px);
-            }
-
-            table,
-            tbody {
-              display: block;
-              width: 100%;
             }
 
             tr {
-              display: flex;
-              flex-flow: column nowrap;
-              border-top: 1px solid darken($white, 4%);
+              border-top: 1px solid lighten($white, 8%);
 
               &:first-child {
                 border-top: none;
               }
 
-              th,
-              td {
-                display: block;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-              }
-
               th {
-                padding: (1.5 * $padding) (6 * $padding) 0!important;
-                margin-bottom: -($padding / 2);
-                font-size: ($font-size - .4);
-                letter-spacing: .064rem;
-                text-transform: uppercase;
                 color: lighten($black, 16%);
               }
+
               td {
-                padding: 0 (6 * $padding) (1.5 * $padding)!important;
-                font-size: $font-size;
-                font-weight: 500;
                 color: lighten($black, 8%)!important;
               }
             }
           }
 
           &#WeatherWidgetComponent {
-            background-color: lighten($blue, 24%);
-            background: linear-gradient(180deg, lighten($blue, 24%), lighten($blue, 28%));
-
-            .p-2 {
-              padding-top: 0!important;
-            }
-
-            .weather-now {
-              flex-flow: row wrap!important;
-              align-items: flex-end!important;
-            }
+            background-color: darken($purple-dark, 8%);
+            background: linear-gradient(180deg, darken($purple-dark, 12%), darken($purple-dark, 4%));
 
             h1,
             h2,
             h3,
             p {
-              padding: .5vh (6 * $padding);
-              margin: 0;
-              flex: 0;
-              color: $white;
-              text-align: left;
-            }
-
-            h1 {
-              order: 1;
-              font-size: calc(3 * var(--base-size));
-            }
-
-            h2 {
-              order: 2;
-              font-weight: 300;
-              font-size: calc(3.5 * var(--base-size));
-            }
-
-            h3 {
-              order: 3;
-              flex: 100%;
-              font-weight: 500;
-              font-size: var(--base-size);
+              color: $black;
             }
 
             p {
-              order: 4;
-              flex: 100%;
-              font-size: calc(5/6 * var(--base-size));
-              letter-spacing: calc(var(--base-size) / 100);
-              margin-top: -.5vh;
-              color: rgba($white, .88)!important;
+              color: rgba($black, .88)!important;
             }
           }
 
           &#MemoryWidgetComponent,
           &#CpuWidgetComponent,
           &#UptimeWidgetComponent {
-            color: $white!important;
+            color: $black!important;
             background-color: $green;
             background: linear-gradient(180deg, $green 0%, darken($green, 12%) 100%);
 
@@ -1725,48 +3026,16 @@ $font-size:     .9rem;
               background-color: transparent;
             }
 
-            .hb-widget-chart-background {
-              background-color: rgba($white, .16);
-            }
-
-            .justify-content-around {
-              justify-content: flex-start!important;
-            }
-
             .grey-text {
-              font-weight: 500;
-              color: $white!important;
+              color: $black!important;
             }
 
             .widget-value-parent-wrap {
-              position: relative;
-              padding: 0 0 0 (6 * $padding);
-              text-align: left!important;
-              min-width: auto;
-
               &:not(:first-child) {
-                padding-left: (8 * $padding);
-
                 &:before {
-                  content: "";
-                  display: block;
-                  position: absolute;
-                  left: (4 * $padding);
-                  top: 25%;
-                  bottom: 25%;
-                  width: 1px;
                   background-color: $white;
                 }
               }
-            }
-
-            .widget-value {
-              font-weight: 600;
-              font-size: calc(2 * var(--base-size));
-            }
-
-            .widget-value-label {
-              font-size: var(--base-size);
             }
           }
 
@@ -1781,42 +3050,23 @@ $font-size:     .9rem;
           }
 
           &#ClockWidgetComponent {
-            background-color: $black;
-            background: linear-gradient(180deg, lighten($black, 12%), lighten($black, 8%));
-            color: $white!important;
-
-            .widget-value {
-              font-size: calc(3 * var(--base-size));
-              font-weight: 500;
-            }
+            background-color: $white;
+            background: linear-gradient(180deg, lighten($white, 12%), lighten($white, 8%));
+            color: $black!important;
 
             .widget-value-label {
-              font-size: var(--base-size);
-              color: darken($white, 32%)!important;
+              color: darken($black, 32%)!important;
             }
           }
 
           &#HomebridgeLogsWidgetComponent {
             background-color: #2b2b2b!important;
-
-            .drag-handler {
-              // flex: 0 0 auto;
-            }
-
-            .p-2 {
-              border-top: 1px solid lighten($black, 16%);
-              padding: 0 (6 * $padding)!important;
-            }
           }
         }
       }
 
       .add-widget-button {
-        opacity: 1;
-        width: (12 * $padding);
-        height: (12 * $padding);
-        border-radius: 100%;
-        box-shadow: 0 4px 16px rgba($black, .48)!important;
+        box-shadow: 0 4px 16px rgba($white, .48)!important;
 
         i {
           text-shadow: 2px 2px 8px rgba(darken($green, 48%), .48);
@@ -1831,45 +3081,14 @@ $font-size:     .9rem;
 
     app-plugins {
       .hb-plugin-space-between {
-        width: calc(100% - (1 - 1/3) * 10px)!important;
-
         .card {
-          > div:first-child {
-            padding-left: (15 * $padding);
-
-            > div:first-child {
-              flex: 1 1;
-            }
-          }
-
           > div:last-child {
-            margin-top: (3 * $padding);
-
             a {
               &.card-link {
-                text-transform: capitalize;
-
                 color: lighten($black, 16%);
                 background-color: transparent;
-                border: 1px solid darken($white, 16%);
-
-                padding: 0 (5 * $padding);
-                height: (8 * $padding);
-                line-height: 100%;
-
-                display: flex;
-                justify-content: center;
-                align-items: center;
-
-                border-radius: $border-radius;
-                transition: color .256s ease, background-color .256s ease, border-color .256s ease, box-shadow .256s ease;
-
-                &:nth-child(2) {
-                  margin-left: 0;
-                }
 
                 &:hover {
-                  color: initial;
                   background-color: darken($white, 8%);
                 }
               }
@@ -1877,7 +3096,6 @@ $font-size:     .9rem;
               // Install link
               &.card-link-install {
                 background-color: darken($white, 8%);
-                border: none;
 
                 &:hover {
                   color: $white;
@@ -1887,28 +3105,26 @@ $font-size:     .9rem;
 
               // Settings Link
               &.card-link-settings {
-                color: $white;
+                color: $black;
                 background-color: $green;
-                border: none;
-                margin: 0 (12 * $padding) 0 auto!important;
 
                 &:hover {
-                  color: $white;
+                  color: $black;
                   background-color: desaturate($green, 44%);
                 }
               }
 
+
               // Update link
               &.card-link-update {
-                animation-name: glow;
-                animation-duration: 1.768s;
-                animation-iteration-count: infinite;
+                animation-name: glow-dark;
+
+                border: 1px solid lighten($white, 24%);
 
                 &:hover {
-                  animation-name: none;
                   color: desaturate($green, 16%);
                   border-color: desaturate($green, 16%);
-                  background-color: desaturate(lighten($green, 48%), 64%);
+                  background-color: rgba(darken($green, 16%), .32);
                 }
 
               }
@@ -1917,43 +3133,29 @@ $font-size:     .9rem;
               &.card-link-uninstall {
                 color: lighten($black, 16%);
                 background-color: transparent;
-                border: 1px solid darken($white, 16%);
+                border: 1px solid lighten($white, 24%);
 
                 &:hover {
                   color: desaturate($red, 24%);
                   border-color: desaturate($red, 16%);
-                  background-color: lighten($red, 40%);
+                  background-color: rgba(darken($red, 32%), .32);
                 }
               }
 
               // NPM Link
               &.card-link-npm {
-                position: absolute;
-                top: ((6 * $padding) + 1);
-                left: (6 * $padding);
-                width: (12 * $padding);
-                height: (5 * $padding);
-                padding: 0;
-
-                border: none;
-                font-size: ($font-size - .2);
-                font-weight: 600;
-                letter-spacing: .05rem;
-
                 color: $white;
                 background-color: $black;
+
+                &:hover {
+                  color: $black;
+                }
               }
 
               // Github Link
               &.card-link-external {
-                position: absolute;
-                right: (6 * $padding);
-                padding: 0;
-                width: (8 * $padding);
-                border: none;
                 background-color: darken($white, 8%);
                 color: $black!important;
-                font-size: ($font-size - .1);
 
                 &:hover {
                   background-color: darken($white, 24%);
@@ -1963,110 +3165,13 @@ $font-size:     .9rem;
             }
           }
 
-          > p,
-          > h4 {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-
-          .card-title {
-            font-weight: 600;
-            margin-top: (3 * $padding);
-            padding: 0;
-          }
-
           .card-text {
-            font-size: $font-size;
             color: lighten($black, 8%);
-            margin: 0 0 (2 * $padding);
 
             span {
-              font-weight: 500;
-              font-size: ($font-size - .2);
-              letter-spacing: .032rem;
               color: darken($blue, 8%);
             }
           }
-        }
-      }
-
-      .mb-3,
-      .my-3 {
-        margin-bottom: $canal!important;
-      }
-    }
-
-    app-settings-plugins-modal {
-      max-width: 500px;
-    }
-
-    /*
-     * Modification settings view
-     */
-
-    app-settings {
-      height: initial!important;
-      min-height: 100%;
-      padding: (16 * $padding) 0 (2 * $padding)!important;
-
-      .list-group .list-group-item {
-        font-size: $font-size;
-        margin: 0 (-6 * $padding);
-        padding: (3 * $padding) (6 * $padding);
-      }
-    }
-
-
-    /*
-     * Modification config view
-     */
-
-    app-config {
-      > div > .row {
-        padding: (4 * $padding) 0;
-      }
-
-      .text-right {
-        button {
-          &:nth-child(1) {
-            border-radius: $border-radius 0 0 $border-radius;
-            margin-right: 0;
-            border-right: none;
-          }
-
-          &:nth-child(2) {
-            border-radius: 0 $border-radius $border-radius 0;
-          }
-
-          &:before {
-            display: block;
-            font-family: "Font Awesome 5 Free";
-            font-weight: 900;
-            margin: 0 (2 * $padding) 0 0;
-          }
-
-          &:nth-child(1):before {
-            content: "\f093";
-          }
-
-          &:nth-child(2):before {
-            content: "\f019";
-          }
-
-          &:nth-child(3):before {
-            content: "\f0c7";
-          }
-        }
-      }
-
-      ngx-monaco-editor,
-      ngx-monaco-editor.flex-grow-1 {
-        margin: 0 -20px!important;
-        width: auto!important;
-
-        .editor-container {
-          height: 100%;
         }
       }
     }
@@ -2077,1231 +3182,181 @@ $font-size:     .9rem;
      */
 
     app-accessories {
-      .background,
-      .background:after {
-        position: fixed;
-        z-index: 0;
-      }
-
-      > div {
-        margin: 0 (-6 * $padding);
-        padding: 0 (6 * $padding);
-        min-height: 100%;
-      }
-
-      .manage-accessory-button {
-        position: relative;
-        z-index: 999;
-        margin: (5 * $padding) (5 * $padding) 0 0;
-
-        transition: opacity .356s ease, transform .512s ease;
-
-        &:hover {
-          transform-origin: 50%;
-          transform: rotate(180deg);
-        }
-      }
-
-      .background:after {
-        display: block;
-      }
-
-      .room-title {
-        margin-left: 0;
-      }
-
       [ng-reflect-dragula="rooms-bag"] {
-        padding-bottom: (2 * $padding);
-
         > div {
-          position: relative;
-          padding-top: (2 * $padding);
-
           &:before {
-            content: "";
-            display: block;
-
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-
             border-top: 1px solid rgba($white, .16);
           }
         }
       }
 
-      .services-bag {
-        padding: 0 (2 * $padding);
+      .dropdown-toggle {
+        box-shadow: 0 8px 36px rgba(darken($green, 48%), .64)!important;
       }
-
-      > div > .row {
-        padding: (4 * $padding) 0;
-        margin-bottom: 0!important;
-      }
-
-      #accessory-dropdown-menu {
-        margin-right: 0;
-        box-shadow: 0 8px 20px rgba(darken($green, 48%), .48)!important;
-
-        i {
-          text-shadow: 2px 2px 8px rgba(darken($green, 48%), .48);
-        }
-      }
-    }
-
-    app-add-room-modal {
-      max-width: 400px;
     }
 
 
     app-accessories h3,
     h5.room-title {
-      color: $white!important;
-      text-shadow: 0 4px 16px rgba($black, .48);
+      color: $black!important;
+      text-shadow: 0 4px 16px rgba($white, .48);
     }
 
     .accessory-box {
-      position: relative;
-      margin: (2 * $padding);
-      padding: (4 * $padding);
+      border: 1px solid lighten($white, 24%);
       background-color: transparent;
-
-      border-radius: (2 * $border-radius)!important;
-      box-shadow: 0 4px 16px rgba($black, .16);
-
-      > div {
-        position: relative;
-        z-index: 1;
-      }
+      box-shadow: 0 4px 16px rgba($white, .16);
 
       &:after {
-        content: "";
-        display: block;
+        background-color: rgba(lighten($white, 16%), .68);
+      }
 
-        position: absolute;
-        z-index: 0;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-
-        background-color: rgba(darken($white, 24%), .68);
-
-        border-radius: (2 * $border-radius)!important;
-        -webkit-backdrop-filter: saturate(180%) blur(20px);
+      &.switch-on {
+        border: 1px solid lighten($white, 16%);
       }
 
       &.switch-on:after {
-        background-color: rgba($white, .96);
+        background-color: rgba(lighten($white, 8%), .96);
       }
 
       .accessory-label {
-        line-height: 1.1rem;
-        font-size: $font-size;
-        font-weight: 500;
         color: rgba($black, .8);
-        max-height: initial;
 
         &.grey-text {
-          margin-top: $padding;
-          font-weight: 400;
-          font-size: ($font-size - .1);
           color: rgba($black, .24);
-          -webkit-line-clamp: 1;
         }
-      }
-
-      .accessory-svg svg,
-      .temperature-circle {
-        width: (9 * $padding);
-        height: (9 * $padding);
-        line-height: (9 * $padding);
-        font-weight: 500;
       }
     }
 
     .no-drag .accessory-box {
-      opacity: 1;
-      margin-left: 0;
-      display: flex;
-
       color: rgba($white,.64)!important;
-
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
       background-color: rgba(lighten($black, 16%), .48);
 
-      -webkit-backdrop-filter: saturate(180%) blur(20px);
-      box-shadow: none;
-
-      &:after {
-        display: none;
-      }
-
       div {
-        margin-top: 0;
         color: inherit!important;
       }
     }
-
-    /*
-     * Modification user view
-     */
-
-    app-users {
-      height: initial!important;
-      min-height: 100%;
-      padding: (16 * $padding) 0 (2 * $padding)!important;
-
-      h4 {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        margin-right: (4 * $padding);
-      }
-
-      .btn {
-        flex: 0 0 auto;
-      }
-    }
-
-    app-users-add,
-    app-users-edit,
-    app-users-setup2fa {
-      max-width: 400px;
-    }
+  }
+}
 
 
-    /*
-     * Restart page
-     */
-
-    app-restart {
-      display: flex!important;
-      flex-flow: row nowrap;
-      align-items: center;
-      justify-content: center;
-
-      .row {
-        max-width: (100 * $padding);
-      }
-
-      .app-spinner-container {
-        position: relative;
-      }
-    }
+/*
+ * New theme - Animations
+ */
 
 
-    // /platform-tools/docker/restart-container
+@keyframes glow {
+  0% {
+    color: $black;
+    border-color: darken($white, 12%);
   }
 
+  25% {
+    color: darken(desaturate($green, 16%), 8%);
+    border-color: desaturate($green, 16%);
+  }
 
-  // Medium screen
-  @media screen and (min-width: 576px) {
-    .modal-dialog {
+  50% {
+    color: $black;
+    border-color: darken($white, 12%);
+  }
+}
+
+@keyframes glow-dark {
+  0% {
+    color: $white;
+    border-color: lighten($black, 24%);
+  }
+
+  25% {
+    color: darken(desaturate($green, 16%), 8%);
+    border-color: desaturate($green, 16%);
+  }
+
+  50% {
+    color: $white;
+    border-color: lighten($black, 24%);
+  }
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+    transform: translateY(-50%);
+  }
+
+  65% {
+    opacity: 0;
+    transform: translateY(-50%);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+}
+
+@keyframes fade-backdrop {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: .5;
+  }
+}
+
+
+/*
+ * New theme - Responsive style
+ */
+
+
+// Medium screen
+@media screen and (min-width: 576px) {
+  .modal-dialog {
+    max-width: 500px;
+    margin: (4 * $padding) auto;
+  }
+}
+
+// Large Screen
+@media screen and (min-width: 760px) {
+  .config-ui-x-#{$name} {
+    .modal-lg, .modal-xl {
       max-width: 500px;
-      margin: (4 * $padding) auto;
     }
-  }
 
-  // Large Screen
-  @media screen and (min-width: 760px) {
-    .config-ui-x-#{$name} {
-      .modal-lg, .modal-xl {
-        max-width: 500px;
+    app-plugins {
+      .justify-content-between {
+        justify-content: flex-start!important;
       }
 
-      app-plugins {
-        .justify-content-between {
-          justify-content: flex-start!important;
-        }
-
-        .hb-plugin-space-between {
-          width: calc(1/2 * 100% - (#{$canal} / 2))!important;
-        }
+      .hb-plugin-space-between {
+        width: calc(1/2 * 100% - (#{$canal} / 2))!important;
       }
     }
   }
+}
 
-  // Extra Large Screen
-  @media screen and (min-width: 1280px) {
-    .config-ui-x-#{$name} {
-      app-plugins {
-        .justify-content-between {
-          justify-content: flex-start!important;
-        }
-
-        .hb-plugin-space-between {
-          margin-right: $canal;
-          width: calc(1/3 * 100% - (#{$canal} * 2/3))!important;
-
-          &:nth-child(3n) {
-            margin-right: 0;
-          }
-        }
-      }
-    }
-  }
-
-  @keyframes glow {
-    0% {
-      color: $black;
-      border-color: darken($white, 12%);
-    }
-
-    25% {
-      color: darken(desaturate($green, 16%), 8%);
-      border-color: desaturate($green, 16%);
-    }
-
-    50% {
-      color: $black;
-      border-color: darken($white, 12%);
-    }
-  }
-
-  // Dark mode
-  @media (prefers-color-scheme: dark) {
-    // Common colors
-    $red:     darken($red, 4%);
-    $orange:  darken($orange, 4%);
-    $yellow:  darken($yellow, 4%);
-    $green:   darken($green, 4%);
-    $blue:    darken($blue, 4%);
-
-    // Homebridge color
-    $purple:      darken($purple, 8%);
-    $purple-dark: darken($purple-dark, 8%);
-
-    // B/W
-    $t_black: $black;
-    $t_white: $white;
-    $black: darken($t_white, 4%);
-    $white: $t_black;
-
-    .config-ui-x-#{$name} {
-      background-color: darken($white, 4%);
-      color: lighten($black, 8%);
-      overflow-x: hidden;
-
-
-      // Commmon styles
-
-      .container-fluid,
-      .container-sm,
-      .container-md,
-      .container-lg,
-      .container-xl {
-        h3.primary-text {
-          color: $black;
-        }
+// Extra Large Screen
+@media screen and (min-width: 1280px) {
+  .config-ui-x-#{$name} {
+    app-plugins {
+      .justify-content-between {
+        justify-content: flex-start!important;
       }
 
-      a {
-        &.card-link {
-          color: $black;
+      .hb-plugin-space-between {
+        margin-right: $canal;
+        width: calc(1/3 * 100% - (#{$canal} * 2/3))!important;
+
+        &:nth-child(3n) {
+          margin-right: 0;
         }
       }
-
-      .hb-uix-switch {
-        .hb-uix-slider  {
-          border-color: $blue!important;
-        }
-
-        input:checked ~ .hb-uix-slider {
-          background-color: $blue!important;
-        }
-      }
-
-      .hb-widget-chart-background {
-        background-color: rgba($white, .24);
-      }
-
-      .alert {
-        color: lighten($black, 16%);
-      }
-
-      .animate_loader {
-        .spinner_outer {
-          stroke: rgba($purple, .32);
-        }
-
-        .spinner_inner {
-          stroke: $purple;
-        }
-      }
-
-      .bg-primary {
-        background-color: $blue!important;
-      }
-
-      .grey-text {
-        color: lighten($black, 32%)!important;
-      }
-
-
-      // Dragable plugin
-      [draggable=true] {
-        border: 1px solid lighten($white, 12%)!important;
-        background-color: lighten($white, 8%);
-
-        &:hover {
-          background-color: lighten($white, 4%);
-          box-shadow: 0 4px 16px rgba($white, .32)!important;
-        }
-      }
-
-      // Modification for header page
-      @include header-theme(rgba(lighten($white, 4%), .64), $black);
-
-
-      /*
-       * Modification for plugins page - search bar
-       */
-
-      form {
-        .hb-npm-search {
-          color: $black;
-          background-color: rgba($black, .08);
-
-          &:focus {
-            box-shadow: 0 0 0 4px rgba($blue, .32);
-          }
-
-          &:before,
-          &:after {
-            background-color: $black;
-          }
-        }
-
-        .hb-npm-search-clear {
-          background-color: lighten($black, 30%);
-
-          &:hover {
-            background-color: lighten($black, 15%);
-          }
-
-          &:before,
-          &:after {
-            background-color: $white;
-          }
-        }
-      }
-
-
-      /*
-       * Modification for button style
-       */
-
-      .btn {
-        border: 1px solid lighten($white, 24%);
-        color: lighten($black, 16%);
-
-        &.btn-default,
-        &.btn-primary {
-          color: $black;
-        }
-
-        &.btn-default {
-          background-color: $blue!important;
-
-          &:hover {
-            color: $black;
-            background-color: darken($blue, 8%)!important;
-          }
-        }
-
-        &.btn-primary {
-          background-color: $green!important;
-
-          &:hover {
-            color: $black;
-            background-color: darken($green, 8%)!important;
-          }
-        }
-
-        &:hover {
-          color: $black;
-          background-color: lighten($white, 8%)!important;
-        }
-      }
-
-
-      /*
-       * Dropdown menu
-       */
-
-      .dropdown-menu,
-      .monaco-menu-container {
-        border: 1px solid lighten($white, 16%);
-        box-shadow: 0 8px 16px rgba(darken($white, 24%), .32)!important;
-
-        &:after {
-          background-color: rgba(lighten($white, 4%), .72);
-        }
-
-        a {
-          color: $black!important;
-
-          &:active,
-          &:focus,
-          &:hover {
-            background-color: rgba($purple, .88);
-            color: $black!important;
-          }
-        }
-
-        .dropdown-divider,
-        .action-label.separator {
-          border-top: 2px solid rgba(darken($black, 16%), .48);
-        }
-      }
-
-
-      /*
-       * Modification for MD-Form
-       */
-
-      .md-form {
-        input:not([type]),
-        input[type="text"]:not(.browser-default),
-        input[type="password"]:not(.browser-default),
-        input[type="email"]:not(.browser-default),
-        input[type="url"]:not(.browser-default),
-        input[type="time"]:not(.browser-default),
-        input[type="date"]:not(.browser-default),
-        input[type="datetime"]:not(.browser-default),
-        input[type="datetime-local"]:not(.browser-default),
-        input[type="tel"]:not(.browser-default),
-        input[type="number"]:not(.browser-default),
-        input[type="search"]:not(.browser-default),
-        input[type="phone"]:not(.browser-default),
-        input[type="search-md"],
-        textarea.md-textarea {
-          color: $black;
-          background-color: lighten($white, 100%);
-          border: 1px solid darken($white, 16%);
-
-          &:focus {
-            color: $black;
-            background-color: lighten($white, 100%);
-            border-color: rgba($blue, .64);
-            box-shadow: 0 0 0 0.2rem rgba($blue, .24);
-          }
-        }
-
-        input,
-        select,
-        textarea {
-          &:-webkit-autofill,
-          &:-webkit-autofill:hover,
-          &:-webkit-autofill:focus {
-            background: 0 0 0 1000px lighten($yellow, 32%) inset!important;
-          }
-        }
-
-        .form-control {
-          &.is-invalid:focus {
-              border-color: rgba($red, .64)!important;
-              box-shadow: 0 0 0 $padding rgba($red, .24)!important;
-          }
-        }
-      }
-
-
-      /*
-       * Modification for card style
-       */
-
-      .card {
-        border: 1px solid lighten($white, 4%);
-        background-color: $white;
-        box-shadow: 0 16px 24px rgba(darken($white, 24%), .32);
-      }
-
-
-      /*
-       * Modification login view
-       */
-
-      .login-container {
-        .logo {
-          background: rgba($purple, .88);
-          background: linear-gradient(180deg, rgba($purple, .88), rgba($purple-dark, .88));
-          border: 1px solid rgba($purple-dark, .92);
-          box-shadow: 0 24px 64px rgba(darken($purple-dark, 8%), .64);
-        }
-
-        .login-card {
-          background-color: transparent;
-
-          form {
-            padding: (12 * $padding) (10 * $padding) (10 * $padding);
-
-            > div:nth-child(2) {
-              filter: drop-shadow(0 8px 16px rgba($black, .32));
-            }
-          }
-        }
-
-        .md-form {
-          .prefix {
-            color: lighten($black, 24%)!important;
-          }
-
-
-          input {
-            color: $black;
-            background-color: rgba(darken($white, 4%), .72)!important;
-
-            &.form-control:focus,
-            &:active,
-            &:hover,
-            &:focus {
-              color: $black!important;
-              border: none!important;
-              background-color: rgba(darken($white, 4%), .72)!important;
-              box-shadow: none!important;
-            }
-
-            &:-webkit-autofill,
-            &:-webkit-autofill:active,
-            &:-webkit-autofill:hover,
-            &:-webkit-autofill:focus {
-              -webkit-text-fill-color: $black!important;
-              -webkit-box-shadow: 0 0 0 1000px darken($yellow, 24%) inset!important;
-            }
-
-            + label {
-              color: lighten($black, 24%)!important;
-            }
-          }
-        }
-
-        .btn,
-        .btn:focus,
-        .btn:hover,
-        .btn:active {
-          background-color: $blue!important;
-          background: linear-gradient(180deg, rgba($purple, .88), rgba($purple-dark, .88))!important;
-          color: $black!important;
-          box-shadow: 0 8px 16px rgba(darken($purple-dark, 32%), .48)!important;
-
-          &:disabled,
-          &.disabled {
-            color: lighten($black, 24%)!important;
-            background: rgba(lighten($white, 16%), .48)!important;
-            box-shadow: none!important;
-          }
-        }
-
-        .red-text{
-          small {
-            @include neomorphism($red, $black, $border-radius);
-          }
-        }
-      }
-
-
-      /*
-       * Modification json form
-       */
-
-      // Form
-
-      .list-group .list-group-item {
-        background-color: lighten($white, .16);
-        border-top: 1px solid lighten($white, 8%);
-
-        &:last-child {
-          border-bottom: 1px solid lighten($white, 8%);
-        }
-
-        .close {
-          background-color: $red;
-
-          span {
-            background-color: $white;
-          }
-        }
-      }
-
-
-      /*
-       * Modification settings modal
-       */
-
-      .modal {
-        .modal-dialog {
-
-          > .modal-content {
-            background-color: transparent;
-
-            > * {
-              box-shadow: 0 20px 60px rgba($white, .16);
-
-              .modal-content {
-                background-color: rgba(lighten($white, 12%), .88);
-              }
-            }
-          }
-        }
-
-        .modal-header,
-        .modal-footer {
-          background-color: transparent;
-        }
-
-        .modal-header{
-          border-bottom: 1px solid lighten($white, 8%);
-
-          .close {
-            background-color: lighten($red, 8%);
-            border: 1px solid rgba(darken($red, 16%), .72);
-
-            color: lighten($red, 8%);
-
-            &:hover {
-              color: rgba($white, .64);
-            }
-          }
-        }
-
-        .modal-body {
-          .card {
-            border: none;
-            background-color: transparent;
-
-            &.card-body {
-              > div > div:last-child {
-                a {
-                  border: 1px solid rgba(darken($red, 16%), .64);
-
-                  &:hover {
-                    background-color: rgba($red, .08);
-                  }
-                }
-              }
-            }
-          }
-        }
-
-        .modal-footer {
-          border-top: 1px solid lighten($white, 8%);
-        }
-      }
-
-
-      /*
-       * Modification toast messages
-       */
-
-      #toast-container {
-        > div,
-        > div:hover,
-        .toast-close-button span {
-          color: $white!important;
-        }
-
-        > div,
-        > div:hover {
-          background-color: rgba(lighten($black, 4%), .72)!important;
-          box-shadow: 0 4px 8px rgba($white, .32);
-        }
-
-        .toast-close-button {
-          span {
-            background-color: rgba(darken($black, 4%), .32)!important;
-          }
-        }
-      }
-
-
-      .background:after {
-        background-color: rgba($white, .24);
-      }
-
-      /*
-       * Modification monaco editor
-       */
-
-      .monaco-editor,
-      .monaco-editor-background,
-      .monaco-editor .inputarea.ime-input,
-      .monaco-editor .margin {
-        background-color: $white;
-      }
-
-      .monaco-editor {
-        .cursor {
-          background-color: $black;
-          border-color: $black;
-          color: $black;
-        }
-
-        .current-line ~ .line-numbers {
-          color: $yellow;
-        }
-
-        .view-overlays {
-          .cigr {
-            box-shadow: 1px 0 0 0 lighten($white, 16%) inset;
-          }
-
-          .current-line {
-            border-color: lighten($white, 8%);
-          }
-
-          .selected-text {
-            background-color: lighten($white, 4%);
-          }
-
-          &.focused {
-            .selected-text {
-              background-color: lighten($white, 8%);
-            }
-          }
-        }
-
-        .mtk1 {
-          color: darken($black, 16%);
-        }
-
-        .mtk5 {
-          color: lighten($blue, 8%);
-        }
-
-        .mtk7 {
-          color: lighten($green, 8%);
-        }
-
-        .mtk20 {
-          color: lighten($red, 8%);
-        }
-      }
-
-
-
-      /*
-       * Modification status view
-       */
-
-      app-status {
-        .background:after {
-          display: block;
-        }
-
-        > div > .row {
-          &.flex-column {
-            box-shadow: 0 4px 24px rgba($white, .32);
-          }
-
-          &:last-child {
-            background-color: darken($white, 4%);
-
-            > div {
-              border-top: 1px solid darken($white, 8%);
-
-              &.grey-text,
-              small,
-              a {
-                color: lighten($black, 24%)!important;
-              }
-            }
-          }
-        }
-
-        gridster {
-          .gridster-preview {
-            box-shadow: 0 8px 16px rgba($white, .32) inset;
-            border: 1px solid rgba($black, .24) inset;
-          }
-
-          gridster-item {
-            color: $black;
-            box-shadow: 0 8px 16px rgba($white, .48);
-            border-top: 1px solid rgba(lighten($white, 100%), .24);
-
-            .drag-handler {
-              color: lighten($white, 48%);
-            }
-
-            &#MemoryWidgetComponent,
-            &#CpuWidgetComponent,
-            &#WeatherWidgetComponent,
-            &#HomebridgeLogsWidgetComponent,
-            &#ClockWidgetComponent,
-            &#UptimeWidgetComponent,
-            &#HapQrcodeWidgetComponent {
-              .drag-handler,
-              .widget-control-button {
-                color: $black!important;
-              }
-            }
-
-            &#HomebridgeStatusWidgetComponent {
-              $space-between: (4 * $padding);
-              background-color: rgba($white, .92);
-
-              .hb-status-item {
-                &:not(:last-child) {
-                  &:after {
-                    background-color: darken($white, 16%);
-                  }
-                }
-
-                .primary-text {
-                  color: $green!important;
-                }
-
-                .hb-status-icon {
-                  display: flex;
-                  align-self: center;
-                  padding: 0 calc(1 * var(--base-size)) 0 0!important;
-
-                  i {
-                    @include neomorphism($green, $black, 100%);
-
-                    &.fa-spin {
-                      text-shadow: none!important;
-
-                      background: transparent!important;
-                      box-shadow: none!important;
-
-                      &:before {
-                        color: lighten($black, 16%)!important;
-                      }
-                    }
-
-                    &.fa-cloud-upload-alt,
-                    &.fa-exclamation-circle {
-                      @include neomorphism($orange, $black, 100%);
-                    }
-                  }
-                }
-              }
-            }
-
-            &#HapQrcodeWidgetComponent {
-              $dark: $purple;
-              $light: $black;
-
-              background-color: lighten($dark, 16%);
-              background: linear-gradient(180deg, lighten($dark, 16%) 0%, lighten($dark, 8%) 100%);
-
-              color: $light;
-
-              .grey-text {
-                color: rgba($light, .64)!important;
-              }
-
-              .qr-code-container {
-                svg {
-                  fill: $light;
-                }
-              }
-
-              .gridster-item-content {
-                p {
-                  color: $light;
-                }
-              }
-            }
-
-            &#SystemInfoWidgetComponent {
-              background-color: $white;
-
-              .flex-wrap {
-                &:before {
-                  background-color: $white;
-                  border-bottom: 1px dashed lighten($white, 16%);
-                }
-              }
-
-              .drag-handler {
-                color: darken($yellow, 28%)!important;
-                background: rgba(lighten($yellow, 24%), .8);
-                background: linear-gradient(180deg, rgba(lighten($yellow, 16%), .92), rgba(saturate(lighten($yellow, 4%), 4%), .92));
-              }
-
-              tr {
-                border-top: 1px solid lighten($white, 8%);
-
-                &:first-child {
-                  border-top: none;
-                }
-
-                th {
-                  color: lighten($black, 16%);
-                }
-
-                td {
-                  color: lighten($black, 8%)!important;
-                }
-              }
-            }
-
-            &#WeatherWidgetComponent {
-              background-color: darken($purple-dark, 8%);
-              background: linear-gradient(180deg, darken($purple-dark, 12%), darken($purple-dark, 4%));
-
-              h1,
-              h2,
-              h3,
-              p {
-                color: $black;
-              }
-
-              p {
-                color: rgba($black, .88)!important;
-              }
-            }
-
-            &#MemoryWidgetComponent,
-            &#CpuWidgetComponent,
-            &#UptimeWidgetComponent {
-              color: $black!important;
-              background-color: $green;
-              background: linear-gradient(180deg, $green 0%, darken($green, 12%) 100%);
-
-              canvas {
-                background-color: transparent;
-              }
-
-              .grey-text {
-                color: $black!important;
-              }
-
-              .widget-value-parent-wrap {
-                &:not(:first-child) {
-                  &:before {
-                    background-color: $white;
-                  }
-                }
-              }
-            }
-
-            &#CpuWidgetComponent {
-              background-color: $blue;
-              background: linear-gradient(180deg, $blue 0%, darken($blue, 12%) 100%);
-            }
-
-            &#UptimeWidgetComponent {
-              background-color: $orange;
-              background: linear-gradient(180deg, $orange 0%, darken($orange, 12%) 100%);
-            }
-
-            &#ClockWidgetComponent {
-              background-color: $white;
-              background: linear-gradient(180deg, lighten($white, 12%), lighten($white, 8%));
-              color: $black!important;
-
-              .widget-value-label {
-                color: darken($black, 32%)!important;
-              }
-            }
-
-            &#HomebridgeLogsWidgetComponent {
-              background-color: #2b2b2b!important;
-            }
-          }
-        }
-
-        .add-widget-button {
-          box-shadow: 0 4px 16px rgba($white, .48)!important;
-
-          i {
-            text-shadow: 2px 2px 8px rgba(darken($green, 48%), .48);
-          }
-        }
-      }
-
-
-      /*
-       * Modification plugins view
-       */
-
-      app-plugins {
-        .hb-plugin-space-between {
-          .card {
-            > div:last-child {
-              a {
-                &.card-link {
-                  color: lighten($black, 16%);
-                  background-color: transparent;
-
-                  &:hover {
-                    background-color: darken($white, 8%);
-                  }
-                }
-
-                // Install link
-                &.card-link-install {
-                  background-color: darken($white, 8%);
-
-                  &:hover {
-                    color: $white;
-                    background-color: $blue;
-                  }
-                }
-
-                // Settings Link
-                &.card-link-settings {
-                  color: $black;
-                  background-color: $green;
-
-                  &:hover {
-                    color: $black;
-                    background-color: desaturate($green, 44%);
-                  }
-                }
-
-
-                // Update link
-                &.card-link-update {
-                  animation-name: glow-dark;
-
-                  border: 1px solid lighten($white, 24%);
-
-                  &:hover {
-                    color: desaturate($green, 16%);
-                    border-color: desaturate($green, 16%);
-                    background-color: rgba(darken($green, 16%), .32);
-                  }
-
-                }
-
-                // Uninstall link
-                &.card-link-uninstall {
-                  color: lighten($black, 16%);
-                  background-color: transparent;
-                  border: 1px solid lighten($white, 24%);
-
-                  &:hover {
-                    color: desaturate($red, 24%);
-                    border-color: desaturate($red, 16%);
-                    background-color: rgba(darken($red, 32%), .32);
-                  }
-                }
-
-                // NPM Link
-                &.card-link-npm {
-                  color: $white;
-                  background-color: $black;
-
-                  &:hover {
-                    color: $black;
-                  }
-                }
-
-                // Github Link
-                &.card-link-external {
-                  background-color: darken($white, 8%);
-                  color: $black!important;
-
-                  &:hover {
-                    background-color: darken($white, 24%);
-                    color: $black!important;
-                  }
-                }
-              }
-            }
-
-            .card-text {
-              color: lighten($black, 8%);
-
-              span {
-                color: darken($blue, 8%);
-              }
-            }
-          }
-        }
-      }
-
-
-      /*
-       * Modification accesories view
-       */
-
-      app-accessories {
-        [ng-reflect-dragula="rooms-bag"] {
-          > div {
-            &:before {
-              border-top: 1px solid rgba($white, .16);
-            }
-          }
-        }
-
-        .dropdown-toggle {
-          box-shadow: 0 8px 36px rgba(darken($green, 48%), .64)!important;
-        }
-      }
-
-
-      app-accessories h3,
-      h5.room-title {
-        color: $black!important;
-        text-shadow: 0 4px 16px rgba($white, .48);
-      }
-
-      .accessory-box {
-        border: 1px solid lighten($white, 24%);
-        background-color: transparent;
-        box-shadow: 0 4px 16px rgba($white, .16);
-
-        &:after {
-          background-color: rgba(lighten($white, 16%), .68);
-        }
-
-        &.switch-on {
-          border: 1px solid lighten($white, 16%);
-        }
-
-        &.switch-on:after {
-          background-color: rgba(lighten($white, 8%), .96);
-        }
-
-        .accessory-label {
-          color: rgba($black, .8);
-
-          &.grey-text {
-            color: rgba($black, .24);
-          }
-        }
-      }
-
-      .no-drag .accessory-box {
-        color: rgba($white,.64)!important;
-        background-color: rgba(lighten($black, 16%), .48);
-
-        div {
-          color: inherit!important;
-        }
-      }
-    }
-  }
-
-  @keyframes glow-dark {
-    0% {
-      color: $white;
-      border-color: lighten($black, 24%);
-    }
-
-    25% {
-      color: darken(desaturate($green, 16%), 8%);
-      border-color: desaturate($green, 16%);
-    }
-
-    50% {
-      color: $white;
-      border-color: lighten($black, 24%);
     }
   }
 }
 
 /* === End New Theme CSS === */
-
-@include make-new-theme();
