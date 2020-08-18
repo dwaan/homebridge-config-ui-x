@@ -311,8 +311,8 @@ $font-size:     .9rem;
 
     .alert {
       font-size: $font-size;
-      margin: 0 (-6 * $padding);
-      padding: 0 (6 * $padding);
+      margin: 0 (-4 * $padding);
+      padding: 0 (4 * $padding);
 
       border: none;
       color: lighten($black, 16%);
@@ -345,9 +345,31 @@ $font-size:     .9rem;
       color: lighten($black, 32%)!important;
     }
 
+
     // Markdown plugin
     .plugin-md {
       font-size: $font-size;
+    }
+
+
+    // Dragable plugin
+    [draggable=true] {
+      border: 1px solid darken($white, 24%)!important;
+      border-radius: (1/2 * $border-radius)!important;
+      overflow: hidden!important;
+
+      &:hover {
+        margin-top: 0!important;
+        margin-bottom: 0!important;
+        margin-left: 0!important;
+        margin-right: 0!important;
+
+        box-shadow: 0 4px 16px rgba($black, .32)!important;
+      }
+
+      .list-group-item {
+        border: none!important;
+      }
     }
 
 
@@ -527,8 +549,8 @@ $font-size:     .9rem;
      */
 
     .md-form {
-      margin-top: (2 * $padding);
-      margin-bottom: (2 * $padding);
+      margin-top: (1 * $padding);
+      margin-bottom: (1 * $padding);
 
       display: flex;
       flex-flow: column-reverse;
@@ -581,17 +603,18 @@ $font-size:     .9rem;
 
       label,
       label.active {
+        margin-bottom: $padding;
         position: relative;
         font-size: $font-size;
         transform: none;
       }
 
       .form-control {
-        padding: 0.375rem 0.75rem!important;
+        padding: $padding (2 * $padding)!important;
 
         &.is-invalid:focus {
             border-color: rgba($red, .64)!important;
-            box-shadow: 0 0 0 0.2rem rgba($red, .24)!important;
+            box-shadow: 0 0 0 $padding rgba($red, .24)!important;
         }
 
         &.is-valid,
@@ -751,11 +774,18 @@ $font-size:     .9rem;
           }
         }
 
-        i {
+        .prefix {
+          display: block;
           z-index: 1;
-          margin: (2.5 * $padding) 0 0 (6 * $padding);
+          margin: 0;
           color: lighten($black, 24%)!important;
+          top: 50%;
+          left: (6 * $padding);
+          width: (4 * $padding);
+          height: (4 * $padding);
+          line-height: (4 * $padding);
           font-size: (4 * $padding);
+          transform: translateY(-50%);
         }
 
         input,
@@ -770,8 +800,8 @@ $font-size:     .9rem;
           width: 100%;
           color: $black;
           font-size: $font-size;
-          border: none;
-          background-color: rgba(darken($white, 4%), .72);
+          border: none!important;
+          background-color: rgba(darken($white, 4%), .72)!important;
 
           -webkit-backdrop-filter: saturate(180%) blur(20px);
 
@@ -786,11 +816,13 @@ $font-size:     .9rem;
           }
 
           + label {
+            position: absolute!important;
             color: lighten($black, 24%)!important;
             font-size: $font-size;
             font-weight: 500;
             transform: none;
             transition: opacity .256 ease;
+            pointer-events: none;
 
             &:before {
               display: none;
@@ -855,15 +887,37 @@ $font-size:     .9rem;
       font-size: $font-size;
     }
 
-    root-widget {
-      > * {
+    .form-flex-row {
+      .form-flex-item {
         margin: $padding 0;
-      }
-
-      > .form-flex-item {
         padding: 0 $padding;
+
+        .form-flex-column {
+          padding: 0 (2 * $padding);
+
+          .form-group {
+            padding: 0;
+          }
+        }
+
+        &:first-child {
+          padding-left: 0;
+
+          .form-flex-column {
+            padding-left: 0;
+          }
+        }
+
+        &:last-child {
+          padding-right: 0;
+
+          .form-flex-column {
+            padding-right: 0;
+          }
+        }
       }
     }
+
     fieldset {
       > root-widget {
         > div:last-child {
@@ -874,8 +928,8 @@ $font-size:     .9rem;
 
     json-schema-form {
       .form-group {
-        padding: 0;
         margin: 0;
+        padding: $padding 0;
       }
     }
 
@@ -928,27 +982,31 @@ $font-size:     .9rem;
         height: 100%;
         padding: (6 * $padding) 0;
         margin: 0 auto;
-        max-width: 600px!important;
 
         > .modal-content {
+          display: flex;
+          flex-flow: column nowrap;
+          justify-content: center;
+          align-items: center;
           height: 100%;
           background-color: transparent;
           border-radius: 0;
           box-shadow: none;
 
           > * {
-            height: 100%;
-            display: flex;
-            justify-items: center;
-            align-items: center;
-          }
-
-          .modal-content {
+            display: block;
             max-height: 100%;
-            background-color: $white;
-            border-radius: (2 * $border-radius);
-            box-shadow: 0 20px 60px rgba($black,.15);
-            overflow: hidden;
+            box-shadow: 0 20px 60px rgba($black, .16);
+
+            .modal-content {
+              position: relative;
+              max-height: 100%;
+              background-color: rgba($white, .88);
+              border-radius: (1.5 * $border-radius);
+              overflow: hidden;
+
+              -webkit-backdrop-filter: saturate(180%) blur(20px);
+            }
           }
 
           .plugin-md p {
@@ -959,27 +1017,66 @@ $font-size:     .9rem;
 
       .modal-header,
       .modal-footer {
+        position: relative;
         flex: 0 0;
-        padding: (3 * $padding) (4 * $padding);
-        background-color: darken($white, 4%);
-        background: linear-gradient(180deg, darken($white, 2%) 0%, darken($white, 6%) 100%);
+        padding: (4 * $padding);
+        background-color: transparent;
+      }
+
+      .modal-header{
+        padding-left: (12 * $padding);
+        border-bottom: 1px solid darken($white, 12%);
 
         h5 {
+          display: inline-block;
+          font-size: ($font-size + .1);
           margin: 0 auto;
           padding: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
 
         .close {
+          $icon-size: (4 * $padding);
+
+          position: absolute;
+          top: 50%;
+          left: (4 * $padding);
+
+          width: $icon-size;
+          height: $icon-size;
           margin: 0;
           padding: 0;
+          background-color: lighten($red, 8%);
+          border: 1px solid rgba(darken($red, 16%), .72);
+          opacity: 1;
+
+          color: lighten($red, 8%);
+          line-height: (3/4 * $icon-size);
+          font-size: (3/4 * $icon-size);
+          text-shadow: none;
+
+          border-radius: 100%;
+          transform: translateY(-50%);
+          transition: color .256s ease;
+
+          span {
+            line-height: inherit;
+            font-size: inherit;
+            text-shadow: inherit;
+          }
+
+          &:hover {
+            color: rgba($black, .64);
+          }
         }
       }
 
       .modal-body {
         flex: 1 1;
-        padding: (4 * $padding);
+        padding: (3 * $padding) (4 * $padding);
         overflow: auto;
-        background-color: darken($white, 2%);
 
         .card {
           background-color: transparent;
@@ -1011,6 +1108,8 @@ $font-size:     .9rem;
       }
 
       .modal-footer {
+        padding: (2 * $padding) (4 * $padding);
+        border-top: 1px solid darken($white, 12%);
       }
     }
 
@@ -1020,22 +1119,41 @@ $font-size:     .9rem;
      */
 
     #toast-container {
+      $icon-size: (8 * $padding);
+
       > div,
       > div:hover,
       .toast-close-button span {
-        color: $white!important;
+        color: $black!important;
         -webkit-backdrop-filter: saturate(180%) blur(20px);
       }
 
       > div,
       > div:hover {
-        background-position: (4 * $padding) (5 * $padding);
-        padding: (4 * $padding) (4 * $padding) (4 * $padding) (13 * $padding);
+        overflow: initial;
+        padding: (4 * $padding) (4 * $padding) (4 * $padding) ($icon-size + (8 * $padding));
 
-        background-color: rgba(lighten($black, 4%), .72)!important;
+        border: 1px solid darken($white, 8%);
+        background-color: rgba(darken($white, 8%), .72)!important;
 
-        box-shadow: 0 4px 8px rgba($black, .32);
+        box-shadow: none;
         border-radius: $border-radius;
+        -webkit-backdrop-filter: saturate(180%) blur(20px);
+
+        &:after {
+          content: "";
+          display: block;
+
+          position: absolute;
+          z-index: 0;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+
+          box-shadow: 0 4px 16px rgba($black, .24);
+          border-radius: $border-radius;
+        }
       }
 
       .toast-close-button {
@@ -1052,25 +1170,74 @@ $font-size:     .9rem;
 
           width: (6 * $padding);
           height: (6 * $padding);
-          line-height: (5.5 * $padding);
+          line-height: (5 * $padding);
 
           text-align: center;
           font-weight: 300;
 
-          background-color: rgba(darken($black, 4%), .32)!important;
+          border: 1px solid darken($white, 16%);
+          background-color: rgba(darken($white, 16%), .32)!important;
 
-          box-shadow: none;
+          box-shadow: 0 2px 4px rgba($black, .16);
           border-radius: 100%;
         }
       }
 
       .toast-title {
-        font-size: ($font-size + .2);
         margin: 0;
+        font-size: ($font-size + .2);
+        line-height: 100%;
       }
 
       .toast-message {
-        margin: 0;
+        margin: $padding 0 0;
+      }
+
+      .toast-info,
+      .toast-error,
+      .toast-success,
+      .toast-warning {
+        background-image: none;
+
+        &:before {
+          content: "";
+          display: block;
+          position: absolute;
+          left: (4 * $padding);
+          top: (4 * $padding);
+          width: $icon-size;
+          height: $icon-size;
+
+          line-height: $icon-size;
+          font-size: (1/2 * $icon-size);
+          text-align: center;
+
+          font-family: "Font Awesome 5 Free";
+          font-weight: 900;
+          content: "\f093";
+          color: $white;
+          text-shadow: 0 4px 8px rgba($black, .24);
+
+          border-radius: 100%;
+          box-shadow: 0 4px 8px rgba($black, .24), inset -2px -4px 16px rgba($black, .24);
+        }
+      }
+
+      .toast-info:before {
+        content: "\f05a";
+        background-color: $blue;
+      }
+      .toast-error:before {
+        content: "\f057";
+        background-color: $red;
+      }
+      .toast-success:before {
+        content: "\f00c";
+        background-color: $green;
+      }
+      .toast-warning:before {
+        content: "\f071";
+        background-color: $orange;
       }
     }
 
@@ -1289,8 +1456,35 @@ $font-size:     .9rem;
               }
 
               .hb-status-icon {
+                margin-right: calc(1 * var(--base-size));
                 padding: 0 calc(1 * var(--base-size)) 0 0!important;
-                font-size: calc(3 * var(--base-size));
+
+                width: calc(3 * var(--base-size));
+                height: calc(3 * var(--base-size));
+                line-height: calc(3 * var(--base-size));
+
+                font-size: calc(2 * var(--base-size));
+
+                box-shadow: 0 8px 20px rgba(darken($green, 48%), .48), inset -4px -4px 12px rgba($black, .32), inset 4px 4px 12px rgba($white, .32)!important;
+                border-radius: 100%;
+
+                i {
+                  text-shadow: 2px 2px 8px rgba(darken($green, 48%), .48);
+                  text-align: center;
+
+                  &:before {
+                    text-align: center;
+                    margin: 0 auto;
+                  }
+
+                  &.fa-check-circle:before {
+                    content: "\f00c";
+                  }
+
+                  &.fa-exclamation-circle:before {
+                    content: "\f12a";
+                  }
+                }
               }
             }
           }
@@ -1781,6 +1975,9 @@ $font-size:     .9rem;
       }
     }
 
+    app-settings-plugins-modal {
+      max-width: 500px;
+    }
 
     /*
      * Modification settings view
@@ -1921,10 +2118,18 @@ $font-size:     .9rem;
         margin-bottom: 0!important;
       }
 
-      .dropdown-toggle {
+      #accessory-dropdown-menu {
         margin-right: 0;
-        box-shadow: 0 8px 36px rgba(darken($green, 48%), .64)!important;
+        box-shadow: 0 8px 20px rgba(darken($green, 48%), .48), inset -4px -4px 12px rgba($black, .32), inset 4px 4px 12px rgba($white, .32)!important;
+
+        i {
+          text-shadow: 2px 2px 8px rgba(darken($green, 48%), .48);
+        }
       }
+    }
+
+    app-add-room-modal {
+      max-width: 400px;
     }
 
 
@@ -2039,6 +2244,12 @@ $font-size:     .9rem;
       .btn {
         flex: 0 0 auto;
       }
+    }
+
+    app-users-add,
+    app-users-edit,
+    app-users-setup2fa {
+      max-width: 400px;
     }
 
 
@@ -2334,7 +2545,8 @@ $font-size:     .9rem;
         }
 
         .md-form {
-          i {
+          .prefix {
+            display: block;
             color: lighten($black, 24%)!important;
           }
 
