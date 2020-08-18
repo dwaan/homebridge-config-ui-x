@@ -960,11 +960,17 @@ $font-size:     .9rem;
     }
 
     .form-flex-row {
+      display: flex;
+      flex-flow: row nowrap;
+
       > .form-flex-item {
         margin: $padding 0;
         padding: 0 $padding;
 
         .form-flex-column {
+          display: flex;
+          flex-flow: column nowrap;
+
           padding: 0 (2 * $padding);
 
           > .form-flex-item {
@@ -2533,6 +2539,7 @@ $font-size:     .9rem;
 
       form {
         .hb-npm-search {
+          color: $black;
           background-color: rgba($black, .08);
 
           &:focus {
