@@ -202,6 +202,28 @@ $font-size:     .9rem;
 }
 
 
+// Neomorphism look
+
+@mixin neomorphism($bgcolor, $fgcolor, $radius) {
+  color: $fgcolor!important;
+  background-color: $bgcolor!important;
+  background: linear-gradient(145deg, lighten($bgcolor, 8%) 0%, $bgcolor 50%, darken($bgcolor, 8%) 100%)!important;
+  text-shadow: 2px 2px 8px rgba(darken($bgcolor, 48%), .48)!important;
+
+  box-shadow:
+    4px 4px 16px rgba(darken($bgcolor, 16%), .48),
+    -4px -4px 16px rgba(darken($white, 8%), .32)!important;
+  border-radius: $radius;
+
+  &:after,
+  &:before {
+    color: $fgcolor!important;
+    box-shadow: none!important;
+    background-color: transparent!important;
+  }
+}
+
+
 /*
  * New theme - all style
  */
@@ -230,17 +252,17 @@ $font-size:     .9rem;
       .plugin-md .h#{$i} {
         font-size: (($font-size + .8) - (0.1 * $i));
         font-weight: 500;
-        letter-spacing: -.024;
+        letter-spacing: -.008rem;
         line-height: 120%;
         padding: 0;
-        margin: 0;
+        margin: 0 0 (2 * $padding);
       }
 
       * ~ h#{$i},
       * ~ .h#{$i},
       .plugin-md * ~ h#{$i},
       .plugin-md * ~ .h#{$i} {
-        margin: (((12 - (2 * $i)) * $padding)) 0 (2 * $padding);
+        margin-top: (((12 - (2 * $i)) * $padding));
       }
     }
 
@@ -295,12 +317,27 @@ $font-size:     .9rem;
     }
 
     .hb-uix-switch {
+      padding-left: (6 * $padding);
+
       .hb-uix-slider  {
-        border-color: $blue!important;
+        margin-top: 1px;
+        width: (5 * $padding);
+        height: (5 * $padding);
+        background-color: $white!important;
+        border-color: darken($white, 16%)!important;
+
+        &:after {
+          top: 50%;
+          left: 50%;
+          width: 40%;
+          height: 70%;
+          transform: translate(-50%, -50%) rotate(45deg);
+        }
       }
 
       input:checked ~ .hb-uix-slider {
         background-color: $blue!important;
+        border-color: darken($blue, 16%)!important;
       }
     }
 
@@ -354,20 +391,25 @@ $font-size:     .9rem;
 
     // Dragable plugin
     [draggable=true] {
-      border: 1px solid darken($white, 24%)!important;
-      border-radius: (1/2 * $border-radius)!important;
+      border: 1px solid darken($white, 20%)!important;
+      background-color: darken($white, 8%);
+      border-radius: none!important;
       overflow: hidden!important;
+      margin-top: -1px!important;
 
       &:hover {
-        margin-top: 0!important;
+        margin-top: -1!important;
         margin-bottom: 0!important;
         margin-left: 0!important;
         margin-right: 0!important;
+
+        background-color: darken($white, 4%);
 
         box-shadow: 0 4px 16px rgba($black, .32)!important;
       }
 
       .list-group-item {
+        background-color: transparent!important;
         border: none!important;
       }
     }
@@ -597,7 +639,17 @@ $font-size:     .9rem;
           color: $black;
           background-color: lighten($white, 100%);
           border-color: rgba($blue, .64);
-          box-shadow: 0 0 0 0.2rem rgba($blue, .24);
+          box-shadow: 0 0 0 $padding rgba($blue, .24);
+        }
+      }
+
+      input,
+      select,
+      textarea {
+        &:-webkit-autofill,
+        &:-webkit-autofill:hover,
+        &:-webkit-autofill:focus {
+          background: 0 0 0 1000px lighten($yellow, 24%) inset!important;
         }
       }
 
@@ -688,15 +740,14 @@ $font-size:     .9rem;
 
       .dropdown-divider,
       .action-label.separator {
-        padding: 0;
-        margin: (2 * $padding) 0;
+        padding: 0!important;
+        margin: (2 * $padding) 0!important;
         border-top: 2px solid rgba(darken($white, 16%), .48);
         border-bottom: none!important;
-        border-radius: $border-radius;
       }
 
       .action-item {
-        border: none;
+        border: none!important;
       }
 
       .monaco-action-bar {
@@ -729,6 +780,7 @@ $font-size:     .9rem;
         overflow: hidden;
         padding: 0;
         margin: (6 * $padding)!important;
+        border: none;
         background-color: transparent;
         max-width: (100 * $padding);
         box-shadow: none;
@@ -815,6 +867,14 @@ $font-size:     .9rem;
             box-shadow: none!important;
           }
 
+          &:-webkit-autofill,
+          &:-webkit-autofill:active,
+          &:-webkit-autofill:hover,
+          &:-webkit-autofill:focus {
+            -webkit-text-fill-color: $black!important;
+            -webkit-box-shadow: 0 0 0 1000px lighten($yellow, 24%) inset!important;
+          }
+
           + label {
             position: absolute!important;
             color: lighten($black, 24%)!important;
@@ -859,6 +919,18 @@ $font-size:     .9rem;
           box-shadow: none!important;
         }
       }
+
+      .red-text{
+        margin: 0 auto (3 * $padding);
+
+        small {
+          padding: $padding (4 * $padding);
+          display: inline-block;
+          font-size: $font-size;
+
+          @include neomorphism($red, $white, $border-radius);
+        }
+      }
     }
 
 
@@ -888,12 +960,16 @@ $font-size:     .9rem;
     }
 
     .form-flex-row {
-      .form-flex-item {
+      > .form-flex-item {
         margin: $padding 0;
         padding: 0 $padding;
 
         .form-flex-column {
           padding: 0 (2 * $padding);
+
+          > .form-flex-item {
+            margin: $padding 0;
+          }
 
           .form-group {
             padding: 0;
@@ -934,6 +1010,7 @@ $font-size:     .9rem;
     }
 
     .list-group .list-group-item {
+      background-color: $white;
       margin: 0;
       padding: $padding (4 * $padding);
       border-radius: 0;
@@ -988,6 +1065,7 @@ $font-size:     .9rem;
           flex-flow: column nowrap;
           justify-content: center;
           align-items: center;
+          width: 100%;
           height: 100%;
           background-color: transparent;
           border-radius: 0;
@@ -995,12 +1073,14 @@ $font-size:     .9rem;
 
           > * {
             display: block;
+            width: 100%;
             max-height: 100%;
             box-shadow: 0 20px 60px rgba($black, .16);
 
-            .modal-content {
+            > .modal-content {
               position: relative;
-              max-height: 100%;
+              width: inherit;
+              max-height: inherit;
               background-color: rgba($white, .88);
               border-radius: (1.5 * $border-radius);
               overflow: hidden;
@@ -1079,6 +1159,7 @@ $font-size:     .9rem;
         overflow: auto;
 
         .card {
+          border: none;
           background-color: transparent;
 
           &.card-body {
@@ -1446,31 +1527,20 @@ $font-size:     .9rem;
                 }
               }
 
-              .primary-text {
-                color: $green!important;
-              }
-
-              .fa-cloud-upload-alt,
-              .fa-exclamation-circle {
-                color: $orange!important;
-              }
-
               .hb-status-icon {
-                margin-right: calc(1 * var(--base-size));
+                display: flex;
+                align-self: center;
                 padding: 0 calc(1 * var(--base-size)) 0 0!important;
 
-                width: calc(3 * var(--base-size));
-                height: calc(3 * var(--base-size));
-                line-height: calc(3 * var(--base-size));
-
-                font-size: calc(2 * var(--base-size));
-
-                box-shadow: 0 8px 20px rgba(darken($green, 48%), .48), inset -4px -4px 12px rgba($black, .32), inset 4px 4px 12px rgba($white, .32)!important;
-                border-radius: 100%;
-
                 i {
-                  text-shadow: 2px 2px 8px rgba(darken($green, 48%), .48);
+                  width: calc(3 * var(--base-size));
+                  height: calc(3 * var(--base-size));
+                  line-height: calc(3 * var(--base-size));
+
                   text-align: center;
+                  font-size: calc(1.5 * var(--base-size));
+
+                  @include neomorphism($green, $white, 100%);
 
                   &:before {
                     text-align: center;
@@ -1483,6 +1553,23 @@ $font-size:     .9rem;
 
                   &.fa-exclamation-circle:before {
                     content: "\f12a";
+                  }
+
+                  &.fa-spin {
+                    font-size: calc(3 * var(--base-size));
+                    text-shadow: none!important;
+
+                    background: transparent!important;
+                    box-shadow: none!important;
+
+                    &:before {
+                      color: lighten($black, 16%)!important;
+                    }
+                  }
+
+                  &.fa-cloud-upload-alt,
+                  &.fa-exclamation-circle {
+                    @include neomorphism($orange, $white, 100%);
                   }
                 }
               }
@@ -1799,6 +1886,10 @@ $font-size:     .9rem;
         height: (12 * $padding);
         border-radius: 100%;
         box-shadow: 0 4px 16px rgba($black, .48)!important;
+
+        i {
+          text-shadow: 2px 2px 8px rgba(darken($green, 48%), .48);
+        }
       }
     }
 
@@ -2120,7 +2211,7 @@ $font-size:     .9rem;
 
       #accessory-dropdown-menu {
         margin-right: 0;
-        box-shadow: 0 8px 20px rgba(darken($green, 48%), .48), inset -4px -4px 12px rgba($black, .32), inset 4px 4px 12px rgba($white, .32)!important;
+        box-shadow: 0 8px 20px rgba(darken($green, 48%), .48)!important;
 
         i {
           text-shadow: 2px 2px 8px rgba(darken($green, 48%), .48);
@@ -2276,9 +2367,22 @@ $font-size:     .9rem;
     // /platform-tools/docker/restart-container
   }
 
+
+  // Medium screen
+  @media screen and (min-width: 576px) {
+    .modal-dialog {
+      max-width: 500px;
+      margin: (4 * $padding) auto;
+    }
+  }
+
   // Large Screen
   @media screen and (min-width: 760px) {
     .config-ui-x-#{$name} {
+      .modal-lg, .modal-xl {
+        max-width: 500px;
+      }
+
       app-plugins {
         .justify-content-between {
           justify-content: flex-start!important;
@@ -2407,6 +2511,18 @@ $font-size:     .9rem;
         color: lighten($black, 32%)!important;
       }
 
+
+      // Dragable plugin
+      [draggable=true] {
+        border: 1px solid lighten($white, 12%)!important;
+        background-color: lighten($white, 8%);
+
+        &:hover {
+          background-color: lighten($white, 4%);
+          box-shadow: 0 4px 16px rgba($white, .32)!important;
+        }
+      }
+
       // Modification for header page
       @include header-theme(rgba(lighten($white, 4%), .64), $black);
 
@@ -2514,6 +2630,57 @@ $font-size:     .9rem;
 
 
       /*
+       * Modification for MD-Form
+       */
+
+      .md-form {
+        input:not([type]),
+        input[type="text"]:not(.browser-default),
+        input[type="password"]:not(.browser-default),
+        input[type="email"]:not(.browser-default),
+        input[type="url"]:not(.browser-default),
+        input[type="time"]:not(.browser-default),
+        input[type="date"]:not(.browser-default),
+        input[type="datetime"]:not(.browser-default),
+        input[type="datetime-local"]:not(.browser-default),
+        input[type="tel"]:not(.browser-default),
+        input[type="number"]:not(.browser-default),
+        input[type="search"]:not(.browser-default),
+        input[type="phone"]:not(.browser-default),
+        input[type="search-md"],
+        textarea.md-textarea {
+          color: $black;
+          background-color: lighten($white, 100%);
+          border: 1px solid darken($white, 16%);
+
+          &:focus {
+            color: $black;
+            background-color: lighten($white, 100%);
+            border-color: rgba($blue, .64);
+            box-shadow: 0 0 0 0.2rem rgba($blue, .24);
+          }
+        }
+
+        input,
+        select,
+        textarea {
+          &:-webkit-autofill,
+          &:-webkit-autofill:hover,
+          &:-webkit-autofill:focus {
+            background: 0 0 0 1000px lighten($yellow, 32%) inset!important;
+          }
+        }
+
+        .form-control {
+          &.is-invalid:focus {
+              border-color: rgba($red, .64)!important;
+              box-shadow: 0 0 0 $padding rgba($red, .24)!important;
+          }
+        }
+      }
+
+
+      /*
        * Modification for card style
        */
 
@@ -2537,7 +2704,11 @@ $font-size:     .9rem;
         }
 
         .login-card {
+          background-color: transparent;
+
           form {
+            padding: (12 * $padding) (10 * $padding) (10 * $padding);
+
             > div:nth-child(2) {
               filter: drop-shadow(0 8px 16px rgba($black, .32));
             }
@@ -2546,20 +2717,30 @@ $font-size:     .9rem;
 
         .md-form {
           .prefix {
-            display: block;
             color: lighten($black, 24%)!important;
           }
 
+
           input {
             color: $black;
-            background-color: rgba(darken($white, 4%), .72);
+            background-color: rgba(darken($white, 4%), .72)!important;
 
             &.form-control:focus,
             &:active,
             &:hover,
             &:focus {
               color: $black!important;
+              border: none!important;
               background-color: rgba(darken($white, 4%), .72)!important;
+              box-shadow: none!important;
+            }
+
+            &:-webkit-autofill,
+            &:-webkit-autofill:active,
+            &:-webkit-autofill:hover,
+            &:-webkit-autofill:focus {
+              -webkit-text-fill-color: $black!important;
+              -webkit-box-shadow: 0 0 0 1000px darken($yellow, 24%) inset!important;
             }
 
             + label {
@@ -2581,6 +2762,13 @@ $font-size:     .9rem;
           &.disabled {
             color: lighten($black, 24%)!important;
             background: rgba(lighten($white, 16%), .48)!important;
+            box-shadow: none!important;
+          }
+        }
+
+        .red-text{
+          small {
+            @include neomorphism($red, $black, $border-radius);
           }
         }
       }
@@ -2616,30 +2804,50 @@ $font-size:     .9rem;
 
       .modal {
         .modal-dialog {
+
           > .modal-content {
             background-color: transparent;
 
-            .modal-content {
-              background-color: $white;
-              box-shadow: 0 20px 60px rgba($white, .15);
+            > * {
+              box-shadow: 0 20px 60px rgba($white, .16);
+
+              .modal-content {
+                background-color: rgba(lighten($white, 12%), .88);
+              }
             }
           }
         }
 
         .modal-header,
         .modal-footer {
-          background-color: darken($white, 4%);
-          background: linear-gradient(180deg, darken($white, 2%) 0%, darken($white, 6%) 100%);
+          background-color: transparent;
+        }
+
+        .modal-header{
+          border-bottom: 1px solid lighten($white, 8%);
+
+          .close {
+            background-color: lighten($red, 8%);
+            border: 1px solid rgba(darken($red, 16%), .72);
+
+            color: lighten($red, 8%);
+
+            &:hover {
+              color: rgba($white, .64);
+            }
+          }
         }
 
         .modal-body {
-          background-color: darken($white, 2%);
-
           .card {
+            border: none;
+            background-color: transparent;
+
             &.card-body {
               > div > div:last-child {
                 a {
                   border: 1px solid rgba(darken($red, 16%), .64);
+
                   &:hover {
                     background-color: rgba($red, .08);
                   }
@@ -2647,6 +2855,10 @@ $font-size:     .9rem;
               }
             }
           }
+        }
+
+        .modal-footer {
+          border-top: 1px solid lighten($white, 8%);
         }
       }
 
@@ -2813,9 +3025,30 @@ $font-size:     .9rem;
                   color: $green!important;
                 }
 
-                .fa-cloud-upload-alt,
-                .fa-exclamation-circle {
-                  color: $orange!important;
+                .hb-status-icon {
+                  display: flex;
+                  align-self: center;
+                  padding: 0 calc(1 * var(--base-size)) 0 0!important;
+
+                  i {
+                    @include neomorphism($green, $black, 100%);
+
+                    &.fa-spin {
+                      text-shadow: none!important;
+
+                      background: transparent!important;
+                      box-shadow: none!important;
+
+                      &:before {
+                        color: lighten($black, 16%)!important;
+                      }
+                    }
+
+                    &.fa-cloud-upload-alt,
+                    &.fa-exclamation-circle {
+                      @include neomorphism($orange, $black, 100%);
+                    }
+                  }
                 }
               }
             }
@@ -2947,6 +3180,10 @@ $font-size:     .9rem;
 
         .add-widget-button {
           box-shadow: 0 4px 16px rgba($white, .48)!important;
+
+          i {
+            text-shadow: 2px 2px 8px rgba(darken($green, 48%), .48);
+          }
         }
       }
 
