@@ -7,8 +7,8 @@ export class ConvertTempPipe implements PipeTransform {
     private $auth: AuthService,
   ) { }
 
-  transform(value: number): number {
-    if (this.$auth.env.temperatureUnits === 'f') {
+  transform(value: number, unit: 'c' | 'f' = this.$auth.env.temperatureUnits): number {
+    if (unit === 'f') {
       return value * 1.8 + 32;
     }
     return value;

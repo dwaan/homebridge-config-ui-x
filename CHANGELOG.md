@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. This project uses [Semantic Versioning](https://semver.org/).
 
+## NEXT
+
+### Other Changes
+
+* **Dashboard:** CPU temperature unit of measure can now optionally be set to differ from the system default ([#783](https://github.com/oznu/homebridge-config-ui-x/issues/783))
+
+
+## 4.25.2 (2020-08-14)
+
+### Bug Fixes
+
+* Fix a bug that caused the UI not to load when it's debug mode was enabled ([#811](https://github.com/oznu/homebridge-config-ui-x/issues/811))
+
+### Other Changes
+
+* **i18n:** Improvements to Indonesian language translations ([#810](https://github.com/oznu/homebridge-config-ui-x/pull/810))
+
 ## 4.25.1 (2020-08-10)
 
 ### Node.js Version
