@@ -3,9 +3,9 @@
 $name: "new";
 
 
-/*
- * New theme variables
- */
+//
+// New theme variables
+//
 
 // Common colors
 $red:     rgb(249, 46, 49);
@@ -30,9 +30,9 @@ $header-height: (12 * $padding);
 $font-size:     .9rem;
 
 
-/*
- * New theme - header style
- */
+//
+// New theme - header style
+//
 
 @mixin header-theme($bg-color, $fg-color) {
   $text-color: darken($fg-color, 8%);
@@ -151,9 +151,9 @@ $font-size:     .9rem;
 }
 
 
-/*
- * New theme - all style
- */
+//
+// New theme - all style
+//
 
 :root {
   --base-size: 2vh;
@@ -168,7 +168,10 @@ $font-size:     .9rem;
   background-color: darken($white, 4%);
   color: lighten($black, 8%);
 
+  //
   // Heading
+  //
+
   @for $i from 1 through 5 {
     h#{$i},
     .h#{$i},
@@ -191,7 +194,10 @@ $font-size:     .9rem;
   }
 
 
+  //
   // Paragraph
+  //
+
   p {
     line-height: 140%;
     margin: (2 * $padding) 0;
@@ -203,8 +209,9 @@ $font-size:     .9rem;
   }
 
 
-
+  //
   // Commmon styles
+  //
 
   .container-fluid,
   .container-sm,
@@ -271,14 +278,14 @@ $font-size:     .9rem;
   }
 
   .alert {
-    font-size: $font-size;
     margin: 0 (-4 * $padding);
     padding: 0 (4 * $padding);
 
-    border: none;
     color: lighten($black, 16%);
     font-size: $font-size;
     letter-spacing: .048;
+
+    border: none;
     background-color: transparent;
   }
 
@@ -306,14 +313,19 @@ $font-size:     .9rem;
     color: lighten($black, 32%)!important;
   }
 
-
+  //
   // Markdown plugin
+  //
+
   .plugin-md {
     font-size: $font-size;
   }
 
 
+  //
   // Dragable plugin
+  //
+
   [draggable=true] {
     border: 1px solid darken($white, 20%)!important;
     background-color: darken($white, 8%);
@@ -339,13 +351,16 @@ $font-size:     .9rem;
   }
 
 
+  //
   // Modification for header page
+  //
+
   @include header-theme($blue, $white);
 
 
-  /*
-   * Modification for plugins page - search bar
-   */
+  //
+  // Modification for plugins page - search bar
+  //
 
   form {
     .hb-npm-search {
@@ -428,22 +443,23 @@ $font-size:     .9rem;
   }
 
 
-  /*
-   * Modification for button style
-   */
+  //
+  // Modification for button style
+  //
 
   .btn {
+    margin: 0 ($padding * 2) 0 0;
+    padding: 0 (6 * $padding);
+    height: (8 * $padding);
+
+    color: lighten($black, 16%);
     font-size: $font-size;
     font-weight: 500;
     line-height: 100%;
     text-transform: capitalize;
-    margin: 0 ($padding * 2) 0 0;
 
-    background-color: transparent!important;
-    border: 1px solid darken($white, 16%);
-    color: lighten($black, 16%);
-    padding: 0 (6 * $padding);
-    height: (8 * $padding);
+    border: none;
+    background-color: darken($white, 8%)!important;
 
     border-radius: (3/4 * $border-radius);
     box-shadow: none!important;
@@ -454,35 +470,9 @@ $font-size:     .9rem;
 
     transition: color .256s ease, background-color .256s ease, border-color .256s ease, box-shadow .256s ease;
 
-    &.btn-default,
-    &.btn-primary {
-      border: none;
-      color: $white;
-    }
-
-    &.btn-elegant {
-      background-color: transparent!important;
-    }
-
-    &.btn-default {
-      background-color: $blue!important;
-      &:hover {
-        color: $white;
-        background-color: darken($blue, 8%)!important;
-      }
-    }
-
-    &.btn-primary {
-      background-color: $green!important;
-      &:hover {
-        color: $white;
-        background-color: darken($green, 8%)!important;
-      }
-    }
-
     &:hover {
       color: initial;
-      background-color: darken($white, 8%)!important;
+      background-color: darken($white, 16%)!important;
     }
 
     &:first-child {
@@ -492,12 +482,47 @@ $font-size:     .9rem;
     &:last-child {
       margin-right: 0;
     }
+
+    &.btn-default,
+    &.btn-primary {
+      border: none;
+      color: $white;
+      box-shadow: 0 -4px 16px rgba($black, .32) inset;
+    }
+
+    &.btn-elegant {
+      border: 1px solid darken($white, 12%);
+      background-color: darken($white, 4%)!important;
+
+      &:hover {
+        border-color: darken($white, 16%);
+        background-color: darken($white, 8%)!important;
+      }
+    }
+
+    &.btn-default {
+      background-color: $blue!important;
+
+      &:hover {
+        color: $white;
+        background-color: darken($blue, 8%)!important;
+      }
+    }
+
+    &.btn-primary {
+      background-color: $green!important;
+
+      &:hover {
+        color: $white;
+        background-color: darken($green, 8%)!important;
+      }
+    }
   }
 
 
-  /*
-   * Modification for card style
-   */
+  //
+  // Modification for card style
+  //
 
   .card {
     border-radius: 12px;
@@ -510,9 +535,9 @@ $font-size:     .9rem;
   }
 
 
-  /*
-   * Modification for MD-Form
-   */
+  //
+  // Modification for MD-Form
+  //
 
   .md-form {
     margin-top: (1 * $padding);
@@ -601,9 +626,9 @@ $font-size:     .9rem;
   }
 
 
-  /*
-   * Modification for Dropdown menu
-   */
+  //
+  // Modification for Dropdown menu
+  //
 
   .dropdown-menu,
   .monaco-menu-container {
@@ -681,9 +706,9 @@ $font-size:     .9rem;
 
 
 
-  /*
-   * Modification login view
-   */
+  //
+  // Modification login view
+  //
 
   .login-container {
     .logo {
@@ -858,9 +883,9 @@ $font-size:     .9rem;
   }
 
 
-  /*
-   * Modification json form
-   */
+  //
+  // Modification json form
+  //
 
   // Form
   legend {
@@ -979,10 +1004,26 @@ $font-size:     .9rem;
     }
   }
 
+  router-outlet ~ * > div {
+    > .row:first-child {
+      padding: (4 * $padding) 0;
+    }
 
-  /*
-   * Modification settings modal
-   */
+    > ngx-monaco-editor,
+    > ngx-monaco-editor.flex-grow-1 {
+      margin: 0 (-6 * $padding)!important;
+      width: auto!important;
+
+      .editor-container {
+        height: 100%;
+      }
+    }
+  }
+
+
+  //
+  // Modification settings modal
+  //
 
   .modal {
     .modal-dialog {
@@ -1124,10 +1165,92 @@ $font-size:     .9rem;
     }
   }
 
+  // App Info Modal
 
-  /*
-   * Modification toast messages
-   */
+  app-info-modal {
+    .modal-body {
+      display: flex;
+      flex-flow: column nowrap;
+      height: 100%;
+
+      > div {
+        flex: 0 0 auto;
+        margin: 0;
+        padding: 0 0 (4 * $padding);
+
+        .text-right {
+          text-align: left!important;
+
+          .hb-uix-switch {
+            padding-left: (7 * $padding);
+
+            .hb-uix-slider {
+              margin-top: -1px;
+            }
+          }
+        }
+      }
+
+      .table {
+        display: block;
+        flex: 1 1 auto;
+        width: auto;
+        overflow: auto;
+
+        border-radius: (1/2 * $border-radius);
+        background-color: lighten($white, 24%);
+
+        thead,
+        tbody {
+          display: block;
+          width: 100%;
+        }
+
+        tr {
+          display: flex;
+          flex-flow: row nowrap;
+          width: 100%;
+          border-top: 1px solid darken($white, 16%);
+          background-color: transparent;
+
+          &:hover {
+            background-color: transparent;
+          }
+
+          &:first-child {
+            border-top: none;
+          }
+
+          th,
+          td {
+            flex: 1 1 auto;
+            padding: (2 * $padding) (4 * $padding);
+
+            &:last-child {
+              color: lighten($black, 24%);
+            }
+
+            span {
+              span {
+                font-weight: 500;
+                color: $green;
+              }
+            }
+          }
+
+          th {
+            font-size: ($font-size + .2);
+          }
+        }
+      }
+    }
+  }
+
+
+
+  //
+  // Modification toast messages
+  //
 
   #toast-container {
     $icon-size: (8 * $padding);
@@ -1254,7 +1377,9 @@ $font-size:     .9rem;
 
 
 
+  //
   // Background
+  //
 
   .background,
   .background:after {
@@ -1273,9 +1398,9 @@ $font-size:     .9rem;
   }
 
 
-  /*
-   * Modification status view
-   */
+  //
+  // Modification status view
+  //
 
   app-status {
     z-index: 0;
@@ -1824,9 +1949,9 @@ $font-size:     .9rem;
   }
 
 
-  /*
-   * Modification plugins view
-   */
+  //
+  // Modification plugins view
+  //
 
   app-plugins {
     .hb-plugin-space-between {
@@ -2000,9 +2125,9 @@ $font-size:     .9rem;
     max-width: 500px;
   }
 
-  /*
-   * Modification settings view
-   */
+  //
+  // Modification settings view
+  //
 
   app-settings {
     height: initial!important;
@@ -2017,15 +2142,11 @@ $font-size:     .9rem;
   }
 
 
-  /*
-   * Modification config view
-   */
+  //
+  // Modification config view
+  //
 
   app-config {
-    > div > .row {
-      padding: (4 * $padding) 0;
-    }
-
     .text-right {
       button {
         &:nth-child(1) {
@@ -2058,22 +2179,12 @@ $font-size:     .9rem;
         }
       }
     }
-
-    ngx-monaco-editor,
-    ngx-monaco-editor.flex-grow-1 {
-      margin: 0 -20px!important;
-      width: auto!important;
-
-      .editor-container {
-        height: 100%;
-      }
-    }
   }
 
 
-  /*
-   * Modification accesories view
-   */
+  //
+  // Modification accesories view
+  //
 
   app-accessories {
     .background,
@@ -2246,9 +2357,36 @@ $font-size:     .9rem;
     }
   }
 
-  /*
-   * Modification user view
-   */
+  .lightbulb-mode-control,
+  .thermostat-mode-control {
+    .btn {
+      margin: 1px!important;
+
+      color: $black!important;
+      font-size: $font-size!important;
+
+      &.btn-primary {
+        background-color: $white!important;
+
+        &:hover,
+        &:focus {
+          background-color: darken($white, 4%)!important;
+        }
+
+        &.active {
+          color: $white!important;
+          background-color: $green!important;
+        }
+      }
+    }
+  }
+
+  .temperature-circle {
+  }
+
+  //
+  // Modification user view
+  //
 
   app-users {
     height: initial!important;
@@ -2274,13 +2412,15 @@ $font-size:     .9rem;
   }
 
 
-  /*
-   * Restart page
-   */
+  //
+  // Restart page
+  //
 
-  app-restart {
+  app-restart,
+  app-restart-linux,
+  app-shutdown-linux {
     display: flex!important;
-    flex-flow: row nowrap;
+    flex-flow: column nowrap;
     align-items: center;
     justify-content: center;
 
@@ -2294,13 +2434,100 @@ $font-size:     .9rem;
   }
 
 
-  // /platform-tools/docker/restart-container
+  //
+  // Modification logs view
+  //
+
+  app-logs {
+    .log-buttons {
+      top: (18 * $padding);
+      right: (6 * $padding);
+
+      button {
+        opacity: 1!important;
+        margin-right: 0;
+
+        &:first-child {
+          border-radius: (1/2 * $border-radius) 0 0 (1/2 * $border-radius);
+        }
+
+        &:last-child {
+          background-color: darken($white, 16%)!important;
+          border-radius: 0 (1/2 * $border-radius) (1/2 * $border-radius) 0;
+
+          &:hover {
+            color: $white;
+            border-color: darken($red, 8%);
+            background-color: $red!important;
+          }
+        }
+      }
+    }
+  }
 
 
+  //
+  // Modification for /platform-tools/docker/restart-container
+  //
 
-  /*
-   * Modal Animation
-   */
+  app-container-restart {
+    $size: 15vw;
+
+    display: flex!important;
+    flex-flow: column;
+    align-content: center;
+    justify-content: center;
+
+    > app-spinner,
+    > div {
+      flex: 0 0 auto;
+    }
+
+    > app-spinner {
+      pointer-events: none;
+    }
+
+    > div {
+      display: flex;
+      justify-content: center;
+      margin-top: -$size;
+
+      > div {
+        max-width: 400px;
+      }
+    }
+
+    .app-spinner-container {
+      position: relative;
+    }
+
+    .fa-docker {
+      width: $size;
+      height: $size;
+      line-height: $size;
+      font-size: 3vw;
+    }
+  }
+
+
+  //
+  // Modification for /platform-tools/docker/restart-container
+  //
+
+  app-startup-script {
+    .mt-3 {
+      margin-top: 0!important;
+    }
+
+    .alert {
+      margin: (-2 * $padding) 120px (4 * $padding) (-4 * $padding);
+    }
+  }
+
+
+  //
+  // Modal Animation
+  //
 
   .fade {
     animation-name: fade;
@@ -2315,9 +2542,9 @@ $font-size:     .9rem;
 }
 
 
-/*
- * New theme - Dark style
- */
+//
+// New theme - Dark style
+//
 
 @media (prefers-color-scheme: dark) {
   // Common colors
@@ -2343,7 +2570,9 @@ $font-size:     .9rem;
     overflow-x: hidden;
 
 
+    //
     // Commmon styles
+    //
 
     .container-fluid,
     .container-sm,
@@ -2398,7 +2627,10 @@ $font-size:     .9rem;
     }
 
 
+    //
     // Dragable plugin
+    //
+
     [draggable=true] {
       border: 1px solid lighten($white, 12%)!important;
       background-color: lighten($white, 8%);
@@ -2409,21 +2641,26 @@ $font-size:     .9rem;
       }
     }
 
+
+    //
     // Modification for header page
+    //
+
     @include header-theme(rgba(lighten($white, 4%), .64), $black);
 
 
-    /*
-     * Modification for plugins page - search bar
-     */
+    //
+    // Modification for plugins page - search bar
+    //
 
     form {
       .hb-npm-search {
         color: $black;
+        border-color: rgba($black, .08);
         background-color: rgba($black, .08);
 
         &:focus {
-          box-shadow: 0 0 0 4px rgba($blue, .32);
+          box-shadow: 0 0 0 4px rgba(lighten($blue, 16%), .32);
         }
 
         &:before,
@@ -2447,17 +2684,34 @@ $font-size:     .9rem;
     }
 
 
-    /*
-     * Modification for button style
-     */
+    //
+    // Modification for button style
+    //
 
     .btn {
-      border: 1px solid lighten($white, 24%);
       color: lighten($black, 16%);
+      background-color: darken($white, 8%)!important;
+
+      &:hover {
+        color: lighten($black, 16%);
+        background-color: darken($white, 16%)!important;
+      }
+
 
       &.btn-default,
       &.btn-primary {
         color: $black;
+        box-shadow: 0 -4px 16px rgba($black, .32) inset;
+      }
+
+      &.btn-elegant {
+        border: 1px solid lighten($white, 12%);
+        background-color: lighten($white, 4%)!important;
+
+        &:hover {
+          border-color: lighten($white, 16%);
+          background-color: lighten($white, 8%)!important;
+        }
       }
 
       &.btn-default {
@@ -2477,17 +2731,11 @@ $font-size:     .9rem;
           background-color: darken($green, 8%)!important;
         }
       }
-
-      &:hover {
-        color: $black;
-        background-color: lighten($white, 8%)!important;
-      }
     }
 
-
-    /*
-     * Dropdown menu
-     */
+    //
+    // Dropdown menu
+    //
 
     .dropdown-menu,
     .monaco-menu-container {
@@ -2516,9 +2764,9 @@ $font-size:     .9rem;
     }
 
 
-    /*
-     * Modification for MD-Form
-     */
+    //
+    // Modification for MD-Form
+    //
 
     .md-form {
       input:not([type]),
@@ -2536,12 +2784,12 @@ $font-size:     .9rem;
       input[type="phone"]:not(.browser-default),
       input[type="search-md"],
       textarea.md-textarea {
-        color: $black;
+        color: $white;
         background-color: lighten($white, 100%);
         border: 1px solid darken($white, 16%);
 
         &:focus {
-          color: $black;
+          color: $white;
           background-color: lighten($white, 100%);
           border-color: rgba($blue, .64);
           box-shadow: 0 0 0 0.2rem rgba($blue, .24);
@@ -2567,9 +2815,9 @@ $font-size:     .9rem;
     }
 
 
-    /*
-     * Modification for card style
-     */
+    //
+    // Modification for card style
+    //
 
     .card {
       border: 1px solid lighten($white, 4%);
@@ -2578,9 +2826,9 @@ $font-size:     .9rem;
     }
 
 
-    /*
-     * Modification login view
-     */
+    //
+    // Modification login view
+    //
 
     .login-container {
       .logo {
@@ -2661,12 +2909,11 @@ $font-size:     .9rem;
     }
 
 
-    /*
-     * Modification json form
-     */
+    //
+    // Modification json form
+    //
 
     // Form
-
     .list-group .list-group-item {
       background-color: lighten($white, .16);
       border-top: 1px solid lighten($white, 8%);
@@ -2685,9 +2932,9 @@ $font-size:     .9rem;
     }
 
 
-    /*
-     * Modification settings modal
-     */
+    //
+    // Modification settings modal
+    //
 
     .modal {
       .modal-dialog {
@@ -2749,10 +2996,44 @@ $font-size:     .9rem;
       }
     }
 
+    // App Info Modal
 
-    /*
-     * Modification toast messages
-     */
+    app-info-modal {
+      .modal-body {
+        .table {
+          background-color: rgba(lighten($white, 8%), .88);
+
+          tr {
+            border-top: 1px solid lighten($white, 16%);
+            background-color: transparent;
+
+            &:hover {
+              background-color: transparent;
+            }
+
+            th,
+            td {
+              color: lighten($black, 24%);
+
+              &:last-child {
+                color: darken($black, 16%);
+              }
+
+              span {
+                span {
+                  color: lighten($green, 16%);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+
+    //
+    // Modification toast messages
+    //
 
     #toast-container {
       > div,
@@ -2775,13 +3056,19 @@ $font-size:     .9rem;
     }
 
 
+    //
+    // Additional background
+    //
+
     .background:after {
       background-color: rgba($white, .24);
     }
 
-    /*
-     * Modification monaco editor
-     */
+
+
+    //
+    // Modification monaco editor
+    //
 
     .monaco-editor,
     .monaco-editor-background,
@@ -2840,9 +3127,9 @@ $font-size:     .9rem;
 
 
 
-    /*
-     * Modification status view
-     */
+    //
+    // Modification status view
+    //
 
     app-status {
       .background:after {
@@ -3075,9 +3362,9 @@ $font-size:     .9rem;
     }
 
 
-    /*
-     * Modification plugins view
-     */
+    //
+    // Modification plugins view
+    //
 
     app-plugins {
       .hb-plugin-space-between {
@@ -3177,9 +3464,9 @@ $font-size:     .9rem;
     }
 
 
-    /*
-     * Modification accesories view
-     */
+    //
+    // Modification accesories view
+    //
 
     app-accessories {
       [ng-reflect-dragula="rooms-bag"] {
@@ -3240,9 +3527,9 @@ $font-size:     .9rem;
 }
 
 
-/*
- * New theme - Animations
- */
+//
+// New theme - Animations
+//
 
 
 @keyframes glow {
@@ -3307,9 +3594,9 @@ $font-size:     .9rem;
 }
 
 
-/*
- * New theme - Responsive style
- */
+//
+// New theme - Responsive style
+//
 
 
 // Medium screen
@@ -3329,7 +3616,7 @@ $font-size:     .9rem;
 
     app-plugins {
       .justify-content-between {
-        justify-content: flex-start!important;
+        justify-content: space-between!important;
       }
 
       .hb-plugin-space-between {
