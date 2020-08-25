@@ -1,10 +1,10 @@
-/* === Start New Theme CSS === */
+/* === Start Neo Theme CSS === */
 
-$name: "new";
+$name: "neo";
 
 
 //
-// New theme variables
+// Neo theme variables
 //
 
 // Common colors
@@ -30,8 +30,53 @@ $header-height: (12 * $padding);
 $font-size:     .9rem;
 
 
+// Standardized box-shadow
+
+@mixin box-shadow-s($shadow-color, $options: "") {
+  box-shadow: 0 4px 16px rgba($shadow-color, .24) #{$options};
+}
+
+@mixin box-shadow-m($shadow-color, $options: "") {
+  box-shadow: 0 8px 16px rgba($shadow-color, .32) #{$options};
+}
+
+@mixin box-shadow-l($shadow-color, $options: "") {
+  box-shadow: 0 8px 32px rgba($shadow-color, .32) #{$options};
+}
+
+@mixin box-shadow-xl($shadow-color, $options: "") {
+  box-shadow: 0 8px 48px rgba($shadow-color, .48) #{$options};
+}
+
+@mixin box-shadow-xxl($shadow-color, $options: "") {
+  box-shadow: 0 8px 64px rgba($shadow-color, .48) #{$options};
+}
+
+
+// Neomorphism look
+
+@mixin neomorphism($bgcolor, $fgcolor, $radius) {
+  color: $fgcolor!important;
+  background-color: $bgcolor!important;
+  background: linear-gradient(145deg, lighten($bgcolor, 8%) 0%, $bgcolor 50%, darken($bgcolor, 8%) 100%)!important;
+  text-shadow: 2px 2px 8px rgba(darken($bgcolor, 48%), .48)!important;
+
+  box-shadow:
+    4px 4px 16px rgba(darken($bgcolor, 16%), .48),
+    -4px -4px 16px rgba(darken($white, 8%), .32)!important;
+  border-radius: $radius;
+
+  &:after,
+  &:before {
+    color: $fgcolor!important;
+    box-shadow: none!important;
+    background-color: transparent!important;
+  }
+}
+
+
 //
-// New theme - header style
+// Neo theme - header style
 //
 
 @mixin header-theme($bg-color, $fg-color) {
@@ -46,7 +91,8 @@ $font-size:     .9rem;
 
     color: $text-color;
     height: $header-height;
-    box-shadow: 0 8px 16px rgba($black, .32);
+
+    @include box-shadow-m($black);
 
     a {
       color: $text-color!important;
@@ -62,10 +108,11 @@ $font-size:     .9rem;
       height: $header-height;
       color: $text-color;
 
-      background: rgba(darken($bg-color, 8%), .88)!important;
-      background: linear-gradient(180deg, rgba($bg-color, .88), rgba(darken($bg-color, 4%), .88))!important;
-      border-bottom: 1px solid rgba(darken($bg-color, 8%), .88);
+      background: rgba(darken($bg-color, 8%), .92)!important;
+      background: linear-gradient(180deg, rgba(lighten($bg-color, 4%), .92) 0%, rgba($bg-color, .92) 50%, rgba(darken($bg-color, 4%), .92) 100%)!important;
+      border-bottom: 1px solid rgba(darken($bg-color, 8%), .92);
 
+      box-shadow: none;
       -webkit-backdrop-filter: saturate(180%) blur(20px);
     }
 
@@ -129,30 +176,9 @@ $font-size:     .9rem;
 }
 
 
-// Neomorphism look
-
-@mixin neomorphism($bgcolor, $fgcolor, $radius) {
-  color: $fgcolor!important;
-  background-color: $bgcolor!important;
-  background: linear-gradient(145deg, lighten($bgcolor, 8%) 0%, $bgcolor 50%, darken($bgcolor, 8%) 100%)!important;
-  text-shadow: 2px 2px 8px rgba(darken($bgcolor, 48%), .48)!important;
-
-  box-shadow:
-    4px 4px 16px rgba(darken($bgcolor, 16%), .48),
-    -4px -4px 16px rgba(darken($white, 8%), .32)!important;
-  border-radius: $radius;
-
-  &:after,
-  &:before {
-    color: $fgcolor!important;
-    box-shadow: none!important;
-    background-color: transparent!important;
-  }
-}
-
 
 //
-// New theme - all style
+// Neo theme - all style
 //
 
 :root {
@@ -248,6 +274,7 @@ $font-size:     .9rem;
   }
 
   .hb-uix-switch {
+    display: inline-block!important;
     padding-left: (6 * $padding);
 
     .hb-uix-slider  {
@@ -341,7 +368,7 @@ $font-size:     .9rem;
 
       background-color: darken($white, 4%);
 
-      box-shadow: 0 4px 16px rgba($black, .32)!important;
+      @include box-shadow-s($black, !important);
     }
 
     .list-group-item {
@@ -355,7 +382,7 @@ $font-size:     .9rem;
   // Modification for header page
   //
 
-  @include header-theme($blue, $white);
+  @include header-theme($purple, $white);
 
 
   //
@@ -517,6 +544,20 @@ $font-size:     .9rem;
         background-color: darken($green, 8%)!important;
       }
     }
+
+    &.btn-danger {
+      color: lighten($black, 16%);
+      background-color: transparent!important;
+      border: 1px solid darken($white, 16%);
+
+      &:active,
+      &:focus,
+      &:hover {
+        color: desaturate($red, 24%);
+        border-color: desaturate($red, 16%);
+        background-color: rgba(lighten($red, 40%), .64)!important;
+      }
+    }
   }
 
 
@@ -525,9 +566,10 @@ $font-size:     .9rem;
   //
 
   .card {
-    border-radius: 12px;
+    border-radius: $border-radius;
     background-color: $white;
-    box-shadow: 0 16px 24px rgba($black, .048);
+
+    @include box-shadow-s($black);
 
     &.card-body {
       padding: (4 * $padding) (6 * $padding);
@@ -637,7 +679,8 @@ $font-size:     .9rem;
     overflow: hidden;
     border-radius: $border-radius!important;
     background-color: transparent;
-    box-shadow: 0 8px 16px rgba($black, .32)!important;
+
+    @include box-shadow-m($black, !important);
 
     .monaco-scrollable-element {
       padding: 0;
@@ -713,16 +756,20 @@ $font-size:     .9rem;
   .login-container {
     .logo {
       display: block;
-      width: 160px;
-      height: 160px;
+
+      width: 160px!important;
+      height: 160px!important;
       padding: (8 * $padding);
       margin: 0 auto (12 * $padding);
+
       background: rgba($purple, .88);
       background: linear-gradient(180deg, rgba($purple, .88), rgba($purple-dark, .88));
       border: 1px solid rgba($purple-dark, .92);
+
+      // box-shadow: 0 24px 64px rgba(darken($purple-dark, 8%), .64);
+      @include box-shadow-xl(darken($purple-dark, 8%));
       border-radius: 100%;
       -webkit-backdrop-filter: saturate(180%) blur(20px);
-      box-shadow: 0 24px 64px rgba(darken($purple-dark, 8%), .64);
     }
 
     .login-card {
@@ -852,11 +899,14 @@ $font-size:     .9rem;
       padding: (3 * $padding) (8 * $padding)!important;
       height: auto!important;
       border: none!important;
+
+      color: $white!important;
+
       background-color: $blue!important;
       background: linear-gradient(180deg, rgba($purple, .88), rgba($purple-dark, .88))!important;
-      color: $white!important;
-      box-shadow: 0 8px 16px rgba(darken($purple-dark, 32%), .48)!important;
       border: none!important;
+
+      @include box-shadow-m(darken($purple-dark, 32%), !important);
       transition: all .256s ease;
       -webkit-backdrop-filter: saturate(180%) blur(20px);
 
@@ -881,6 +931,7 @@ $font-size:     .9rem;
       }
     }
   }
+
 
 
   //
@@ -1036,7 +1087,7 @@ $font-size:     .9rem;
         flex-flow: column nowrap;
         justify-content: center;
         align-items: center;
-        width: 100%;
+        width: auto;
         height: 100%;
         background-color: transparent;
         border-radius: 0;
@@ -1044,18 +1095,21 @@ $font-size:     .9rem;
 
         > * {
           display: block;
-          width: 100%;
-          max-height: 100%;
-          box-shadow: 0 20px 60px rgba($black, .16);
+          width: auto;
+          max-height: calc(100vh - (12 * #{$padding}));
+
+          @include box-shadow-xxl($black);
 
           > .modal-content {
             position: relative;
             width: inherit;
             max-height: inherit;
-            background-color: rgba($white, .88);
-            border-radius: (1.5 * $border-radius);
             overflow: hidden;
 
+            background-color: rgba($white, .88);
+
+            box-shadow: none;
+            border-radius: (1.5 * $border-radius);
             -webkit-backdrop-filter: saturate(180%) blur(20px);
           }
         }
@@ -1265,7 +1319,7 @@ $font-size:     .9rem;
     > div,
     > div:hover {
       overflow: initial;
-      padding: (4 * $padding) (4 * $padding) (4 * $padding) ($icon-size + (8 * $padding));
+      padding: (4 * $padding) (8 * $padding) (4 * $padding) ($icon-size + (8 * $padding));
 
       border: 1px solid darken($white, 8%);
       background-color: rgba(darken($white, 8%), .72)!important;
@@ -1285,7 +1339,7 @@ $font-size:     .9rem;
         right: 0;
         bottom: 0;
 
-        box-shadow: 0 4px 16px rgba($black, .24);
+        @include box-shadow-s($black);
         border-radius: $border-radius;
       }
     }
@@ -1312,7 +1366,7 @@ $font-size:     .9rem;
         border: 1px solid darken($white, 16%);
         background-color: rgba(darken($white, 16%), .32)!important;
 
-        box-shadow: 0 2px 4px rgba($black, .16);
+        @include box-shadow-s($black);
         border-radius: 100%;
       }
     }
@@ -1408,8 +1462,12 @@ $font-size:     .9rem;
     height: 100%;
     display: block;
 
-    .background:after {
-      display: none;
+    .background{
+        @include box-shadow-s($black);
+
+        &:after {
+          display: none;
+        }
     }
 
     .status-container {
@@ -1429,7 +1487,6 @@ $font-size:     .9rem;
         position: relative;
         z-index: 3;
         height: calc(100vh - #{$header-height});
-        box-shadow: 0 4px 24px rgba($black, .32);
       }
 
       &:last-child {
@@ -1475,14 +1532,16 @@ $font-size:     .9rem;
 
       .gridster-preview {
         border-radius: var(--base-size);
-        box-shadow: 0 8px 16px rgba($black, .32) inset;
         border: 1px solid rgba($black, .24) inset;
+
+        @include box-shadow-m($black, inset);
       }
 
       gridster-item {
         border-radius: var(--base-size);
-        box-shadow: 0 8px 16px rgba($black, .48);
         border-top: 1px solid rgba(lighten($white, 100%), .24);
+
+        @include box-shadow-m($black);
 
         .drag-handler {
           padding: (3 * $padding) (10 * $padding) (3 * $padding) (6 * $padding)!important;
@@ -1508,8 +1567,7 @@ $font-size:     .9rem;
         &#WeatherWidgetComponent,
         &#HomebridgeLogsWidgetComponent,
         &#ClockWidgetComponent,
-        &#UptimeWidgetComponent,
-        &#HapQrcodeWidgetComponent {
+        &#UptimeWidgetComponent {
           .drag-handler,
           .widget-control-button {
             color: $white!important;
@@ -1632,13 +1690,15 @@ $font-size:     .9rem;
         }
 
         &#HapQrcodeWidgetComponent {
-          $dark: $purple;
-          $light: $white;
-
-          background-color: lighten($dark, 16%);
-          background: linear-gradient(180deg, lighten($dark, 16%) 0%, lighten($dark, 8%) 100%);
+          $dark: $white;
+          $light: $black;
 
           color: $light;
+
+          background-color: rgba(lighten($dark, 16%), .92);
+          background: linear-gradient(180deg, rgba(lighten($dark, 16%), .92) 0%, rgba(lighten($dark, 8%), .92) 100%);
+
+          -webkit-backdrop-filter: saturate(180%) blur(20px);
 
           .grey-text {
             color: rgba($light, .64)!important;
@@ -1940,7 +2000,8 @@ $font-size:     .9rem;
       width: (12 * $padding);
       height: (12 * $padding);
       border-radius: 100%;
-      box-shadow: 0 4px 16px rgba($black, .48)!important;
+
+      @include box-shadow-s($black);
 
       i {
         text-shadow: 2px 2px 8px rgba(darken($green, 48%), .48);
@@ -2252,7 +2313,8 @@ $font-size:     .9rem;
 
     #accessory-dropdown-menu {
       margin-right: 0;
-      box-shadow: 0 8px 20px rgba(darken($green, 48%), .48)!important;
+
+      @include box-shadow-m(darken($green, 48%), !important);
 
       i {
         text-shadow: 2px 2px 8px rgba(darken($green, 48%), .48);
@@ -2278,11 +2340,17 @@ $font-size:     .9rem;
     background-color: transparent;
 
     border-radius: (2 * $border-radius)!important;
-    box-shadow: 0 4px 16px rgba($black, .16);
+    @include box-shadow-s($black);
 
     > div {
       position: relative;
       z-index: 1;
+      flex-direction: column-reverse!important;
+    }
+
+    svg {
+      margin-bottom: 0;
+      fill: lighten($black, 24%);
     }
 
     &:after {
@@ -2296,37 +2364,86 @@ $font-size:     .9rem;
       right: 0;
       bottom: 0;
 
-      background-color: rgba(darken($white, 24%), .68);
+      background-color: rgba(darken($white, 24%), .88);
 
       border-radius: (2 * $border-radius)!important;
       -webkit-backdrop-filter: saturate(180%) blur(20px);
     }
 
-    &.switch-on:after {
-      background-color: rgba($white, .96);
-    }
+    &.switch-on {
+      @include box-shadow-m($black);
 
-    .accessory-label {
-      line-height: 1.1rem;
-      font-size: $font-size;
-      font-weight: 500;
-      color: rgba($black, .8);
-      max-height: initial;
+      svg {
+        fill: $green;
+      }
 
-      &.grey-text {
-        margin-top: $padding;
-        font-weight: 400;
-        font-size: ($font-size - .1);
-        color: rgba($black, .24);
-        -webkit-line-clamp: 1;
+      &:after {
+        background-color: rgba($white, .96);
       }
     }
 
+    .accessory-label {
+      margin: 0 0 auto!important;
+      max-height: initial;
+
+      color: rgba($black, .8);
+      font-size: $font-size;
+      font-weight: 500;
+      line-height: 1.1rem;
+
+      &.red-text,
+      &.grey-text {
+        margin-bottom: $padding!important;
+
+        color: rgba($black, .24);
+        font-weight: 400;
+        font-size: ($font-size - .2);
+        line-height: 120%;
+        letter-spacing: .032rem;
+
+        span {
+          padding: 0;
+          margin: 0;
+
+          color: inherit;
+          font-size: inherit;
+          font-weight: inherit;
+          letter-spacing: inherit;
+          line-height: inherit;
+        }
+      }
+
+      &.red-text {
+        align-self: flex-start;
+        padding: (1/2 * $padding) $padding;
+
+        color: $white!important;
+        background-color: rgba($red, .88);
+
+        border-radius: $padding;
+      }
+    }
+
+    .accessory-icon {
+      margin-top: auto;
+    }
+
+    .accessory-svg {
+      transform-origon: 50%;
+      align-self: flex-start;
+    }
+
+    .accessory-img,
     .accessory-svg svg,
+    .batterylevel-circle,
     .temperature-circle {
+      padding: 0;
+      margin: 0;
       width: (9 * $padding);
       height: (9 * $padding);
       line-height: (9 * $padding);
+
+      font-size: (3 * $padding);
       font-weight: 500;
     }
   }
@@ -2357,32 +2474,89 @@ $font-size:     .9rem;
     }
   }
 
-  .lightbulb-mode-control,
-  .thermostat-mode-control {
-    .btn {
-      margin: 1px!important;
+  .btn-group-toggle,
+  .btn-group-vertical {
+    background-color: darken($white, 16%);
+    border: 1px solid darken($white, 24%);
+    border-radius: (1/2 * $border-radius);
 
-      color: $black!important;
+    .btn {
+      color: lighten($black, 16%)!important;
       font-size: $font-size!important;
+      border-radius: (1/2 * $border-radius)!important;
+      background-color: transparent!important;
+      border: 1px solid transparent;
 
       &.btn-primary {
-        background-color: $white!important;
+        background-color: transparent!important;
+        border: 1px solid transparent;
 
         &:hover,
         &:focus {
-          background-color: darken($white, 4%)!important;
+          background-color: transparent!important;
         }
 
         &.active {
-          color: $white!important;
-          background-color: $green!important;
+          background-color: $white!important;
+          border-color: darken($white, 8%);
+          color: $black!important;
+
+          @include box-shadow-s($black, !important);
         }
       }
     }
   }
 
-  .temperature-circle {
+  nouislider {
+    $size: (3 * $padding);
+
+    padding: 0 $size;
+    background-color: rgba(darken($white, 16%), .88);
+    border: 1px solid rgba(darken($white, 24%), .88);
+
+    border-radius: $size;
+
+    .noUi-target {
+      background-color: transparent;
+      border: none;
+      box-shadow: none;
+    }
+
+    .noUi-horizontal {
+      height: (2 * $size);
+
+      .noUi-handle {
+        background-color: $white;
+        border: 1px solid darken($white, 16%);
+
+        width: (2 * $size);
+        height: (2 * $size);
+
+        top: 0;
+        right: -$size;
+
+        box-shadow: none;
+        border-radius: $size;
+        @include box-shadow-s($black);
+
+        &:before,
+        &:after {
+          display: none;
+        }
+      }
+    }
   }
+
+  // Modification accesories status
+
+  .cooling {
+    background-color: $blue!important;
+  }
+
+  .heating {
+    background-color: $red!important;
+  }
+
 
   //
   // Modification user view
@@ -2543,7 +2717,7 @@ $font-size:     .9rem;
 
 
 //
-// New theme - Dark style
+// Neo theme - Dark style
 //
 
 @media (prefers-color-scheme: dark) {
@@ -2637,7 +2811,7 @@ $font-size:     .9rem;
 
       &:hover {
         background-color: lighten($white, 4%);
-        box-shadow: 0 4px 16px rgba($white, .32)!important;
+        @include box-shadow-s($white, !important);
       }
     }
 
@@ -2740,7 +2914,8 @@ $font-size:     .9rem;
     .dropdown-menu,
     .monaco-menu-container {
       border: 1px solid lighten($white, 16%);
-      box-shadow: 0 8px 16px rgba(darken($white, 24%), .32)!important;
+
+      @include box-shadow-m(darken($white, 24%), !important);
 
       &:after {
         background-color: rgba(lighten($white, 4%), .72);
@@ -2792,7 +2967,7 @@ $font-size:     .9rem;
           color: $white;
           background-color: lighten($white, 100%);
           border-color: rgba($blue, .64);
-          box-shadow: 0 0 0 0.2rem rgba($blue, .24);
+          box-shadow: 0 0 0 $padding rgba($blue, .24);
         }
       }
 
@@ -2822,7 +2997,8 @@ $font-size:     .9rem;
     .card {
       border: 1px solid lighten($white, 4%);
       background-color: $white;
-      box-shadow: 0 16px 24px rgba(darken($white, 24%), .32);
+
+      @include box-shadow-s(darken($white, 24%));
     }
 
 
@@ -2835,7 +3011,7 @@ $font-size:     .9rem;
         background: rgba($purple, .88);
         background: linear-gradient(180deg, rgba($purple, .88), rgba($purple-dark, .88));
         border: 1px solid rgba($purple-dark, .92);
-        box-shadow: 0 24px 64px rgba(darken($purple-dark, 8%), .64);
+        @include box-shadow-xl(darken($purple-dark, 8%));
       }
 
       .login-card {
@@ -2891,7 +3067,8 @@ $font-size:     .9rem;
         background-color: $blue!important;
         background: linear-gradient(180deg, rgba($purple, .88), rgba($purple-dark, .88))!important;
         color: $black!important;
-        box-shadow: 0 8px 16px rgba(darken($purple-dark, 32%), .48)!important;
+
+        @include box-shadow-m(darken($purple-dark, 32%), !important);
 
         &:disabled,
         &.disabled {
@@ -2943,7 +3120,7 @@ $font-size:     .9rem;
           background-color: transparent;
 
           > * {
-            box-shadow: 0 20px 60px rgba($white, .16);
+            @include box-shadow-xl($white);
 
             .modal-content {
               background-color: rgba(lighten($white, 12%), .88);
@@ -3045,7 +3222,7 @@ $font-size:     .9rem;
       > div,
       > div:hover {
         background-color: rgba(lighten($black, 4%), .72)!important;
-        box-shadow: 0 4px 8px rgba($white, .32);
+        @include box-shadow-s($white);
       }
 
       .toast-close-button {
@@ -3138,7 +3315,7 @@ $font-size:     .9rem;
 
       > div > .row {
         &.flex-column {
-          box-shadow: 0 4px 24px rgba($white, .32);
+          @include box-shadow-s($white);
         }
 
         &:last-child {
@@ -3158,14 +3335,16 @@ $font-size:     .9rem;
 
       gridster {
         .gridster-preview {
-          box-shadow: 0 8px 16px rgba($white, .32) inset;
           border: 1px solid rgba($black, .24) inset;
+
+          @include box-shadow-m($white, inset);
         }
 
         gridster-item {
           color: $black;
-          box-shadow: 0 8px 16px rgba($white, .48);
           border-top: 1px solid rgba(lighten($white, 100%), .24);
+
+          @include box-shadow-m($white, !important);
 
           .drag-handler {
             color: lighten($white, 48%);
@@ -3176,8 +3355,7 @@ $font-size:     .9rem;
           &#WeatherWidgetComponent,
           &#HomebridgeLogsWidgetComponent,
           &#ClockWidgetComponent,
-          &#UptimeWidgetComponent,
-          &#HapQrcodeWidgetComponent {
+          &#UptimeWidgetComponent {
             .drag-handler,
             .widget-control-button {
               color: $black!important;
@@ -3353,7 +3531,7 @@ $font-size:     .9rem;
       }
 
       .add-widget-button {
-        box-shadow: 0 4px 16px rgba($white, .48)!important;
+        @include box-shadow-s($white, !important);
 
         i {
           text-shadow: 2px 2px 8px rgba(darken($green, 48%), .48);
@@ -3478,7 +3656,7 @@ $font-size:     .9rem;
       }
 
       .dropdown-toggle {
-        box-shadow: 0 8px 36px rgba(darken($green, 48%), .64)!important;
+        @include box-shadow-m(darken($green, 48%), !important);
       }
     }
 
@@ -3492,7 +3670,8 @@ $font-size:     .9rem;
     .accessory-box {
       border: 1px solid lighten($white, 24%);
       background-color: transparent;
-      box-shadow: 0 4px 16px rgba($white, .16);
+
+      @include box-shadow-s($white);
 
       &:after {
         background-color: rgba(lighten($white, 16%), .68);
@@ -3528,7 +3707,7 @@ $font-size:     .9rem;
 
 
 //
-// New theme - Animations
+// Neo theme - Animations
 //
 
 
@@ -3585,7 +3764,7 @@ $font-size:     .9rem;
 
 @keyframes fade-backdrop {
   0% {
-    opacity: 0;
+    opacity: .0;
   }
 
   100% {
@@ -3595,7 +3774,7 @@ $font-size:     .9rem;
 
 
 //
-// New theme - Responsive style
+// Neo theme - Responsive style
 //
 
 
@@ -3646,4 +3825,4 @@ $font-size:     .9rem;
   }
 }
 
-/* === End New Theme CSS === */
+/* === End Neo Theme CSS === */

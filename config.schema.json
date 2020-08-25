@@ -141,15 +141,15 @@
             ]
           },
           {
-            "title": "New (Auto)",
-            "enum": [
-              "new"
-            ]
-          },
-          {
             "title": "Dark Mode",
             "enum": [
               "dark-mode"
+            ]
+          },
+          {
+            "title": "Neo (Auto)",
+            "enum": [
+              "neo"
             ]
           }
         ],
@@ -422,7 +422,7 @@
         "type": "object",
         "properties": {
           "debug": {
-            "title": " Enable / disable debug level logging for accessory control via the web UI",
+            "title": "Enable / disable debug level logging for accessory control via the web UI",
             "type": "boolean"
           },
           "instanceBlacklist": {
