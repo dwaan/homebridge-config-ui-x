@@ -3,7 +3,7 @@
   <div class="card card-body ml-2 mr-2 login-card">
 
     <form novalidate (ngSubmit)="onSubmit(form)" [formGroup]="form">
-      <img class="logo" src="/assets/homebridge-logo.svg" />
+      <img class="logo" src="/assets/homebridge-logo.svg" width="0" height="0" />
 
       <div *ngIf="!twoFactorCodeRequired">
 
