@@ -48,6 +48,7 @@ export class LinuxInstaller {
       await this.createRunPartsPath();
       await this.reloadSystemd();
       await this.enableService();
+      await this.createFirewallRules();
       await this.start();
       await this.hbService.printPostInstallInstructions();
     } catch (e) {
@@ -128,15 +129,28 @@ export class LinuxInstaller {
   /**
    * Rebuilds the Node.js modules for Homebridge Config UI X
    */
-  public async rebuild() {
+  public async rebuild(all: boolean = false) {
     try {
       this.checkForRoot();
+      const npmGlobalPath = child_process.execSync('/bin/echo -n "$(npm --no-update-notifier -g prefix)/lib/node_modules"').toString('utf8');
       const targetNodeVersion = child_process.execSync('node -v').toString('utf8').trim();
 
       child_process.execSync('npm rebuild --unsafe-perm node-pty-prebuilt-multiarch', {
         cwd: process.env.UIX_BASE_PATH,
         stdio: 'inherit',
       });
+
+      if (all === true) {
+        // rebuild all modules
+        try {
+          child_process.execSync('npm rebuild --unsafe-perm', {
+            cwd: npmGlobalPath,
+            stdio: 'inherit',
+          });
+        } catch (e) {
+          this.hbService.logger('Could not rebuild all modules - check Homebridge logs.', 'warn');
+        }
+      }
 
       this.hbService.logger(`Rebuilt modules in ${process.env.UIX_BASE_PATH} for Node.js ${targetNodeVersion}.`, 'succeed');
     } catch (e) {
@@ -204,7 +218,7 @@ export class LinuxInstaller {
     // rebuild node modules if required
     if (job.rebuild) {
       this.hbService.logger(`Rebuilding for Node.js ${job.target}...`);
-      await this.rebuild();
+      await this.rebuild(true);
     }
 
     // restart
@@ -353,7 +367,7 @@ export class LinuxInstaller {
   private checkForRoot() {
     if (process.getuid() !== 0) {
       this.hbService.logger('ERROR: This command must be executed using sudo on Linux', 'fail');
-      this.hbService.logger(`EXAMPLE: sudo hb-service ${this.hbService.action} --user ${this.hbService.asUser || 'your-user'}`, 'fail');
+      this.hbService.logger(`EXAMPLE: sudo hb-service ${this.hbService.action}`, 'fail');
       process.exit(1);
     }
     if (this.hbService.action === 'install' && !this.hbService.asUser) {
@@ -373,6 +387,7 @@ export class LinuxInstaller {
     } catch (e) {
       // if not create the user
       child_process.execSync(`useradd -m --system ${this.hbService.asUser}`);
+      this.hbService.logger(`Created service user: ${this.hbService.asUser}`, 'info');
     }
 
     try {
@@ -430,6 +445,85 @@ export class LinuxInstaller {
       } catch (e) {
         this.hbService.logger(`WARNING: Failed to set permissions`, 'warn');
       }
+    }
+  }
+
+
+  /**
+   * Opens the port in the firewall if required
+   */
+  private async createFirewallRules() {
+    // check ufw is present on the system (debian based linux)
+    if (await fs.pathExists('/usr/sbin/ufw')) {
+      return await this.createUfwRules();
+    }
+
+    // check firewall-cmd is present on the system (enterprise linux)
+    if (await fs.pathExists('/usr/bin/firewall-cmd')) {
+      return await this.createFirewallCmdRules();
+    }
+  }
+
+  /**
+   * Use ufw to create firewall rules
+   * ufw is used on ubuntu based systems
+   */
+  private async createUfwRules() {
+    try {
+      // check the firewall is active before doing anything
+      const status = child_process.execSync('/bin/echo -n "$(ufw status)" 2> /dev/null').toString('utf8');
+      if (!status.includes('Status: active')) {
+        return;
+      }
+
+      // load the current config to get the Homebridge port
+      const currentConfig = await fs.readJson(process.env.UIX_CONFIG_PATH);
+      const bridgePort = currentConfig.bridge?.port;
+
+      // add ui rule
+      child_process.execSync(`ufw allow ${this.hbService.uiPort}/tcp 2> /dev/null`);
+      this.hbService.logger(`Added firewall rule to allow inbound traffic on port ${this.hbService.uiPort}/tcp`, 'info');
+
+      // add bridge rule
+      if (bridgePort) {
+        child_process.execSync(`ufw allow ${bridgePort}/tcp 2> /dev/null`);
+        this.hbService.logger(`Added firewall rule to allow inbound traffic on port ${bridgePort}/tcp`, 'info');
+      }
+    } catch (e) {
+      this.hbService.logger(`WARNING: failed to allow ports through firewall.`, 'warn');
+    }
+  }
+
+  /**
+   * User firewall-cmd to create firewall rules
+   * firewall-cmd is used on enterprise / centos / fedora linux
+   */
+  private async createFirewallCmdRules() {
+    try {
+      // check the firewall is running before doing anything
+      const status = child_process.execSync('/bin/echo -n "$(firewall-cmd --state)" 2> /dev/null').toString('utf8');
+      if (status !== 'running') {
+        return;
+      }
+      // load the current config to get the Homebridge port
+      const currentConfig = await fs.readJson(process.env.UIX_CONFIG_PATH);
+      const bridgePort = currentConfig.bridge?.port;
+
+      // add ui rule
+      child_process.execSync(`firewall-cmd --permanent --add-port=${this.hbService.uiPort}/tcp 2> /dev/null`);
+      this.hbService.logger(`Added firewall rule to allow inbound traffic on port ${this.hbService.uiPort}/tcp`, 'info');
+
+      // add bridge rule
+      if (bridgePort) {
+        child_process.execSync(`firewall-cmd --permanent --add-port=${bridgePort}/tcp 2> /dev/null`);
+        this.hbService.logger(`Added firewall rule to allow inbound traffic on port ${bridgePort}/tcp`, 'info');
+      }
+
+      // reload the firewall
+      child_process.execSync(`firewall-cmd --reload 2> /dev/null`);
+      this.hbService.logger(`Firewall reloaded`, 'info');
+    } catch (e) {
+      this.hbService.logger(`WARNING: failed to allow ports through firewall.`, 'warn');
     }
   }
 

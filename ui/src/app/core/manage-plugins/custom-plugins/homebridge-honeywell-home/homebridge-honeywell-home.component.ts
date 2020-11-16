@@ -2,8 +2,10 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
-import { ApiService } from '../../../../core/api.service';
-import { AuthService } from '../../../../core/auth/auth.service';
+
+import { ApiService } from '@/app/core/api.service';
+import { AuthService } from '@/app/core/auth/auth.service';
+import { NotificationService } from '@/app/core/notification.service';
 
 @Component({
   selector: 'app-homebridge-honeywell-home',
@@ -16,7 +18,7 @@ export class HomebridgeHoneywellHomeComponent implements OnInit, OnDestroy {
   private popup;
   private originCheckInterval;
   public justLinked = false;
-  public pluginConfig;
+  public honeywellConfig: Record<string, any>;
 
   public jsonFormOptions = {
     addSubmit: false,
@@ -25,15 +27,16 @@ export class HomebridgeHoneywellHomeComponent implements OnInit, OnDestroy {
     setSchemaDefaults: true,
   };
 
-  @Input() public pluginName;
+  @Input() public plugin;
   @Input() public schema;
-  @Input() homebridgeConfig;
+  @Input() pluginConfig: Record<string, any>[];
 
   constructor(
     public activeModal: NgbActiveModal,
     private translate: TranslateService,
     private $api: ApiService,
     public $auth: AuthService,
+    private $notification: NotificationService,
     private $toastr: ToastrService,
   ) {
     // listen for sign in events from the link account popup
@@ -41,22 +44,11 @@ export class HomebridgeHoneywellHomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (!this.homebridgeConfig.platforms) {
-      this.homebridgeConfig.platforms = [];
+    if (!this.pluginConfig.length) {
+      this.pluginConfig.push({ platform: this.schema.pluginAlias });
     }
 
-    this.pluginConfig = this.homebridgeConfig.platforms.find(x => x.platform === this.schema.pluginAlias);
-
-    if (!this.pluginConfig) {
-      this.pluginConfig = {
-        platform: this.schema.pluginAlias,
-        name: 'HoneywellHome',
-        options: {
-          ttl: 60,
-          verbose: false,
-        },
-      };
-    }
+    this.honeywellConfig = this.pluginConfig[0];
   }
 
   windowMessageListener = (e) => {
@@ -79,7 +71,7 @@ export class HomebridgeHoneywellHomeComponent implements OnInit, OnDestroy {
     const y = window.top.outerHeight / 2 + window.top.screenY - (h / 2);
     const x = window.top.outerWidth / 2 + window.top.screenX - (w / 2);
 
-    const urlToOpen = this.linkUrl + `?consumerKey=${encodeURIComponent(this.pluginConfig.consumerKey)}&consumerSecret=${encodeURIComponent(this.pluginConfig.consumerSecret)}`;
+    const urlToOpen = this.linkUrl + `?consumerKey=${encodeURIComponent(this.honeywellConfig.consumerKey)}&consumerSecret=${encodeURIComponent(this.honeywellConfig.consumerSecret)}`;
 
     this.popup = window.open(
       urlToOpen, 'oznu-google-smart-home-auth',
@@ -94,13 +86,11 @@ export class HomebridgeHoneywellHomeComponent implements OnInit, OnDestroy {
   }
 
   unlinkAccount() {
-    this.pluginConfig = {
+    this.honeywellConfig = {
       platform: this.schema.pluginAlias,
     };
 
-    const existingConfigIndex = this.homebridgeConfig.platforms.findIndex(x => x.platform === this.schema.pluginAlias);
-    this.homebridgeConfig.platforms.splice(existingConfigIndex, 1);
-
+    this.pluginConfig.splice(0, this.pluginConfig.length);
     this.saveConfig();
   }
 
@@ -110,18 +100,17 @@ export class HomebridgeHoneywellHomeComponent implements OnInit, OnDestroy {
       this.popup.close();
     }
 
-    this.pluginConfig.credentials = credentials;
+    this.honeywellConfig.credentials = credentials;
 
-    const existingConfig = this.homebridgeConfig.platforms.find(x => x.platform === this.schema.pluginAlias);
-    if (!existingConfig) {
-      this.homebridgeConfig.platforms.push(this.pluginConfig);
+    if (!this.pluginConfig.length) {
+      this.pluginConfig.push(this.honeywellConfig);
     }
 
     this.saveConfig();
   }
 
   saveConfig() {
-    return this.$api.post('/config-editor', this.homebridgeConfig).toPromise()
+    return this.$api.post(`/config-editor/plugin/${encodeURIComponent(this.plugin.name)}`, this.pluginConfig).toPromise()
       .then((result) => {
         this.justLinked = true;
         this.$toastr.success(
@@ -135,12 +124,12 @@ export class HomebridgeHoneywellHomeComponent implements OnInit, OnDestroy {
   }
 
   async saveAndClose() {
-    this.pluginConfig.platform = this.schema.pluginAlias;
-    const existingConfigIndex = this.homebridgeConfig.platforms.findIndex(x => x.platform === this.schema.pluginAlias);
-    this.homebridgeConfig.platforms[existingConfigIndex] = this.pluginConfig;
+    this.honeywellConfig.platform = this.schema.pluginAlias;
+    this.pluginConfig[0] = this.honeywellConfig;
 
     await this.saveConfig();
     this.activeModal.close();
+    this.$notification.configUpdated.next();
   }
 
   close() {

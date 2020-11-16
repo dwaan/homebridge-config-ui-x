@@ -1,29 +1,43 @@
 import * as os from 'os';
 import * as color from 'bash-color';
 import * as semver from 'semver';
-import * as pty from 'node-pty-prebuilt-multiarch';
 import * as child_process from 'child_process';
 import * as fs from 'fs-extra';
+import { EventEmitter } from 'events';
 import { Injectable } from '@nestjs/common';
 import { Tail } from 'tail';
+
 import { ConfigService } from '../../core/config/config.service';
+import { NodePtyService } from '../../core/node-pty/node-pty.service';
+
+export type LogTermSize = { cols: number, rows: number };
 
 @Injectable()
 export class LogService {
-  private command;
+  private command: string[];
   private useNative = false;
   private ending = false;
   private nativeTail: Tail;
 
   constructor(
     private configService: ConfigService,
+    private nodePtyService: NodePtyService,
   ) {
+    this.setLogMethod();
+  }
+
+  /**
+   * Set the log method
+   */
+  public setLogMethod() {
+    this.useNative = false;
     if (typeof this.configService.ui.log !== 'object') {
       this.logNotConfigured();
     } else if (this.configService.ui.log.method === 'file' && this.configService.ui.log.path) {
       this.logFromFile();
     } else if (this.configService.ui.log.method === 'native' && this.configService.ui.log.path) {
       this.useNative = true;
+      this.command = undefined;
     } else if (this.configService.ui.log.method === 'systemd') {
       this.logFromSystemd();
     } else if (this.configService.ui.log.method === 'custom' && this.configService.ui.log.command) {
@@ -37,7 +51,7 @@ export class LogService {
    * Socket handler
    * @param client
    */
-  public connect(client, size) {
+  public connect(client: EventEmitter, size: LogTermSize) {
     this.ending = false;
 
     if (!semver.satisfies(process.version, `>=${this.configService.minimumNodeVersion}`)) {
@@ -63,11 +77,11 @@ export class LogService {
    * Connect pty
    * @param client
    */
-  private tailLog(client, size) {
+  private tailLog(client: EventEmitter, size: LogTermSize) {
     const command = [...this.command];
 
     // spawn the process that will output the logs
-    const term = pty.spawn(command.shift(), command, {
+    const term = this.nodePtyService.spawn(command.shift(), command, {
       name: 'xterm-color',
       cols: size.cols,
       rows: size.rows,
@@ -95,7 +109,7 @@ export class LogService {
     });
 
     // handle resize events
-    client.on('resize', (resize) => {
+    client.on('resize', (resize: { rows: number, cols: number }) => {
       try {
         term.resize(resize.cols, resize.rows);
       } catch (e) { }
@@ -126,7 +140,7 @@ export class LogService {
    * Construct the logs from file command
    */
   private logFromFile() {
-    let command;
+    let command: string[];
     if (os.platform() === 'win32') {
       // windows - use powershell to tail log
       command = ['powershell.exe', '-command', `Get-Content -Path '${this.configService.ui.log.path}' -Wait -Tail 200`];
@@ -160,7 +174,7 @@ export class LogService {
   /**
    * Logs from a file without spawning a child_process
    */
-  private async tailLogFromFileNative(client) {
+  private async tailLogFromFileNative(client: EventEmitter) {
     if (!fs.existsSync(this.configService.ui.log.path)) {
       client.emit('stdout', '\n\r');
       client.emit('stdout', color.red(`No log file exists at path: ${this.configService.ui.log.path}\n\r`));

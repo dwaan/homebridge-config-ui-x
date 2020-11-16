@@ -25,7 +25,22 @@
         text-transform: uppercase;
 
         &:hover {
-          color: $primary-dark;
+          color: $primary !important;
+        }
+      }
+    }
+
+    .nav-tabs {
+      border-bottom: 1px solid $primary;
+      .nav-link {
+        &.active {
+          color: #ffffff;
+          background-color: $primary;
+          border-color: $primary;
+        }
+        &:hover,
+        &:focus {
+          border-color: $primary !important;
         }
       }
     }
@@ -67,6 +82,16 @@
       }
       .spinner_inner {
         stroke: $primary;
+      }
+    }
+
+    .uix-highlight-icon {
+      animation: uix-glow-icon 1s ease-in-out infinite alternate;
+    }
+
+    @keyframes uix-glow-icon {
+      from {
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff;
       }
     }
   }

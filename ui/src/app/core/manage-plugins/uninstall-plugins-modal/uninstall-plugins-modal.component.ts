@@ -12,11 +12,14 @@ import { ManagePluginsModalComponent } from '../manage-plugins-modal/manage-plug
   styleUrls: ['./uninstall-plugins-modal.component.scss'],
 })
 export class UninstallPluginsModalComponent implements OnInit {
-  @Input() pluginName;
+  @Input() plugin;
   @Input() action;
-  @Input() settingsSchema;
 
+  public loading = true;
   public removeConfig = false;
+
+  public pluginType: 'platform' | 'accessory';
+  public pluginAlias: string;
 
   constructor(
     private modalService: NgbModal,
@@ -26,9 +29,13 @@ export class UninstallPluginsModalComponent implements OnInit {
     private $api: ApiService,
   ) { }
 
-  ngOnInit() {
-    if (this.settingsSchema) {
-      this.removeConfig = true;
+  async ngOnInit() {
+    try {
+      const schema = await this.getAlias();
+      this.pluginType = schema.pluginType;
+      this.pluginAlias = schema.pluginAlias;
+    } finally {
+      this.loading = false;
     }
   }
 
@@ -49,40 +56,15 @@ export class UninstallPluginsModalComponent implements OnInit {
       backdrop: 'static',
     });
     ref.componentInstance.action = 'Uninstall';
-    ref.componentInstance.pluginName = this.pluginName;
+    ref.componentInstance.pluginName = this.plugin.name;
+  }
+
+  async getAlias() {
+    return await this.$api.get(`/plugins/alias/${encodeURIComponent(this.plugin.name)}`).toPromise();
   }
 
   async removePluginConfig() {
-    const configSchema = await this.$api.get(`/plugins/config-schema/${encodeURIComponent(this.pluginName)}`).toPromise();
-    const homebridgeConfig = await this.$api.get('/config-editor').toPromise();
-
-    if (!Array.isArray(homebridgeConfig.platforms)) {
-      homebridgeConfig.platforms = [];
-    }
-
-    if (!Array.isArray(homebridgeConfig.accessories)) {
-      homebridgeConfig.accessories = [];
-    }
-
-    if (configSchema.pluginType === 'platform') {
-      homebridgeConfig.platforms = homebridgeConfig.platforms.filter((platform) => {
-        return !(
-          platform.platform === configSchema.pluginAlias ||
-          platform.platform === this.pluginName + '.' + configSchema.pluginAlias
-        );
-      });
-    }
-
-    if (configSchema.pluginType === 'accessory') {
-      homebridgeConfig.accessories = homebridgeConfig.accessories.filter((accessory) => {
-        return !(
-          accessory.accessory === configSchema.pluginAlias ||
-          accessory.accessory === this.pluginName + '.' + configSchema.pluginAlias
-        );
-      });
-    }
-
-    await this.$api.post('/config-editor', homebridgeConfig).toPromise();
+    await this.$api.post(`/config-editor/plugin/${encodeURIComponent(this.plugin.name)}`, []).toPromise();
 
     this.$toastr.success(
       this.translate.instant('plugins.settings.toast_plugin_config_saved'),

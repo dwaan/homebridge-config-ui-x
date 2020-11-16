@@ -11,6 +11,7 @@ import { CoreModule } from '../core.module';
 import { AccessoriesService } from './accessories.service';
 
 import { SwitchComponent } from './types/switch/switch.component';
+import { StatelessprogrammableswitchComponent } from './types/statelessprogrammableswitch/statelessprogrammableswitch.component';
 import { ThermostatComponent } from './types/thermostat/thermostat.component';
 import { ThermostatManageComponent } from './types/thermostat/thermostat.manage.component';
 import { OutletComponent } from './types/outlet/outlet.component';
@@ -31,6 +32,10 @@ import { HumiditysensorComponent } from './types/humiditysensor/humiditysensor.c
 import { AirqualitysensorComponent } from './types/airqualitysensor/airqualitysensor.component';
 import { WindowcoveringComponent } from './types/windowcovering/windowcovering.component';
 import { WindowcoveringManageComponent } from './types/windowcovering/windowcovering.manage.component';
+import { WindowComponent } from './types/window/window.component';
+import { WindowManageComponent } from './types/window/window.manage.component';
+import { DoorComponent } from './types/door/door.component';
+import { DoorManageComponent } from './types/door/door.manage.component';
 import { TelevisionComponent } from './types/television/television.component';
 import { ContactsensorComponent } from './types/contactsensor/contactsensor.component';
 import { BatteryserviceComponent } from './types/batteryservice/batteryservice.component';
@@ -57,6 +62,8 @@ import { InfoModalComponent } from './info-modal/info-modal.component';
     FanManageComponent,
     Fanv2ManageComponent,
     WindowcoveringManageComponent,
+    WindowManageComponent,
+    DoorManageComponent,
     SpeakerManageComponent,
     SecuritysystemManageComponent,
     ValveManageComponent,
@@ -66,6 +73,7 @@ import { InfoModalComponent } from './info-modal/info-modal.component';
   declarations: [
     InfoModalComponent,
     SwitchComponent,
+    StatelessprogrammableswitchComponent,
     ThermostatComponent,
     ThermostatManageComponent,
     OutletComponent,
@@ -86,6 +94,10 @@ import { InfoModalComponent } from './info-modal/info-modal.component';
     AirqualitysensorComponent,
     WindowcoveringComponent,
     WindowcoveringManageComponent,
+    WindowComponent,
+    WindowManageComponent,
+    DoorComponent,
+    DoorManageComponent,
     TelevisionComponent,
     ContactsensorComponent,
     BatteryserviceComponent,
@@ -115,6 +127,7 @@ import { InfoModalComponent } from './info-modal/info-modal.component';
   ],
   exports: [
     SwitchComponent,
+    StatelessprogrammableswitchComponent,
     ThermostatComponent,
     ThermostatManageComponent,
     OutletComponent,
@@ -135,6 +148,10 @@ import { InfoModalComponent } from './info-modal/info-modal.component';
     AirqualitysensorComponent,
     WindowcoveringComponent,
     WindowcoveringManageComponent,
+    WindowComponent,
+    WindowManageComponent,
+    DoorComponent,
+    DoorManageComponent,
     TelevisionComponent,
     ContactsensorComponent,
     BatteryserviceComponent,

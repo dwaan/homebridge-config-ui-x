@@ -23,6 +23,11 @@
                 "glob": "**/*",
                 "input": "node_modules/ngx-monaco-editor/assets/monaco",
                 "output": "./assets/monaco/"
+              },
+              {
+                "glob": "ui.js*",
+                "input": "node_modules/@homebridge/plugin-ui-utils/dist",
+                "output": "./assets/plugin-ui-utils/"
               }
             ],
             "styles": [
@@ -47,6 +52,7 @@
               "nouislider",
               "chart.js",
               "inline-svg",
+              "ng-inline-svg",
               "semver",
               "ajv"
             ]

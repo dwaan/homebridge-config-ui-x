@@ -3,6 +3,7 @@ import * as fs from 'fs-extra';
 import { ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { FastifyAdapter, NestFastifyApplication, } from '@nestjs/platform-fastify';
+
 import { AuthModule } from '../../src/core/auth/auth.module';
 import { ServerModule } from '../../src/modules/server/server.module';
 import { ServerService } from '../../src/modules/server/server.service';
@@ -104,6 +105,40 @@ describe('ServerController (e2e)', () => {
 
     expect(res.statusCode).toEqual(200);
     expect(res.headers['content-type']).toEqual('image/svg+xml');
+  });
+
+  it('GET /server/pairing', async () => {
+    const res = await app.inject({
+      method: 'GET',
+      path: '/server/pairing',
+      headers: {
+        authorization,
+      }
+    });
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.json()).toEqual({
+      displayName: 'Homebridge Test',
+      isPaired: false,
+      pincode: '874-99-441',
+      setupCode: 'X-HM://0024X0Z3L1FAP',
+    });
+  });
+
+  it('GET /server/pairing (not ready)', async () => {
+    // remove the persist folder
+    await fs.remove(persistPath);
+
+    const res = await app.inject({
+      method: 'GET',
+      path: '/server/pairing',
+      headers: {
+        authorization,
+      }
+    });
+
+    // should return 503 - Service Unavailable
+    expect(res.statusCode).toEqual(503);
   });
 
   it('PUT /server/reset-homebridge-accessory', async () => {
@@ -258,5 +293,85 @@ describe('ServerController (e2e)', () => {
 
   afterAll(async () => {
     await app.close();
+  });
+
+  it('GET /server/network-interfaces/system', async () => {
+    const res = await app.inject({
+      method: 'GET',
+      path: '/server/network-interfaces/system',
+      headers: {
+        authorization,
+      }
+    });
+
+    expect(res.statusCode).toEqual(200);
+    expect(Array.isArray(res.json())).toEqual(true);
+  });
+
+  it('GET /server/network-interfaces/bridge', async () => {
+    const res = await app.inject({
+      method: 'GET',
+      path: '/server/network-interfaces/bridge',
+      headers: {
+        authorization,
+      }
+    });
+
+    expect(res.statusCode).toEqual(200);
+    expect(Array.isArray(res.json())).toEqual(true);
+  });
+
+  it('PUT /server/network-interfaces/bridge', async () => {
+    const res = await app.inject({
+      method: 'PUT',
+      path: '/server/network-interfaces/bridge',
+      headers: {
+        authorization,
+      },
+      payload: {
+        adapters: ['en0']
+      }
+    });
+
+    expect(res.statusCode).toEqual(200);
+
+    // check the value was saved
+    const config = await fs.readJson(configService.configPath);
+    expect(config.bridge.bind).toEqual(['en0']);
+  });
+
+  it('PUT /server/network-interfaces/bridge (no adapters)', async () => {
+    const res = await app.inject({
+      method: 'PUT',
+      path: '/server/network-interfaces/bridge',
+      headers: {
+        authorization,
+      },
+      payload: {
+        adapters: []
+      }
+    });
+
+    expect(res.statusCode).toEqual(200);
+
+    // check the value was saved
+    const config = await fs.readJson(configService.configPath);
+    expect(config.bridge.bind).toBeUndefined();
+  });
+
+  it('PUT /server/network-interfaces/bridge (bad payload)', async () => {
+    const res = await app.inject({
+      method: 'PUT',
+      path: '/server/network-interfaces/bridge',
+      headers: {
+        authorization,
+      },
+      payload: {
+        adapters: 'en0'
+      }
+    });
+
+    expect(res.statusCode).toEqual(400);
+    expect(res.body).toContain('adapters must be an array');
   });
 });

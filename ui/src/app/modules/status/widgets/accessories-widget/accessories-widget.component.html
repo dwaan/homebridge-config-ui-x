@@ -34,6 +34,10 @@
         </app-airqualitysensor>
         <app-windowcovering *ngSwitchCase="'WindowCovering'" [service]="service">Window Covering
         </app-windowcovering>
+        <app-window *ngSwitchCase="'Window'" [service]="service">Window
+        </app-window>
+        <app-door *ngSwitchCase="'Door'" [service]="service">Door
+        </app-door>
         <app-television *ngSwitchCase="'Television'" [service]="service">Television
         </app-television>
         <app-securitysystem *ngSwitchCase="'SecuritySystem'" [service]="service">Security System
@@ -46,6 +50,8 @@
         </app-irrigationsystem>
         <app-heatercooler *ngSwitchCase="'HeaterCooler'" [service]="service">Heater Cooler
         </app-heatercooler>
+        <app-statelessprogrammableswitch *ngSwitchCase="'StatelessProgrammableSwitch'" [service]="service">Stateless Programmable Switch
+        </app-statelessprogrammableswitch>
         <app-unknown *ngSwitchDefault [service]="service">{{ service.humanType }}</app-unknown>
       </ng-container>
     </div>

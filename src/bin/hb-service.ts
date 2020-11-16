@@ -24,7 +24,7 @@ import { LinuxInstaller } from './platforms/linux';
 import { DarwinInstaller } from './platforms/darwin';
 
 export class HomebridgeServiceHelper {
-  public action: 'install' | 'uninstall' | 'start' | 'stop' | 'restart' | 'rebuild' | 'run' | 'logs' | 'update-node' | 'before-start';
+  public action: 'install' | 'uninstall' | 'start' | 'stop' | 'restart' | 'rebuild' | 'run' | 'logs' | 'update-node' | 'before-start' | 'status';
   public selfPath = __filename;
   public serviceName = 'Homebridge';
   public storagePath;
@@ -32,6 +32,7 @@ export class HomebridgeServiceHelper {
   public allowRunRoot = false;
   public asUser;
   private log: fs.WriteStream | NodeJS.WriteStream;
+  private homebridgeModulePath: string;
   private homebridgePackage: { version: string, bin: { homebridge: string } };
   private homebridgeBinary: string;
   private homebridge: child_process.ChildProcessWithoutNullStreams;
@@ -100,6 +101,7 @@ export class HomebridgeServiceHelper {
 
     switch (this.action) {
       case 'install': {
+        this.nvmCheck();
         this.logger(`Installing ${this.serviceName} Service`);
         this.installer.install();
         break;
@@ -124,7 +126,7 @@ export class HomebridgeServiceHelper {
       }
       case 'rebuild': {
         this.logger(`Rebuilding for Node.js ${process.version}...`);
-        this.installer.rebuild();
+        this.installer.rebuild(commander.args.includes('--all'));
         break;
       }
       case 'run': {
@@ -144,6 +146,10 @@ export class HomebridgeServiceHelper {
         process.exit(0);
         break;
       }
+      case 'status': {
+        this.checkStatus();
+        break;
+      }
       default: {
         commander.outputHelp();
 
@@ -154,10 +160,12 @@ export class HomebridgeServiceHelper {
         console.log('    start                            start the homebridge service');
         console.log('    stop                             stop the homebridge service');
         console.log('    restart                          restart the homebridge service');
-        console.log('    rebuild                          rebuild npm modules (use after updating Node.js)');
+        console.log('    rebuild                          rebuild ui');
+        console.log('    rebuild --all                    rebuild all npm modules (use after updating Node.js)');
         console.log('    run                              run homebridge daemon');
         console.log('    logs                             tails the homebridge service logs');
         console.log('    update-node [version]            update Node.js');
+        console.log('\nSee the wiki for help with hb-service: https://git.io/JTtHK \n');
 
         process.exit(1);
       }
@@ -460,6 +468,7 @@ export class HomebridgeServiceHelper {
     this.logger(`Homebridge Process Ended. Code: ${code}, Signal: ${signal}`);
 
     this.checkForStaleHomebridgeProcess();
+    this.refreshHomebridgePackage();
 
     setTimeout(() => {
       this.logger('Restarting Homebridge...');
@@ -503,32 +512,48 @@ export class HomebridgeServiceHelper {
    * Finds the homebridge binary
    */
   private async findHomebridgePath() {
-    let homebridgeModulePath;
-
     // check the folder directly above
     const nodeModules = path.resolve(process.env.UIX_BASE_PATH, '..');
     if (await fs.pathExists(path.resolve(nodeModules, 'homebridge', 'package.json'))) {
-      homebridgeModulePath = path.resolve(nodeModules, 'homebridge');
+      this.homebridgeModulePath = path.resolve(nodeModules, 'homebridge');
     }
 
     // check the global npm modules directory
-    if (!homebridgeModulePath) {
-      const globaModules = await this.getNpmGlobalModulesDirectory();
-      if (globaModules && await fs.pathExists(path.resolve(globaModules, 'homebridge'))) {
-        homebridgeModulePath = path.resolve(globaModules, 'homebridge');
+    if (!this.homebridgeModulePath) {
+      const globalModules = await this.getNpmGlobalModulesDirectory();
+      if (globalModules && await fs.pathExists(path.resolve(globalModules, 'homebridge'))) {
+        this.homebridgeModulePath = path.resolve(globalModules, 'homebridge');
       }
     }
 
-    if (homebridgeModulePath) {
+    if (this.homebridgeModulePath) {
       try {
-        this.homebridgePackage = await fs.readJson(path.join(homebridgeModulePath, 'package.json'));
-        return path.resolve(homebridgeModulePath, this.homebridgePackage.bin.homebridge);
+        await this.refreshHomebridgePackage();
+        return path.resolve(this.homebridgeModulePath, this.homebridgePackage.bin.homebridge);
       } catch (e) {
         console.log(e);
       }
     }
 
     return null;
+  }
+
+  /**
+   * Refresh the homebridge package.json
+   */
+  private async refreshHomebridgePackage() {
+    try {
+      if (await fs.pathExists(this.homebridgeModulePath)) {
+        this.homebridgePackage = await fs.readJson(path.join(this.homebridgeModulePath, 'package.json'));
+      } else {
+        this.logger(`Homebridge not longer found at ${this.homebridgeModulePath}`, 'fail');
+        this.homebridgeModulePath = undefined;
+        this.homebridgeBinary = await this.findHomebridgePath();
+        this.logger(`Found New Homebridge Path: ${this.homebridgeBinary}`);
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   /**
@@ -539,6 +564,22 @@ export class HomebridgeServiceHelper {
     if (parseInt(process.versions.modules, 10) < 64) {
       this.logger(`ERROR: Node.js v10.13.0 or greater is required. Current: ${process.version}.`, 'fail');
       process.exit(1);
+    }
+  }
+
+
+  /**
+   * Show a warning if the user is trying to install with NVM on Linux
+   */
+  private nvmCheck() {
+    if (process.execPath.includes('nvm') && os.platform() === 'linux') {
+      this.logger(
+        `WARNING: It looks like you are running Node.js via NVM (Node Version Manager).\n` +
+        `  Using hb-service with NVM may not work unless you have configured NVM for the\n` +
+        `  user this service will run as. See https://git.io/JUZ2g for instructions on how\n` +
+        `  to remove NVM, then follow the wiki instructions to install Node.js and Homebridge.`,
+        'warn'
+      );
     }
   }
 
@@ -1018,7 +1059,7 @@ export class HomebridgeServiceHelper {
     const currentLts = versionList.filter(x => x.lts)[0];
 
     if (requestedVersion) {
-      const wantedVersion = versionList.find(x => x.version === 'v' + requestedVersion);
+      const wantedVersion = versionList.find(x => x.version.startsWith('v' + requestedVersion));
       if (wantedVersion) {
         this.logger(`Installing Node.js ${wantedVersion.version} over ${process.version}...`, 'info');
         return this.installer.updateNodejs({
@@ -1098,6 +1139,26 @@ export class HomebridgeServiceHelper {
       spinner.succeed(`Installed Node.js ${targetVersion}`);
     } catch (e) {
       spinner.fail(e.message);
+      process.exit(1);
+    }
+  }
+
+  /**
+   * Check the current status of the Homebridge UI by calling it's API
+   */
+  private async checkStatus() {
+    this.logger(`Testing hb-service is running on port ${this.uiPort}...`);
+
+    try {
+      const res = await axios.get(`http://localhost:${this.uiPort}/api`);
+      if (res.data === 'Hello World!') {
+        this.logger('Homebridge UI Running', 'succeed');
+      } else {
+        this.logger('Unexpected Response', 'fail');
+        process.exit(1);
+      }
+    } catch (e) {
+      this.logger('Homebridge UI Not Running', 'fail');
       process.exit(1);
     }
   }

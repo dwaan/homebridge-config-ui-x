@@ -1,13 +1,14 @@
-import axios from 'axios';
 import * as os from 'os';
 import * as path from 'path';
 import * as fs from 'fs-extra';
 import * as si from 'systeminformation';
 import * as semver from 'semver';
 import * as NodeCache from 'node-cache';
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '../../core/config/config.service';
+import { Injectable, HttpService } from '@nestjs/common';
+
 import { Logger } from '../../core/logger/logger.service';
+import { ConfigService } from '../../core/config/config.service';
+import { PluginsService } from '../plugins/plugins.service';
 
 @Injectable()
 export class StatusService {
@@ -21,8 +22,10 @@ export class StatusService {
   private memoryInfo: si.Systeminformation.MemData;
 
   constructor(
+    private httpService: HttpService,
     private logger: Logger,
     private configService: ConfigService,
+    private pluginsService: PluginsService,
   ) {
 
     // systeminformation cpu data is not supported in FreeBSD Jail Shells
@@ -31,10 +34,14 @@ export class StatusService {
       this.getCpuTemp = this.getCpuTempAlt;
     }
 
-    setInterval(async () => {
-      this.getCpuLoadPoint();
-      this.getMemoryUsagePoint();
-    }, 10000);
+    if (this.configService.ui.disableServerMetricsMonitoring !== true) {
+      setInterval(async () => {
+        this.getCpuLoadPoint();
+        this.getMemoryUsagePoint();
+      }, 10000);
+    } else {
+      this.logger.warn('Server metrics monitoring disabled.');
+    }
   }
 
   /**
@@ -239,9 +246,9 @@ export class StatusService {
    */
   public async checkHomebridgeStatus() {
     try {
-      await axios.get(`http://localhost:${this.configService.homebridgeConfig.bridge.port}`, {
+      await this.httpService.get(`http://localhost:${this.configService.homebridgeConfig.bridge.port}`, {
         validateStatus: () => true
-      });
+      }).toPromise();
       this.homebridgeStatus = 'up';
     } catch (e) {
       this.homebridgeStatus = 'down';
@@ -306,6 +313,13 @@ export class StatusService {
   }
 
   /**
+   * Return the Homebridge package
+   */
+  public async getHomebridgeVersion() {
+    return this.pluginsService.getHomebridgePackage();
+  }
+
+  /**
    * Checks the current version of Node.js and compares to the latest LTS
    */
   public async getNodeJsVersionInfo() {
@@ -316,13 +330,13 @@ export class StatusService {
     }
 
     try {
-      const versionList = (await axios.get('https://nodejs.org/dist/index.json')).data;
+      const versionList = (await this.httpService.get('https://nodejs.org/dist/index.json').toPromise()).data;
       const currentLts = versionList.filter(x => x.lts)[0];
       const versionInformation = {
         currentVersion: process.version,
         latestVersion: currentLts.version,
         updateAvailable: semver.gt(currentLts.version, process.version),
-        showUpdateWarning: semver.lt(process.version, '10.17.0'),
+        showUpdateWarning: semver.lt(process.version, '12.13.0'),
         installPath: path.dirname(process.execPath),
       };
       this.statusCache.set('nodeJsVersion', versionInformation, 86400);

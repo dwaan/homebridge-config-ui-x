@@ -1,9 +1,11 @@
 export const environment = {
+  serverTarget: require('../../../package.json').version,
   production: true,
   socket: '',
   api: {
     base: '/api',
     socket: `${(window.location.protocol) === 'http:' ? 'ws://' : 'wss://'}${window.location.host}`,
+    origin: window.location.origin,
   },
   jwt: {
     tokenKey: 'access_token',

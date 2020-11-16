@@ -17,7 +17,7 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot): Promise<boolean> {
     // ensure app settings are loaded
     if (!this.$auth.settingsLoaded) {
-      await this.$auth.getAppSettings();
+      await this.$auth.onSettingsLoaded.toPromise();
     }
 
     if (this.$auth.isLoggedIn()) {

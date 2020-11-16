@@ -1,6 +1,6 @@
-import { Controller, UseGuards, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import { Controller, UseGuards, Get, Post, Body, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiBody, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiBody, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { ConfigEditorService } from './config-editor.service';
 import { AdminGuard } from '../../core/auth/guards/admin.guard';
 
@@ -29,6 +29,27 @@ export class ConfigEditorController {
   }
 
   @UseGuards(AdminGuard)
+  @ApiOperation({
+    summary: 'Return the config blocks for a specific plugin.',
+    description: 'An array of config blocks will be returned. An empty array will be returned if the plugin is not configured.',
+  })
+  @Get('/plugin/:pluginName')
+  getConfigForPlugin(@Param('pluginName') pluginName: string) {
+    return this.configEditorService.getConfigForPlugin(pluginName);
+  }
+
+  @UseGuards(AdminGuard)
+  @ApiOperation({
+    summary: 'Replace the config for a specific plugin.',
+    description: 'An array of all config blocks for the plugin must be provided, missing blocks will be removed. Sending an empty array will remove all plugin config.'
+  })
+  @Post('/plugin/:pluginName')
+  @ApiBody({ description: 'Array of plugin config blocks', type: 'json', isArray: true })
+  updateConfigForPlugin(@Param('pluginName') pluginName: string, @Body() body) {
+    return this.configEditorService.updateConfigForPlugin(pluginName, body);
+  }
+
+  @UseGuards(AdminGuard)
   @ApiOperation({ summary: 'List the available Homebridge config.json backups.' })
   @Get('/backups')
   listConfigBackups() {
@@ -39,8 +60,8 @@ export class ConfigEditorController {
   @ApiOperation({ summary: 'Return the Homebridge config.json file for the given backup ID.' })
   @ApiParam({ name: 'backupId', type: 'number' })
   @Get('/backups/:backupId(\\d+)')
-  getBackup(@Param() param) {
-    return this.configEditorService.getConfigBackup(param.backupId);
+  getBackup(@Param('backupId', ParseIntPipe) backupId) {
+    return this.configEditorService.getConfigBackup(backupId);
   }
 
   @UseGuards(AdminGuard)

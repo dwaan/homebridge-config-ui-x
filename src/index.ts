@@ -31,8 +31,8 @@ class HomebridgeConfigUi {
       .option('-T, --no-timestamp', '', () => process.env.UIX_LOG_NO_TIMESTAMPS = '1')
       .parse(process.argv);
 
-    if (!semver.satisfies(process.version, '>=8.15.1')) {
-      const msg = `Node.js v8.15.1 higher is required. You may experience issues running this plugin running on ${process.version}.`;
+    if (!semver.satisfies(process.version, '>=10.17.0')) {
+      const msg = `Node.js v10.17.0 higher is required. You may experience issues running this plugin running on ${process.version}.`;
       log.error(msg);
       log.warn(msg);
     }
@@ -42,6 +42,9 @@ class HomebridgeConfigUi {
       this.serviceMode();
     } else if (config.standalone || process.env.UIX_SERVICE_MODE === '1' ||
       (process.env.HOMEBRIDGE_CONFIG_UI === '1' && semver.satisfies(process.env.CONFIG_UI_VERSION, '>=3.5.5', { includePrerelease: true }))) {
+      this.log.warn(`*********** Homebridge Standalone Mode Is Depreciated **********`);
+      this.log.warn(`* Please swap to "service mode" using the hb-service command.  *`);
+      this.log.warn(`* See https://git.io/JUvQr for instructions on how to migrate. *`);
       this.log(`Running in Standalone Mode.`);
     } else if (config.noFork) {
       this.noFork();

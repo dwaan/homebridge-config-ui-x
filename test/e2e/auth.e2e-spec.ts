@@ -3,6 +3,7 @@ import * as fs from 'fs-extra';
 import { ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { FastifyAdapter, NestFastifyApplication, } from '@nestjs/platform-fastify';
+
 import { AuthModule } from '../../src/core/auth/auth.module';
 import { ConfigService } from '../../src/core/config/config.service';
 
@@ -81,6 +82,34 @@ describe('AuthController (e2e)', () => {
     });
 
     expect(res.statusCode).toEqual(403);
+    expect(res.json()).not.toHaveProperty('access_token');
+  });
+
+  it('POST /auth/login (missing password)', async () => {
+    const res = await app.inject({
+      method: 'POST',
+      path: '/auth/login',
+      payload: {
+        username: 'admin'
+      }
+    });
+
+    expect(res.statusCode).toEqual(400);
+    expect(res.body).toContain('password should not be null or undefined');
+    expect(res.json()).not.toHaveProperty('access_token');
+  });
+
+  it('POST /auth/login (missing username)', async () => {
+    const res = await app.inject({
+      method: 'POST',
+      path: '/auth/login',
+      payload: {
+        password: 'admin'
+      }
+    });
+
+    expect(res.statusCode).toEqual(400);
+    expect(res.body).toContain('username should not be null or undefined');
     expect(res.json()).not.toHaveProperty('access_token');
   });
 

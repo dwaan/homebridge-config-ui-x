@@ -1,5 +1,6 @@
 export interface HomebridgePlugin {
   name: string;
+  private: boolean;
   displayName?: string;
   description?: string;
   verifiedPlugin?: boolean;
@@ -21,6 +22,11 @@ export interface HomebridgePlugin {
     node?: string;
   };
   funding?: NpmFunding;
+}
+
+export interface HomebridgePluginVersions {
+  tags: Record<string, string>,
+  versions: Array<string>,
 }
 
 export interface IPackageJson {
@@ -127,3 +133,15 @@ export interface INpmSearchResults {
 }
 
 export type NpmFunding = { type: string, url: string } | string | Array<{ type: string, url: string } | string>;
+
+export type HomebridgePluginUiMetadata = {
+  devServer: null | string;
+  publicPath: string;
+  serverPath: string;
+  plugin: HomebridgePlugin;
+}
+
+export type PluginAlias = {
+  pluginAlias: null | string;
+  pluginType: null | 'platform' | 'accessory';
+}

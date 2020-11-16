@@ -100,7 +100,7 @@ async function bootstrap() {
 
   // setup swagger api doc generator
   const options = new DocumentBuilder()
-    .setTitle('Homebridge Config UI X API Reference')
+    .setTitle('Homebridge UI API Reference')
     .setVersion(configService.package.version)
     .addBearerAuth({
       type: 'oauth2',
@@ -111,7 +111,6 @@ async function bootstrap() {
         }
       }
     })
-    .setBasePath('/api')
     .build();
 
   const document = SwaggerModule.createDocument(app, options);

@@ -12,9 +12,10 @@ export interface HomebridgeConfig {
     pin: string;
     name: string;
     port: number;
+    bind?: string | string[];
   };
-  platforms: any[];
-  accessories: any[];
+  platforms: Record<string, any>[];
+  accessories: Record<string, any>[];
   plugins?: string[];
 }
 
@@ -29,11 +30,13 @@ export class ConfigService {
   public secretPath = path.resolve(this.storagePath, '.uix-secrets');
   public authPath = path.resolve(this.storagePath, 'auth.json');
   public accessoryLayoutPath = path.resolve(this.storagePath, 'accessories', 'uiAccessoriesLayout.json');
+  public configBackupPath = path.resolve(this.storagePath, 'backups/config-backups');
+  public instanceBackupPath = path.resolve(this.storagePath, 'backups/instance-backups');
   public homebridgeInsecureMode = Boolean(process.env.UIX_INSECURE_MODE === '1');
   public homebridgeNoTimestamps = Boolean(process.env.UIX_LOG_NO_TIMESTAMPS === '1');
 
   // server env
-  public minimumNodeVersion = '8.15.1';
+  public minimumNodeVersion = '10.17.0';
   public serviceMode = (process.env.UIX_SERVICE_MODE === '1');
   public runningInDocker = Boolean(process.env.HOMEBRIDGE_CONFIG_UI === '1');
   public runningInLinux = (!this.runningInDocker && os.platform() === 'linux');
@@ -95,6 +98,9 @@ export class ConfigService {
     proxyHost?: string;
     sessionTimeout?: number;
     homebridgePackagePath?: string;
+    scheduledBackupPath?: string;
+    scheduledBackupDisable?: boolean;
+    disableServerMetricsMonitoring?: boolean;
   };
 
   private bridgeFreeze: this['homebridgeConfig']['bridge'];
@@ -121,7 +127,7 @@ export class ConfigService {
       this.homebridgeConfig.bridge = {} as this['homebridgeConfig']['bridge'];
     }
 
-    this.ui = Array.isArray(this.homebridgeConfig.platforms) ? this.homebridgeConfig.platforms.find(x => x.platform === 'config') : undefined;
+    this.ui = Array.isArray(this.homebridgeConfig.platforms) ? this.homebridgeConfig.platforms.find(x => x.platform === 'config') : undefined as any;
 
     if (!this.ui) {
       this.ui = {
@@ -144,7 +150,13 @@ export class ConfigService {
     }
 
     if (!this.ui.sessionTimeout) {
-      this.ui.sessionTimeout = 28800;
+      this.ui.sessionTimeout = this.ui.auth === 'none' ? 1296000 : 28800;
+    }
+
+    if (this.ui.scheduledBackupPath) {
+      this.instanceBackupPath = this.ui.scheduledBackupPath;
+    } else {
+      this.instanceBackupPath = path.resolve(this.storagePath, 'backups/instance-backups');
     }
 
     this.secrets = this.getSecrets();

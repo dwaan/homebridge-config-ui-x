@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
-import { AuthService } from './core/auth/auth.service';
-import { Router, NavigationEnd } from '@angular/router';
+import { AuthService } from '@/app/core/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +15,7 @@ export class AppComponent {
     private $auth: AuthService,
   ) {
     // this array needs to be updated each time a new translation is added
-    const languages = ['en', 'de', 'fr', 'pl', 'cs', 'ru', 'zh-CN', 'zh-TW', 'hu', 'ja', 'es', 'nl', 'tr', 'it', 'bg', 'sv', 'no', 'sl', 'pt', 'id'];
+    const languages = ['en', 'de', 'fr', 'pl', 'cs', 'ru', 'zh-CN', 'zh-TW', 'hu', 'ja', 'es', 'nl', 'tr', 'it', 'bg', 'sv', 'no', 'sl', 'pt-BR', 'pt', 'id', 'ca'];
 
     console.log('Browser Culture Lang:', translate.getBrowserCultureLang());
     console.log('Browser Lang:', translate.getBrowserLang());

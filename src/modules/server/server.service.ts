@@ -1,18 +1,23 @@
+import * as os from 'os';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as bufferShim from 'buffer-shims';
 import * as qr from 'qr-image';
+import * as si from 'systeminformation';
+import * as NodeCache from 'node-cache';
 import * as child_process from 'child_process';
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, ServiceUnavailableException } from '@nestjs/common';
 import { Categories } from '@oznu/hap-client/dist/hap-types';
 
-import { ConfigService } from '../../core/config/config.service';
 import { Logger } from '../../core/logger/logger.service';
+import { ConfigService, HomebridgeConfig } from '../../core/config/config.service';
 import { ConfigEditorService } from '../config-editor/config-editor.service';
 import { AccessoriesService } from '../accessories/accessories.service';
 
 @Injectable()
 export class ServerService {
+  private serverServiceCache = new NodeCache({ stdTTL: 300 });
+
   private accessoryId = this.configService.homebridgeConfig.bridge.username.split(':').join('');
   private accessoryInfoPath = path.join(this.configService.storagePath, 'persist', `AccessoryInfo.${this.accessoryId}.json`);
 
@@ -31,13 +36,13 @@ export class ServerService {
   public async restartServer() {
     this.logger.log('Homebridge restart request received');
 
-    if (this.configService.serviceMode && !(await this.configService.uiRestartRequired())) {
+    if (this.configService.serviceMode && !(await this.configService.uiRestartRequired() || await this.nodeVersionChanged())) {
       this.logger.log('UI / Bridge settings have not changed; only restarting Homebridge process');
       // emit restart request to hb-service
       process.emit('message', 'restartHomebridge', undefined);
       // reset the pool of discovered homebridge instances
       this.accessoriesService.resetInstancePool();
-      return { ok: true, command: 'SIGTERM' };
+      return { ok: true, command: 'SIGTERM', restartingUI: false };
     }
 
     setTimeout(() => {
@@ -54,7 +59,7 @@ export class ServerService {
       }
     }, 500);
 
-    return { ok: true, command: this.configService.ui.restart };
+    return { ok: true, command: this.configService.ui.restart, restartingUI: true };
   }
 
   /**
@@ -274,5 +279,112 @@ export class ServerService {
     }
 
     return 'X-HM://' + encodedPayload + accessoryInfo.setupID;
+  }
+
+  /**
+   * Return the current pairing information for the main bridge
+   */
+  public async getBridgePairingInformation() {
+    if (!await fs.pathExists(this.accessoryInfoPath)) {
+      return new ServiceUnavailableException('Pairing Information Not Available Yet');
+    }
+
+    const accessoryInfo = await fs.readJson(this.accessoryInfoPath);
+
+    return {
+      displayName: accessoryInfo.displayName,
+      pincode: accessoryInfo.pincode,
+      setupCode: await this.getSetupCode(),
+      isPaired: accessoryInfo.pairedClients && Object.keys(accessoryInfo.pairedClients).length > 0,
+    };
+  }
+
+  /**
+   * Returns a list of network adapters on the current host
+   */
+  public async getSystemNetworkInterfaces(): Promise<si.Systeminformation.NetworkInterfacesData[]> {
+    const fromCache: si.Systeminformation.NetworkInterfacesData[] = this.serverServiceCache.get(`network-interfaces`);
+
+    const networkInterfaces = fromCache || (await si.networkInterfaces()).filter((adapter) => {
+      return !adapter.internal
+        && adapter.mac
+        && (adapter.ip4 || (adapter.ip6 && adapter.ip6subnet !== 'ffff:ffff:ffff:ffff::'))
+        && (adapter.operstate === 'up' || os.platform() === 'freebsd');
+    });
+
+    if (!fromCache) {
+      this.serverServiceCache.set(`network-interfaces`, networkInterfaces);
+    }
+
+    return networkInterfaces;
+  }
+
+  /**
+   * Returns a list of network adapters the bridge is currently configured to listen on
+   */
+  public async getHomebridgeNetworkInterfaces() {
+    const config = await this.configEditorService.getConfigFile();
+
+    if (!config.bridge?.bind) {
+      return [];
+    }
+
+    if (Array.isArray(config.bridge?.bind)) {
+      return config.bridge.bind;
+    }
+
+    if (typeof config.bridge?.bind === 'string') {
+      return [config.bridge.bind];
+    }
+
+    return [];
+  }
+
+  /**
+   * Set the bridge interfaces
+   */
+  public async setHomebridgeNetworkInterfaces(adapters: string[]) {
+    const config = await this.configEditorService.getConfigFile();
+
+    if (!config.bridge) {
+      config.bridge = {} as HomebridgeConfig['bridge'];
+    }
+
+    if (!adapters.length) {
+      delete config.bridge.bind;
+    } else {
+      config.bridge.bind = adapters;
+    }
+
+    await this.configEditorService.updateConfigFile(config);
+
+    return;
+  }
+
+  /**
+   * Check if the system Node.js version has changed
+   */
+  private async nodeVersionChanged(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      let result: boolean = false;
+
+      const child = child_process.spawn(process.execPath, ['-v']);
+
+      child.stdout.once('data', (data) => {
+        if (data.toString().trim() === process.version) {
+          result = false;
+        } else {
+          result = true;
+        }
+      });
+
+      child.on('error', () => {
+        result = true;
+      });
+
+      child.on('close', () => {
+        return resolve(result);
+      });
+    });
   }
 }
