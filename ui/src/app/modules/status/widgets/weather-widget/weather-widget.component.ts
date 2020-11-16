@@ -90,41 +90,41 @@ export class WeatherWidgetComponent implements OnInit, OnDestroy {
   getWeatherIconClass(): string {
     switch (this.currentWeather.weather[0].icon) {
       case '01d': // clear day
-        return 'far fa-sun';
+        return 'far fa-sun day';
       case '01n': // clear night
-        return 'far fa-moon';
+        return 'far fa-moon night';
       case '02d': // few clouds day
-        return 'fas fa-cloud-sun';
+        return 'fas fa-cloud-sun day';
       case '02n': // few clouds night
         return 'fas fa-cloud-moon';
       case '03d': // scattered clouds day
-        return 'fas fa-cloud-sun';
+        return 'fas fa-cloud-sun day';
       case '03n': // scattered clouds night
-        return 'fas fa-cloud-moon';
+        return 'fas fa-cloud-moon night';
       case '04d': // broken clouds day
-        return 'fas fa-cloud-sun';
+        return 'fas fa-cloud-sun day';
       case '04n': // broken clouds night
-        return 'fas fa-cloud-moon';
+        return 'fas fa-cloud-moon night';
       case '09d': // shower rain day
-        return 'fas fa-cloud-sun-rain';
+        return 'fas fa-cloud-sun-rain day';
       case '09n': // shower rain night
-        return 'fas fa-cloud-moon-rain';
+        return 'fas fa-cloud-moon-rain night';
       case '10d': // rain day
-        return 'fas fa-cloud-rain';
+        return 'fas fa-cloud-rain day';
       case '10n': // rain night
-        return 'fas fa-cloud-moon-rain';
+        return 'fas fa-cloud-moon-rain night';
       case '11d': // thunderstorm day
-        return 'fas fa-cloud-showers-heavy';
+        return 'fas fa-cloud-showers-heavy day';
       case '11n': // thunderstorm night
-        return 'fas fa-cloud-showers-heavy';
+        return 'fas fa-cloud-showers-heavy night';
       case '13d': // snow day
-        return 'fas fa-snowflake';
+        return 'fas fa-snowflake day';
       case '13n': // snow night
-        return 'fas fa-snowflake';
+        return 'fas fa-snowflake night';
       case '50d': // mist day
-        return 'fas fa-smog';
+        return 'fas fa-smog day';
       case '50n': // mist night
-        return 'fas fa-smog';
+        return 'fas fa-smog night';
     }
   }
 

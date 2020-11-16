@@ -1,6 +1,6 @@
-<div class="flex-column d-flex align-items-stretch h-100 w-100 pb-1">
+<div class="flex-column d-flex align-items-stretch h-100 w-100 pb-1" [ngClass]="getWeatherIconClass(currentWeather.weather[0].icon)">
   <div style="cursor: move;" class="drag-handler pl-2 pt-1 pb-1 pr-2">
-    {{ currentWeather?.name }} {{ 'status.widget.weather.title_weather' | translate }}
+    {{ 'status.widget.weather.title_weather' | translate }}: {{ currentWeather?.name }}
   </div>
   <div class="d-flex flex-row flex-grow-1 align-items-center w-100 gridster-item-content text-center"
     *ngIf="!this.widget.location || !this.widget.location.id">

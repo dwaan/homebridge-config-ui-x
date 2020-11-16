@@ -261,3 +261,7 @@ gridster-preview {
     }
   }
 }
+
+app-weather-widget > div:before {
+  display: none;
+}
